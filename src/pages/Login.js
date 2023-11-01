@@ -1,8 +1,9 @@
-import Button from '../components/Button';
+import '../index.css';
 import style from './Login.module.css';
+import { Link } from 'react-router-dom';
 
 
-function Login() {
+export default function Login() {
    
     function submitForm(e) {
         e.preventDefault();
@@ -21,9 +22,9 @@ function Login() {
                     Passwort:
                     <input type="password" name="name" />
                 </label>
-                <Button className="primary" label="Anmelden" type="submit" />
+                <input className="btn primary" type="submit" value="Anmelden" />
+                <Link to="/assembler-dashboard">Erstmal weiter zum Monteur</Link>
             </form>
         </div>
     );
 }
-export default Login;
