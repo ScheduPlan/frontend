@@ -1,0 +1,16 @@
+.primary {
+    width: fit-content;
+    background-color: #ffffff;
+    border: 2px solid var(--primary);
+    padding: 5px 15px;
+    margin-top: 25px;
+    font-weight: 600;
+    color: var(--primary);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.primary:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
