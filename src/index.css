@@ -24,8 +24,51 @@ body {
   font-family: 'PT Sans';
 }
 
+/* Font styles */
+
 h1 {
   font-size: 52px;
   font-weight: 600;
   color: var(--primary);
+}
+
+/* Link styles */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+a::after {
+  content: "->";
+  margin-left: 8px;
+  transition: 0.4s ease;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:hover::after {
+  text-decoration: none !important;
+  margin-left: 15px;
+}
+
+/* Button styles */
+.btn.primary {
+  width: fit-content;
+  background-color: #ffffff;
+  border: 2px solid var(--primary);
+  padding: 5px 15px;
+  margin-top: 25px;
+  font-weight: 600;
+  color: var(--primary);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn.primary:hover {
+  background-color: var(--primary);
+  color: #fff;
 }
