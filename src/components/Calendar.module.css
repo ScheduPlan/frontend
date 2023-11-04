@@ -1,0 +1,33 @@
+.calendar_wrapper {
+    width: 100%;
+    height: calc(100vh - 150px);
+    overflow: scroll;
+    padding: 0 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.calendar_wrapper .rbc-toolbar .rbc-btn-group {
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.rbc-btn-group button {
+    border: none;
+    border-radius: 0;
+}
+
+.rbc-btn-group button:not(:last-child) {
+    border-right: 1px solid #ccc !important;
+}
+
+.rbc-btn-group:nth-child(1) button:nth-child(1) {
+    background: red !important;
+    order: 2;
+}
+
+.rbc-toolbar .rbc-btn-group:first-child button:nth-child(1) {
+    order: 1;
+}

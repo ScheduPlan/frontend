@@ -14,14 +14,14 @@ export default function CalendarComponent(props) {
     moment.locale('de');
     const localizer = momentLocalizer(moment);
     localizer.formats.dayRangeHeaderFormat = (({ start, end }, culture, localizer) =>
-        localizer.format(start, 'DD.', culture) + ' - ' + localizer.format(end, 'DD. MMMM', culture));
+        localizer.format(start, 'DD.', culture) + ' - ' + localizer.format(end, 'DD. MMMM YYYY', culture));
     localizer.formats.dayFormat = 'dd DD.MM.';
-    localizer.formats.dayHeaderFormat = 'dddd, DD.MM.';
+    localizer.formats.dayHeaderFormat = 'dddd, DD.MM.YYYY';
     localizer.formats.agendaHeaderFormat = (({ start, end }, culture, localizer) =>
         localizer.format(start, 'dddd, DD.MM.', culture) + ' - ' + localizer.format(end, 'dddd, DD.MM.', culture));
     localizer.formats.agendaDateFormat = 'DD.MM.';
 
-   
+
     //sets default values for the calendar
     const { components, max, views } = useMemo(
         () => ({
@@ -32,7 +32,7 @@ export default function CalendarComponent(props) {
 
 
     return (
-        <div className={style.body} >
+        <div className={style.calendar_wrapper} >
             <Calendar
                 defaultView="week"
                 components={components}
@@ -52,6 +52,7 @@ export default function CalendarComponent(props) {
                 culture='de'
                 style={style}
                 length={6}
+                messages={{next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag"}} 
             />
         </div>
     )
