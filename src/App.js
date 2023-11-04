@@ -9,6 +9,7 @@ import AssemblerDashboard from './pages/AssemblerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ChangePassword from './pages/ChangePassword';
 import CreateAppointment from './pages/CreateAppointment';
+import Error404 from './pages/Error404';
 
 export default function App() {
   const { auth, user } = useContext(AuthContext);
@@ -33,11 +34,12 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route path='/admin' element={<AdminDashboard />} />
-          <Route path='/manager' element={<ManagerDashboard />} />
-          <Route path='/assembler' element={<AssemblerDashboard />} />
+          <Route path='/admin' element={user.is_admin ? <AdminDashboard /> : <Error404 />} />
+          <Route path='/manager' element={user.is_manager ? <ManagerDashboard /> : <Error404 />} />
+          <Route path='/assembler' element={user.is_assembler ? <AssemblerDashboard /> : <Error404 />} />
           <Route path='/password' element={<ChangePassword />} />
           <Route path='/appointment' element={<CreateAppointment />} />
+          <Route path='*' element={<Error404 />}/>
         </Routes>
       </AuthProvider>
     </BrowserRouter>
