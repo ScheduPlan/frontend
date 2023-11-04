@@ -7,27 +7,27 @@
     margin: 0 auto;
 }
 
-.calendar_wrapper .rbc-toolbar .rbc-btn-group {
+.calendar_wrapper .rbcToolbar .rbcBtnGroup {
     display: flex;
     border: 1px solid #ccc;
     border-radius: 6px;
     overflow: hidden;
 }
 
-.rbc-btn-group button {
+.rbcBtnGroup button {
     border: none;
     border-radius: 0;
 }
 
-.rbc-btn-group button:not(:last-child) {
+.rbcBtnGroup button:not(:last-child) {
     border-right: 1px solid #ccc !important;
 }
 
-.rbc-btn-group:nth-child(1) button:nth-child(1) {
+.rbcBtnGroup:nth-child(1) button:nth-child(1) {
     background: red !important;
     order: 2;
 }
 
-.rbc-toolbar .rbc-btn-group:first-child button:nth-child(1) {
+.rbcToolbar .rbcBtnGroup:first-child button:nth-child(1) {
     order: 1;
 }

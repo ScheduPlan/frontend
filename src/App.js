@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import AuthContext, { AuthProvider } from './AuthProvider';
 import axios from 'axios';
+import user from './UserExample'; //später raus
 
 // import pages
 import Login from './pages/Login';
@@ -13,16 +14,8 @@ import CreateAppointment from './pages/CreateAppointment';
 import Error404 from './pages/Error404';
 
 export default function App() {
-  //const { auth, user } = useContext(AuthContext);
 
-  const user = {
-    is_loged_in: true,
-    is_admin: false,
-    is_manager: false,
-    is_assembler: true,
-    name: "Max Mustermann",
-    email: "max@muster.de"
-  }
+  const { auth } = useContext(AuthContext);
 
   function getDashboard() {
     if (user.is_admin === true) {

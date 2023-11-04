@@ -9,6 +9,8 @@ import AuthContext from '../AuthProvider';
 export default function CalendarComponent(props) {
 
     const { auth, user } = useContext(AuthContext);
+    const [appointments, setAppointments] = useState([]);
+    const [appointment, setAppointment] = useState([]);
 
     //define the formats
     moment.locale('de');
@@ -30,15 +32,61 @@ export default function CalendarComponent(props) {
         []
     )
 
+    //get all appointments
+    useEffect(() => {
+        let appointments = [];
+        props.appointments.forEach((appointment) => {
+            let elem = {
+                title: appointment.category,
+                start: new Date(appointment.start),
+                end: new Date(appointment.end),
+                appointment: appointment.category,
+            };
+            appointments = [...appointments, elem];
+        });
+        setAppointments(appointments);
+    }, [props.appointments]);
+
+    //style of different appointments
+    const eventPropGetter = useCallback((event, start, end, isSelected) => (
+        {
+            ...(event && {
+                style: {
+                    backgroundColor: '#ccc',
+                    borderRadius: '0px',
+                    color: 'black',
+                    border: 'none',
+                    opacity: '1',
+                    display: 'block'
+                }
+            }),
+            ...(event.title === "Montage" && { //ToDo: title in timeslot z-index:1 setzen
+                style: {
+                    backgroundColor: 'var(--primary)',
+                    border: '0',
+                    opacity: '1',
+                    display: 'block'                 
+                }
+            }),
+            ...(event.title === "Reklamation" && { //ToDo: title in timeslot z-index:1 setzen
+                style: {
+                    backgroundColor: 'var(--primary-dark)',
+                    border: '0',
+                    opacity: '1',
+                    display: 'block'                 
+                }
+            })
+        }
+    ), [appointments]);
 
     return (
         <div className={style.calendar_wrapper} >
             <Calendar
                 defaultView="week"
                 components={components}
-                /*events={appointments}*/
+                events={appointments}
                 /*backgroundEvents={timeslots}*/
-                /*eventPropGetter={eventPropGetter}*/
+                eventPropGetter={eventPropGetter}
                 localizer={localizer}
                 max={max}
                 showMultiDayTimes
