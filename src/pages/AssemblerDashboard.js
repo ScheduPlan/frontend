@@ -5,7 +5,7 @@ import Header from '../components/Header'
 export default function AssemblerDashboard() {
   return (
     <div>
-        <Header />
+        <Header title="Terminkalender"/>
         <Calendar />
     </div>
   )

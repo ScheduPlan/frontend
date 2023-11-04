@@ -3,12 +3,12 @@ import AuthContext from '../AuthProvider';
 import { Link } from 'react-router-dom';
 import style from './Header.module.css';
 
-export default function Header() {
+export default function Header(props) {
     const { auth, user } = useContext(AuthContext);
 
     return (
         <div className={style.header_wrapper}>
-            <h1>Planungs&shy;assis&shy;tent</h1>
+            <h1>{props.title}</h1>
             <Link to="/">Benutzername</Link>
         </div>
     )
