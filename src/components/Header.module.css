@@ -1,9 +1,9 @@
 .header_wrapper {
     display: flex;
-    flex-flow: row wrap-reverse;
+    flex-flow: row nowrap;
     padding: 2rem 2rem;
-    justify-content: flex-start;
-    align-items: center;
+    justify-content: space-between;
+    align-items: flex-start;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -13,7 +13,14 @@
     hyphens: auto;
 }
 
-.header_wrapper a {
-    margin-bottom: 20px;
-    margin-left: auto;
+.header_wrapper svg {
+    min-width: 48px;
+    min-height: 48px;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 576px) {
+    .header_wrapper {
+        align-items: center;
+    }
 }

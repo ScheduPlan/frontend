@@ -5,12 +5,23 @@ import 'moment/locale/de';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import style from './Calendar.module.css';
 import AuthContext from '../AuthProvider';
+import PopUp from './PopUp';
 
 export default function CalendarComponent(props) {
 
     const { auth, user } = useContext(AuthContext);
     const [appointments, setAppointments] = useState([]);
     const [appointment, setAppointment] = useState([]);
+
+    const [isPopUpOpen, setPopUpOpen] = useState(false);
+
+    function togglePopUp() {
+        if (isPopUpOpen) {
+            setPopUpOpen(false);
+        } else {
+            setPopUpOpen(true);
+        }
+    }
 
     //define the formats
     moment.locale('de');
@@ -92,7 +103,7 @@ export default function CalendarComponent(props) {
                 showMultiDayTimes
                 step={30}
                 views={views}
-                /*onSelectEvent={handleClick}*/
+                onSelectEvent={togglePopUp}
                 dayLayoutAlgorithm="no-overlap"
                 tooltipAccessor={{}}
                 /*onSelectSlot={onSelectSlot}*/
@@ -102,6 +113,7 @@ export default function CalendarComponent(props) {
                 length={6}
                 messages={{next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag"}} 
             />
+            <PopUp trigger={isPopUpOpen} close={togglePopUp} />
         </div>
     )
 }

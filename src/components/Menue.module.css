@@ -1,0 +1,18 @@
+.menue_wrapper {
+    position: absolute;
+    background: #fff;
+    top: 6rem;
+    right: 2rem;
+    padding: 1rem;
+    z-index: 5;
+    box-shadow: 2px 2px 4px 0px #00000024;
+}
+
+.menue_wrapper > p {
+    margin-top: 0;
+}
+
+.menue_wrapper .menue_links {
+    display: flex;
+    flex-flow: column nowrap;
+}

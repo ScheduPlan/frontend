@@ -20,7 +20,7 @@ export default function AssemblerDashboard() {
 
   return (
     <div>
-        <Header title="Terminkalender"/>
+        <Header title="Termin&shy;kalender"/>
         <Calendar appointments={appoint}/>
     </div>
   )
