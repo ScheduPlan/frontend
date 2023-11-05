@@ -15,10 +15,11 @@ export default function CalendarComponent(props) {
 
     const [isPopUpOpen, setPopUpOpen] = useState(false);
 
-    function togglePopUp() {
+    function togglePopUp(appointment) {
         if (isPopUpOpen) {
             setPopUpOpen(false);
         } else {
+            setAppointment(appointment);
             setPopUpOpen(true);
         }
     }
@@ -113,7 +114,7 @@ export default function CalendarComponent(props) {
                 length={6}
                 messages={{next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag"}} 
             />
-            <PopUp trigger={isPopUpOpen} close={togglePopUp} />
+            <PopUp trigger={isPopUpOpen} close={togglePopUp} type="dateDetail" appointment={appointment}/>
         </div>
     )
 }
