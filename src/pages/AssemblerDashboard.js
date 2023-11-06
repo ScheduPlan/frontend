@@ -1,6 +1,8 @@
 import React from 'react'
 import Calendar from '../components/Calendar'
 import Header from '../components/Header'
+import Swal from 'sweetalert2';
+
 
 export default function AssemblerDashboard() {
   const appoint = [
@@ -16,12 +18,20 @@ export default function AssemblerDashboard() {
     }
   ]
 
-  console.log(appoint.at(0));
+  function clickEvent() {
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Your work has been saved',
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
 
   return (
     <div>
-        <Header title="Termin&shy;kalender"/>
-        <Calendar appointments={appoint}/>
+      <Header title="Termin&shy;kalender" />
+      <Calendar appointments={appoint} />
     </div>
   )
 }

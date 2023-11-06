@@ -4,8 +4,8 @@ import user from '../UserExample';
 import { Link } from 'react-router-dom';
 
 export default function Menue(props) {
-    return (props.trigger ?
-        <div className={style.menue_wrapper}>
+    return (
+        <div className={style.menue_wrapper} state={props.trigger ? "open" : ""}>    
             <p><b>{user.name}</b></p>
             <div className={style.menue_links}>
                 {props.links?.map((link) => (
@@ -14,6 +14,6 @@ export default function Menue(props) {
                 <Link to='/password'>Passwort ändern</Link>
                 <Link to='/'>Logout</Link>
             </div>
-        </div> : ""
+        </div>
     )
 }
