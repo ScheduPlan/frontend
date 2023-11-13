@@ -13,38 +13,6 @@
     margin: 0;
 }
 
-form {
-    margin: 20px 0;
-    display: flex;
-    flex-direction: column;
-}
-
-form label {
-    margin: 10px 0;
-    display: flex;
-    flex-direction: column;
-    color: var(--primary);
-    font-size: 1.2rem;
-}
-
-form input {
-    padding: 8px 10px;
-    font-family: 'PT Sans';
-    font-size: 1rem;
-    margin-top: 5px;
-    color: var(--grey-dark);
-    transition: 0.2s ease;
-}
-
-form input[type="text"], form input[type="password"] {
-    border: none;
-}
-
-form input[type="text"]:focus-visible, form input[type="password"]:focus-visible {
-    outline: none;
-    box-shadow: inset -1px -1px 3px 1px #00000026;
-}
-
 @media screen and (min-width: 768px) {
     .login_wrapper {
         max-width: 640px;

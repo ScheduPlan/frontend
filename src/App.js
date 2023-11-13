@@ -1,8 +1,10 @@
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
 import AuthContext, { AuthProvider } from './AuthProvider';
 import axios from 'axios';
 import user from './UserExample'; //später raus
+import Layout from './components/Layout';
+import RequireAuth from './RequireAuth';
 
 // import pages
 import Login from './pages/Login';
@@ -17,37 +19,54 @@ export default function App() {
 
   const { auth } = useContext(AuthContext);
 
-  function getDashboard() {
-    if (user.is_admin === true) {
+  function redirect() {
+    if (user.role=="admin") {
+      window.location.href = 'admin';
       return (
-        <AdminDashboard />
-      );
-    } else if (user.is_manager === true) {
+        <Navigate to="/admin" replace />
+      )
+    } else if (user.role=="manager") {
       return (
-        <ManagerDashboard />
-      );
-    } else if (user.is_assembler === true) {
+        <Navigate to="/manager" replace />
+      )
+    } else if (user.role=="assembler") {
       return (
-        <AssemblerDashboard />
-      );
+        <Navigate to="/assembler" replace />
+      )
+    } else {
+      return (
+        <Navigate to="/error" replace />
+      )
     }
   }
 
   return (
     <BrowserRouter>
       {/*<AuthProvider>*/}
-      <Routes>
-        {/*<Route path='/' element={(user.is_loged_in === true ? getDashboard() : <Login />)} />*/}
+      <Layout>
+        <Routes>
+          {/*<Route path='/' element={(user.is_loged_in === true ? redirect : <Login />)} />*/}
+          <Route path='/' element={<Login />} />
 
-        <Route path='/' element={<Login />} />
-        <Route path='/admin' element={user.is_admin ? <AdminDashboard /> : <Error404 />} />
-        <Route path='/manager' element={user.is_manager ? <ManagerDashboard /> : <Error404 />} />
-        <Route path='/assembler' element={user.is_assembler ? <AssemblerDashboard /> : <Error404 />} />
-        <Route path='/password' element={<ChangePassword />} />
-        <Route path='/appointment' element={<CreateAppointment />} />
-        <Route path='*' element={<Error404 />} />
-        <Route path='/error' element={<Error404 />} />
-      </Routes>
+          <Route element={<RequireAuth allowedRoles="admin" />}>
+            <Route path='/admin' element={<AdminDashboard />} />
+          </Route>
+
+          <Route path='/manager' element={<ManagerDashboard />} />
+            <Route path='/manager/appointment' element={<CreateAppointment />} />
+            
+          {/*<Route element={<RequireAuth allowedRoles="manager" />}>
+            <Route path='/manager' element={<ManagerDashboard />} />
+            <Route path='/manager/appointment' element={<CreateAppointment />} />
+          </Route>*/}
+          
+          <Route path='/assembler' element={user.role=="assembler" ? <AssemblerDashboard /> : redirect} />
+
+          <Route path='/password' element={<ChangePassword />} />
+          <Route path='*' element={<Error404 />} />
+          <Route path='/error' element={<Error404 />} />
+        </Routes>
+      </Layout>
       {/*</AuthProvider>*/}
     </BrowserRouter>
   );

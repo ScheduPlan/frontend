@@ -1,16 +1,13 @@
-import React, { useContext, useState } from 'react'
-import AuthContext from '../AuthProvider';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef } from 'react'
 import style from './Header.module.css';
 import Path from '../icons/Paths';
-import user from '../UserExample'; //später raus
-import {test} from './PopUp';
 import Menue from './Menue';
 
 export default function Header(props) {
     //const { auth, user } = useContext(AuthContext);
     const [isMenueOpen, setMenueOpen] = useState(false);
     const [menueIcon, setMenueIcon] = useState("menue");
+    const menueButton = useRef(null);
 
     function toggleMenue() {
         if (isMenueOpen) {
@@ -22,24 +19,22 @@ export default function Header(props) {
         }
     }
 
-    const links = [
-        {
-            path: "/",
-            title: "Test"
-        },
-        {
-            path: "/",
-            title: "Test1"
-        },
-    ]
+    const closeMenue = (e)=>{
+        if(isMenueOpen && !menueButton.current.contains(e.target)){
+            setMenueOpen(false);
+            setMenueIcon("menue");
+        }
+    }
+
+    document.addEventListener('mousedown', closeMenue);
 
     return (
         <div className={style.header_wrapper}>
-            <h1 onClick={test}>{props.title}</h1>
-            <svg onClick={toggleMenue} xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 -960 960 960" fill="var(--primary)">
+            <h1>{props.title}</h1>
+            <svg ref={menueButton} onClick={toggleMenue} xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 -960 960 960" fill="var(--primary)">
                 <path d={Path(menueIcon)} />
             </svg>
-            <Menue trigger={isMenueOpen} links={links} />
+            <Menue trigger={isMenueOpen} links={props.menueLinks} />
         </div>
     )
 }
