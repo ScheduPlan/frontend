@@ -1,14 +1,44 @@
+import CreatePerson from './pages/CreatePerson';
+import CreateAppointment from './pages/CreateAppointment';
+import Schedule from './pages/Schedule';
+
 const user = {
     is_loged_in: true,
     role: "manager",
-    name: "Max Mustermann",
+    firstname: "Max",
+    lastname: "Mustermann",
     email: "max@muster.de"
 }
 
-const roles = {
-    admin: "admin",
-    manager: "manager",
-    assembler: "assembler"
-}
+export const roles = [
+  {
+    role: "admin",
+    links: [
+      {
+        path: "admin/newPerson",
+        title: "Mitarbeiter anlegen",
+        component: <CreatePerson />
+      }
+    ]
+  },
+  {
+    role: "manager",
+    links: [
+      {
+        path: "/manager/schedule",
+        title: "Planungsassistent",
+        component: <Schedule />
+      },
+      {
+        path: "/manager/appointment",
+        title: "Termine anlegen",
+        component: <CreateAppointment />
+      }
+    ]
+  },
+  {
+    role: "assembler"
+  }
+]
 
 export default user;

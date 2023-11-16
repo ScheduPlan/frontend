@@ -10,11 +10,13 @@
     transition: 0.4s ease;
     width: 16rem;
     height: calc(100vh - 6rem);
+    transition-delay: 0.2s;
 }
 
 .menue_wrapper[state="open"] {
     right: 0;
     opacity: 1;
+    transition-delay: 0;
 }
 
 .menue_wrapper>p {
