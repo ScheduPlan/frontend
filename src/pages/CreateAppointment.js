@@ -1,7 +1,12 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 export default function CreateAppointment() {
   return (
-    <div>CreateAppointment</div>
+    <div>
+      <p>
+        CreateAppointment
+      </p>
+    </div>
   )
 }
