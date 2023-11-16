@@ -1,0 +1,34 @@
+.sidebar {
+    width: 25%;
+    height: calc(100vh - 150px);
+    padding: 1rem;
+    background: var(--primary);
+    color: #fff;
+}
+
+.appointment_box_wrapper {
+    width: 100%;
+    height: 88%;
+    background: #fff;
+    color: var(--primary);
+    overflow: scroll;
+}
+
+.appointment_box {
+    width: auto;
+    margin: 0.4rem;
+    padding: 0.8rem;
+    background: #e6e6e6;
+    cursor: pointer;
+}
+
+.appointment_box .title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+}
+
+.appointment_detail p {
+    margin: 0;
+}

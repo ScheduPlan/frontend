@@ -25,8 +25,14 @@ body {
   overflow-x: hidden;
 }
 
+.content-wrapper {
+  display: flex;
+}
+
 .content-container {
   padding: 0 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Font styles */
@@ -100,6 +106,7 @@ form .form-row {
   display: flex;
   flex-flow: row wrap;
   column-gap: 1rem;
+  justify-content: space-between;
 }
 
 form .form-row label {
@@ -112,7 +119,7 @@ form .form-row label {
   }
 }
 
-form input {
+form input, form select {
   padding: 8px 10px;
   font-family: 'PT Sans';
   font-size: 1rem;
@@ -123,7 +130,7 @@ form input {
   border-radius: 4px;
 }
 
-form input.light-blue {
+.light-blue {
   background-color: #93b4df3b;
 }
 
