@@ -1,9 +1,11 @@
 import React from 'react'
 import Calendar from '../components/Calendar'
 import Sidebar from '../components/Sidebar'
+import axios from 'axios'
+import url from '../BackendURL'
 
 export default function Schedule() {
-  const appoint = [
+  const testAppointments = [
     {
       start: new Date(2023, 10, 17, 8, 0),
       end: new Date(2023, 10, 17, 13, 0),
@@ -19,7 +21,7 @@ export default function Schedule() {
   return (
     <div className='content-wrapper'>
       <Sidebar />
-      <Calendar appointments={appoint} />
+      <Calendar appointments={testAppointments} />
     </div>
   )
 }

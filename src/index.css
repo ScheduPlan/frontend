@@ -33,6 +33,9 @@ body {
   padding: 0 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  max-height: calc(100vh - 131px);
+  overflow: scroll;
+  /*box-shadow: inset 0px 0px 15px 0px #00000045;*/
 }
 
 /* Font styles */
@@ -72,7 +75,6 @@ a:hover::after {
   background-color: #ffffff;
   border: 2px solid var(--primary);
   padding: 5px 15px;
-  margin-top: 25px;
   font-weight: 600;
   color: var(--primary);
   cursor: pointer;
@@ -82,6 +84,12 @@ a:hover::after {
 .btn.primary:hover {
   background-color: var(--primary);
   color: #fff;
+}
+
+.button-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.8rem;
 }
 
 /* Form style */
@@ -100,6 +108,7 @@ form label {
   color: var(--primary);
   font-size: 1.2rem;
 }
+
 
 form .form-row {
   width: 100%;
