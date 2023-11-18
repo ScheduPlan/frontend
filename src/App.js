@@ -61,6 +61,7 @@ export default function App() {
           <Route path='/manager' element={<Dashboard />}>
             <Route path='/manager/schedule' element={<Schedule />} />
             <Route path='/manager/appointment' element={<CreateAppointment />} />
+            <Route path='/manager/newCustomer' element={<CreatePerson />} />
           </Route>
 
           <Route path='/assembler' element={<Dashboard />} />
