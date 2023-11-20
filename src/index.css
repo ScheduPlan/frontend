@@ -44,6 +44,7 @@ h1 {
   font-size: 52px;
   font-weight: 600;
   color: var(--primary);
+  margin-top: 0;
 }
 
 /* Link styles */
@@ -53,7 +54,7 @@ a {
   transition: 0.2s ease;
 }
 
-a::after {
+a::after:not(.icon, .btn) {
   content: "->";
   margin-left: 8px;
   transition: 0.4s ease;
@@ -70,15 +71,23 @@ a:hover::after {
 }
 
 /* Button styles */
-.btn.primary {
+.btn {
   width: fit-content;
-  background-color: #ffffff;
-  border: 2px solid var(--primary);
   padding: 5px 15px;
   font-weight: 600;
-  color: var(--primary);
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: 0.4s ease;
+  border-radius: 50px;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btn.primary {
+  color: var(--primary);
+  background-color: #ffffff;
+  border: 2px solid var(--primary);
 }
 
 .btn.primary:hover {
