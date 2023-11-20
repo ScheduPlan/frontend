@@ -7,7 +7,7 @@ import TestUser, { roles } from '../UserExample';
 export default function Menue(props) {
     return (
         <div className={style.menue_wrapper} state={props.trigger ? "open" : ""}>    
-            <p><b>{user.name}</b></p>
+            <p><b>{TestUser.firstname} {TestUser.lastname}</b></p>
             <div className={style.menue_links}>
                 <Link to={'/' + TestUser.role} replace>Dashboard</Link>
                 {roles.find((r) => r.role === TestUser.role).links.map((link, index) => (

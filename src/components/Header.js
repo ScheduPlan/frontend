@@ -36,7 +36,6 @@ export default function Header() {
 
     return (
         <div className={style.header_wrapper}>
-            <h1>{TestUser.role} Dashboard</h1>
             <svg ref={menueButton} onClick={toggleMenue} xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 -960 960 960" fill="var(--primary)">
                 <path d={Path(menueIcon)} />
             </svg>

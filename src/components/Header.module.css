@@ -8,15 +8,11 @@
     margin: 0 auto;
 }
 
-.header_wrapper h1 {
-    margin: 0;
-    hyphens: auto;
-}
-
 .header_wrapper svg {
     min-width: 48px;
     min-height: 48px;
     cursor: pointer;
+    margin-left: auto;
 }
 
 @media screen and (min-width: 576px) {
