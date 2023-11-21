@@ -39,7 +39,7 @@ export default function FormCreateEmployee() {
 
     return (
         <div className='content-container'>
-            <h2>Neuen Mitarbeiter anlegen</h2>
+            <h1>Neuen Mitarbeiter anlegen</h1>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>

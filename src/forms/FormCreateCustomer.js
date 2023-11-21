@@ -17,10 +17,13 @@ export default function FormCreateCustomer() {
     const [newAddress, setNewAddress] = useState([]);
     const [addresses, setAddresses] = useState([]);
 
+
+    const [test, setTest] = useState([]);
+
     const getFirstname = (e) => {
         const firstname = e.target.value;
         setFirstname(firstname);
-        console.log();
+        console.log(firstname);
     };
 
     const getLastname = (e) => {
@@ -63,13 +66,13 @@ export default function FormCreateCustomer() {
 
             console.log(response.data);
 
-            /*const newCustomer = await axios.post(url + '/customers/' + response.data.id + '/addresses',
+            const newCustomer = await axios.post(url + '/customers/' + response.data.id + '/addresses',
                 {
                     addresses: addresses.push(newAddress)
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
-            console.log(newCustomer.data);*/
+            console.log(newCustomer.data);
 
             Swal.fire({
                 position: 'top-end',
@@ -91,13 +94,16 @@ export default function FormCreateCustomer() {
     function testFct() {
         const res = axios.get(url + '/customers')
             .then(r => {
-                console.log(r.data);
+                console.log(r.data.at(0));
+                const data = r.data.at(0);
+                console.log("data", data);
+                setTest(data);
             });
     }
 
     return (
         <div className='content-container'>
-            <h2>Neuen Kunden anlegen</h2>
+            <h1>Neuen Kunden anlegen</h1>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>

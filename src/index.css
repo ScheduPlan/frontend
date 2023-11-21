@@ -38,13 +38,25 @@ body {
   /*box-shadow: inset 0px 0px 15px 0px #00000045;*/
 }
 
+.container-header-wrapper {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.container-header-wrapper a {
+  margin-left: 3rem;
+}
+
 /* Font styles */
 
 h1 {
   font-size: 52px;
   font-weight: 600;
   color: var(--primary);
-  margin-top: 0;
+  margin: 0;
+  margin-bottom: 0px;
+  margin-bottom: 12px;
 }
 
 /* Link styles */
@@ -137,7 +149,8 @@ form .form-row label {
   }
 }
 
-form input, form select {
+form input,
+form select {
   padding: 8px 10px;
   font-family: 'PT Sans';
   font-size: 1rem;

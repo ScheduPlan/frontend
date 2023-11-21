@@ -1,8 +1,9 @@
 import CreatePerson from './pages/CreatePerson';
-import CreateAppointment from './pages/CreateAppointment';
+import AssemblerDashboard from './pages/AssemblerDashboard';
 import Schedule from './pages/Schedule';
 import axios from 'axios';
 import url from './BackendURL';
+import ListItems from './pages/ListItems';
 
 const user = {
   is_loged_in: true,
@@ -32,19 +33,26 @@ export const roles = [
         component: <Schedule />
       },
       {
-        path: "appointment",
-        title: "Termine anlegen",
-        component: <CreateAppointment />
+        path: "orders",
+        title: "Aufträge anzeigen",
+        component: <ListItems items="orders" h1="Alle Aufträge" />
       },
       {
-        path: "newCustomer",
-        title: "Kunde anlegen",
-        component: <CreatePerson />
+        path: "customers",
+        title: "Kunden anzeigen",
+        component: <ListItems items="customers" h1="Alle Kunden" />
       }
     ]
   },
   {
-    role: "assembler"
+    role: "assembler",
+    links: [
+      {
+        path: "calendar",
+        title: "Terminkalender",
+        component: <AssemblerDashboard />
+      }
+    ]
   }
 ]
 

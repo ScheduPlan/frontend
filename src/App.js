@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import React, { useContext } from 'react';
+import React, { Component, useContext } from 'react';
 import AuthContext from './AuthProvider';
 import TestUser , {roles} from './UserExample'; //später raus
 import Layout from './components/Layout';
@@ -10,8 +10,10 @@ import Dashboard from './pages/Dashboard';
 import ChangePassword from './pages/ChangePassword';
 import Error404 from './pages/Error404';
 import CreatePerson from './pages/CreatePerson';
-import CreateAppointment from './pages/CreateAppointment';
 import Schedule from './pages/Schedule';
+import ListItems from './pages/ListItems';
+import FormCreateOrder from './forms/FormCreateOrder';
+import FormCreateCustomer from './forms/FormCreateCustomer';
 
 export default function App() {
 
@@ -58,11 +60,13 @@ export default function App() {
             <Route path='/admin/newPerson' element={<CreatePerson />} />
           </Route>
       
-          <Route path='/manager' element={<Dashboard />}>
+          <Route path='/manager' element={<Dashboard />} />
             <Route path='/manager/schedule' element={<Schedule />} />
-            <Route path='/manager/appointment' element={<CreateAppointment />} />
-            <Route path='/manager/newCustomer' element={<CreatePerson />} />
-          </Route>
+            <Route path='/manager/orders' element={<ListItems items="orders" h1="Alle Aufträge" />} />
+            <Route path='/manager/orders/new' element={<FormCreateOrder />} />
+            <Route path='/manager/customers' element={<ListItems items="customers" h1="Alle Kunden" />} />
+            <Route path='/manager/customers/new' element={<FormCreateCustomer />} />
+        
 
           <Route path='/assembler' element={<Dashboard />} />
 
