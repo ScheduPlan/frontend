@@ -1,4 +1,3 @@
-import CreatePerson from './pages/CreatePerson';
 import AssemblerDashboard from './pages/AssemblerDashboard';
 import Schedule from './pages/Schedule';
 import axios from 'axios';
@@ -18,9 +17,14 @@ export const roles = [
     role: "admin",
     links: [
       {
-        path: "newPerson",
-        title: "Mitarbeiter anlegen",
-        component: <CreatePerson />
+        path: "employees",
+        title: "Mitarbeiter anzeigen",
+        component: <ListItems items="employees" h1="Alle Mitarbeiter" />
+      },
+      {
+        path: "teams",
+        title: "Teams anzeigen",
+        component: <ListItems items="teams" h1="Alle Teams" />
       }
     ]
   },

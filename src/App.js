@@ -9,11 +9,11 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ChangePassword from './pages/ChangePassword';
 import Error404 from './pages/Error404';
-import CreatePerson from './pages/CreatePerson';
 import Schedule from './pages/Schedule';
 import ListItems from './pages/ListItems';
 import FormCreateOrder from './forms/FormCreateOrder';
 import FormCreateCustomer from './forms/FormCreateCustomer';
+import FormCreateEmployee from './forms/FormCreateEmployee';
 
 export default function App() {
 
@@ -56,9 +56,11 @@ export default function App() {
 
           <Route path='/' element={<Login />} />
 
-          <Route path='/admin' element={<Dashboard />}>
-            <Route path='/admin/newPerson' element={<CreatePerson />} />
-          </Route>
+          <Route path='/admin' element={<Dashboard />} />
+            <Route path='/admin/employees' element={<ListItems items="employess" h1="Alle Mitarbeiter" />} />
+            <Route path='/admin/employees/new' element={<FormCreateEmployee />} />
+            <Route path='/admin/teams' element={<ListItems items="employess" h1="Alle Mitarbeiter" />} />
+            <Route path='/admin/team/new' element={<FormCreateEmployee />} />
       
           <Route path='/manager' element={<Dashboard />} />
             <Route path='/manager/schedule' element={<Schedule />} />
