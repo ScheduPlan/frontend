@@ -42,6 +42,9 @@ body {
   display: flex;
   justify-content: left;
   align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
 }
 
 .container-header-wrapper a {
@@ -107,6 +110,23 @@ a:hover::after {
   color: #fff;
 }
 
+svg.btn-icon {
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+svg.blue:hover {
+  fill: var(--primary);
+}
+
+svg.red:hover {
+  fill: var(--red);
+}
+
+svg.green:hover {
+  fill: var(--green);
+}
+
 .button-wrapper {
   display: flex;
   flex-flow: row wrap;
@@ -158,7 +178,7 @@ form select {
   color: var(--grey-dark);
   transition: 0.2s ease;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .light-blue {
