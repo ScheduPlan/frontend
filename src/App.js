@@ -14,6 +14,8 @@ import ListItems from './pages/ListItems';
 import FormCreateOrder from './forms/FormCreateOrder';
 import FormCreateCustomer from './forms/FormCreateCustomer';
 import FormCreateEmployee from './forms/FormCreateEmployee';
+import FormCreateTeam from './forms/FormCreateTeam';
+import Customer from './components/Customer';
 
 export default function App() {
 
@@ -57,16 +59,16 @@ export default function App() {
           <Route path='/' element={<Login />} />
 
           <Route path='/admin' element={<Dashboard />} />
-            <Route path='/admin/employees' element={<ListItems items="employess" h1="Alle Mitarbeiter" />} />
+            <Route path='/admin/employees' element={<ListItems items={Customer} path="/employees" h1="Alle Mitarbeiter" />} />
             <Route path='/admin/employees/new' element={<FormCreateEmployee />} />
-            <Route path='/admin/teams' element={<ListItems items="employess" h1="Alle Mitarbeiter" />} />
-            <Route path='/admin/team/new' element={<FormCreateEmployee />} />
+            <Route path='/admin/teams' element={<ListItems items={Customer} path="/teams" h1="Alle Mitarbeiter" />} />
+            <Route path='/admin/teams/new' element={<FormCreateTeam />} />
       
           <Route path='/manager' element={<Dashboard />} />
             <Route path='/manager/schedule' element={<Schedule />} />
-            <Route path='/manager/orders' element={<ListItems items="orders" h1="Alle Aufträge" />} />
+            <Route path='/manager/orders' element={<ListItems items={Customer} path="/orders" h1="Alle Aufträge" />} />
             <Route path='/manager/orders/new' element={<FormCreateOrder />} />
-            <Route path='/manager/customers' element={<ListItems items="customers" h1="Alle Kunden" />} />
+            <Route path='/manager/customers' element={<ListItems items={Customer} path="/customers" h1="Alle Kunden" />} />
             <Route path='/manager/customers/new' element={<FormCreateCustomer />} />
         
 
