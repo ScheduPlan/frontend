@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import url from '../BackendURL';
 import axios from 'axios';
 import FormCreateAddress from './FormCreateAddress';
-import { wait } from '@testing-library/user-event/dist/utils';
-import { resolvePath } from 'react-router-dom';
 
 export default function FormCreateCustomer() {
+
+    const navigate = useNavigate();
 
     const [firstname, setFirstname] = useState([]); //To Do: kann man das alles vereinfachen / zusammen fassen?
     const [lastname, setLastname] = useState([]);
@@ -23,7 +24,6 @@ export default function FormCreateCustomer() {
     const getFirstname = (e) => {
         const firstname = e.target.value;
         setFirstname(firstname);
-        console.log(firstname);
     };
 
     const getLastname = (e) => {
@@ -64,7 +64,7 @@ export default function FormCreateCustomer() {
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
-            console.log(response.data);
+            console.log("Post res", response.data);
 
             const newCustomer = await axios.post(url + '/customers/' + response.data.id + '/addresses',
                 {
@@ -72,7 +72,7 @@ export default function FormCreateCustomer() {
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
-            console.log(newCustomer.data);
+            console.log("Customer", newCustomer.data);
 
             Swal.fire({
                 position: 'top-end',
@@ -82,23 +82,13 @@ export default function FormCreateCustomer() {
                 timer: 2000,
             });
 
-            setTimeout(function(){
-                window.location.reload();
-             }, 2500);
+            setTimeout(function () {
+                navigate("..", { relative: "path" });
+            }, 2500);
 
         } catch (error) {
             alert(error);
         }
-    }
-
-    function testFct() {
-        const res = axios.get(url + '/customers')
-            .then(r => {
-                console.log(r.data.at(0));
-                const data = r.data.at(0);
-                console.log("data", data);
-                setTest(data);
-            });
     }
 
     return (
@@ -137,8 +127,12 @@ export default function FormCreateCustomer() {
                     </label>
                 </div>
                 <FormCreateAddress value={newAddress} />
+                <label>
+                    Lieferaddresse abweichend
+                    <input className='btn primary' type='checkbox' value="" />
+                </label>
+
                 <input className="btn primary" type="submit" value="Anlegen" />
-                <input onClick={testFct} className="btn primary" type="button" value="AnlegenTest" />
             </form>
         </div>
     )
