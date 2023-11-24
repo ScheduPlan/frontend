@@ -195,3 +195,28 @@ form input[type="password"]:focus-visible {
   outline: none;
   box-shadow: inset -1px -1px 3px 1px #00000026;
 }
+
+.pickedItem-wrapper {
+  display: flex;
+  width: 50%;
+  align-items: center;
+  padding-top: 2rem;
+  padding-left: 1.5rem;
+  gap: 1rem 2rem;
+}
+
+.pickedItem {
+  background-color: #eee;
+  padding: 7px 14px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.pickedItem p {
+  margin: 0;
+}
+
+.pickedItem svg {
+  margin-left: 10px;
+}
