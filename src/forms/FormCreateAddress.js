@@ -1,82 +1,103 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import url from '../BackendURL';
+import axios from 'axios';
 
-export default function FormCreateAddress(props) {
-    const [street, setStreet] = useState([]);
-    const [streetNumber, setStreetNumber] = useState([]);
-    const [zip, setZip] = useState([]);
-    const [city, setCity] = useState([]);
-    const [land, setLand] = useState([]);
-    const [addressSuffix, setAddressSuffix] = useState([]);
+const FormCreateAddress = React.forwardRef((props, ref) => {
 
-    useEffect(() => {
-        props.value.useState = {
-            street, streetNumber, zip, city, land, addressSuffix
-        }
-    }, [street, streetNumber, zip, city, land, addressSuffix]);
+    const [street, setStreet] = useState("");
+    const [streetNumber, setStreetNumber] = useState("");
+    const [zip, setZip] = useState("");
+    const [city, setCity] = useState("");
+    const [country, setCountry] = useState("");
+    const [addressSuffix, setAddressSuffix] = useState("");
+    const [addressType, setAddressType] = useState("DELIVERY");
+
+    // Ref an die Elternkomponente übergeben
+    React.useImperativeHandle(ref, () => ({
+        triggerFunctionInChild,
+    }));
+
 
     const getStreet = (e) => {
-        const street = e.target.value;
-        setStreet(street);
+        setStreet(e.target.value);
     };
 
     const getStreetNumber = (e) => {
-        const streetNumber = e.target.value;
-        setStreetNumber(streetNumber);
+        setStreetNumber(e.target.value);
     };
 
     const getZip = (e) => {
-        const zip = e.target.value;
-        setZip(zip);
+        setZip(e.target.value);
     };
 
     const getCity = (e) => {
-        const city = e.target.value;
-        setCity(city);
+        setCity(e.target.value);
     };
 
-    const getLand = (e) => {
-        const land = e.target.value;
-        setLand(land);
+    const getCountry = (e) => {
+        setCountry(e.target.value);
     };
 
     const getAddressSuffix = (e) => {
-        const addressSuffix = e.target.value;
-        setAddressSuffix(addressSuffix);
+        setAddressSuffix(e.target.value);
     };
+
+    /**
+     * sends address form
+     */
+    async function triggerFunctionInChild(id) {
+        console.log("Id in address", id);
+        const newCustomer = await axios.post(url + '/customers/' + id + '/addresses',
+            {
+                country: {country},
+                street: {street},
+                streetNumber: {streetNumber},
+                city: {city},
+                zip: {zip},
+                //description: "string",
+                addressSuffix: {addressSuffix},
+                addressType: {addressType}
+            },
+            { headers: { 'Content-Type': 'application/json' } });
+
+        console.log("Customer", newCustomer.data);
+    }
 
     return (
         <div>
             <h3>Adresse</h3>
-                <div className='form-row'>
-                    <label>
-                        Straße
-                        <input className='light-blue' type="text" name="street" onChange={getStreet} required />
-                    </label>
-                    <label>
-                        Hausnummer
-                        <input className='light-blue' type="number" name="streetNumber" onChange={getStreetNumber} required />
-                    </label>
-                </div>
-                <div className='form-row'>
-                    <label>
-                        Postleitzahl
-                        <input className='light-blue' type="text" name="zip" onChange={getZip} required />
-                    </label>
-                    <label>
-                        Stadt
-                        <input className='light-blue' type="text" name="city" onChange={getCity} required />
-                    </label>
-                </div>
-                <div className='form-row'>
-                    <label>
-                        Land
-                        <input className='light-blue' type="text" name="land" onChange={getLand} required />
-                    </label>
-                    <label>
-                        Addresszusatz
-                        <input className='light-blue' type="text" name="addressSuffix" onChange={getAddressSuffix} />
-                    </label>
-                </div>
+            <div className='form-row'>
+                <label>
+                    Straße
+                    <input className='light-blue' type="text" name="street" onChange={getStreet} required />
+                </label>
+                <label>
+                    Hausnummer
+                    <input className='light-blue' type="number" name="streetNumber" onChange={getStreetNumber} required />
+                </label>
+            </div>
+            <div className='form-row'>
+                <label>
+                    Postleitzahl
+                    <input className='light-blue' type="text" name="zip" onChange={getZip} required />
+                </label>
+                <label>
+                    Stadt
+                    <input className='light-blue' type="text" name="city" onChange={getCity} required />
+                </label>
+            </div>
+            <div className='form-row'>
+                <label>
+                    Land
+                    <input className='light-blue' type="text" name="country" onChange={getCountry} required />
+                </label>
+                <label>
+                    Addresszusatz
+                    <input className='light-blue' type="text" name="addressSuffix" onChange={getAddressSuffix} />
+                </label>
+            </div>
         </div>
     )
-}
+});
+
+export default FormCreateAddress;

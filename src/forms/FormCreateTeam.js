@@ -18,16 +18,34 @@ export default function FormCreateTeam() {
     const [pickedEmployees, setPickedEmployees] = useState([]);
 
     useEffect(() => {
-        //add all employees but in a different form
-        setAvailableEmployees(testEmployees.map(emp => {
-            return (
-                {
-                    id: emp.id,
-                    name: emp.firstName + " " + emp.lastName
-                }
-            )
-        }));
+        //getAllEmployees();
     }, []);
+
+    useEffect(() => {
+        updateAvailableEmployees();
+    }, [pickedEmployees]);
+
+    /**
+     * gets all employees from database
+     */
+    function getAllEmployees() {
+        axios.get(url + 'employees')
+            .then(response => {
+                const itemData = response.data;
+                setAllEmployees(itemData);
+                console.log("Employees", itemData);
+            });
+    }
+
+    /**
+     * filters the available employees that there are nor picked ones
+     */
+    function updateAvailableEmployees() {
+        setAvailableEmployees(
+            allEmployees.filter(obj =>
+                !pickedEmployees.some(pickedObj => pickedObj.id === obj.id))
+        )
+    }
 
     const getTeamName = (e) => {
         setTeamName(e.target.value);
@@ -37,32 +55,27 @@ export default function FormCreateTeam() {
         setTeamDesc(e.target.value);
     }
 
+
+    /**
+     * gets the selected employee and adds it to the picked employees
+     * @param {*} e 
+     */
     const getPickedEmployees = (e) => {
         const selectedOption = {
             id: e.target.selectedOptions[0].id,
-            name: e.target.value
+            value: e.target.value
         };
-        //add the picked element to pickedEmployees
         setPickedEmployees((prevEmployees) => [...prevEmployees, selectedOption]);
     }
 
-    function addEmployee() {
-        //remove the picked element from the avaiable ones
-        const filteredObjects = availableEmployees.filter(obj =>
-            !pickedEmployees.some(pickedObj => pickedObj.id === obj.id)
-        );
-        setAvailableEmployees(filteredObjects);
-    }
-
+    /**
+     * removes the employee from the picked list & adds the removed employee back to the select options
+     * @param {*} e 
+     */
     function removeEmployee(e) {
         const selectedOption = pickedEmployees.find(elem => elem.id === e.target.id);
-        //console.log(selectedOption);
-
-        //remove the employee from the picked list
         setPickedEmployees(pickedEmployees.filter(obj => obj != selectedOption));
-
-        //add the removed employee back to the select options
-        setAvailableEmployees((prevEmployees) => [...prevEmployees, selectedOption]);        
+        updateAvailableEmployees();
     }
 
     async function submitForm(event) {
@@ -114,17 +127,20 @@ export default function FormCreateTeam() {
                         Mitarbeiter
                         <select className='light-blue' name="customer" onChange={getPickedEmployees} required>
                             <option readOnly hidden>Bitte wählen</option>
-                            {availableEmployees.map((emp) => {
-                                return (<option onClick={addEmployee} key={emp.id} id={emp.id} value={emp.name}>{emp.name}</option>)
-                            })}
+                            {availableEmployees
+                                .map((emp) => {
+                                    return (
+                                        <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
+                                    )
+                                })}
                         </select>
                     </label>
                     <div className='pickedItem-wrapper'>
                         {(pickedEmployees != [] ?
-                            pickedEmployees.map((emp, index) => {
+                            pickedEmployees.map((emp) => {
                                 return (
-                                    <div key={index} className='pickedItem'>
-                                        <p>{emp.name} {emp.lastName}</p>
+                                    <div key={emp.id} className='pickedItem'>
+                                        <p>{emp.value}</p>
                                         <svg onClick={removeEmployee} id={emp.id} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
                                             <path d={Path("close")} />
                                         </svg>

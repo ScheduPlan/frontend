@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import url from '../BackendURL';
@@ -8,42 +8,39 @@ import FormCreateAddress from './FormCreateAddress';
 export default function FormCreateCustomer() {
 
     const navigate = useNavigate();
+    // Ref für die Kindkomponente erstellen
+    const childRef = useRef(null);
 
-    const [firstname, setFirstname] = useState([]); //To Do: kann man das alles vereinfachen / zusammen fassen?
-    const [lastname, setLastname] = useState([]);
-    const [email, setEmail] = useState([]);
+    const [customerID, setCustomerID] = useState("");
+
     const [company, setCompany] = useState([]);
     const [customerNumber, setCustomerNumber] = useState([]);
+    const [firstname, setFirstname] = useState([]);
+    const [lastname, setLastname] = useState([]);
+    const [email, setEmail] = useState([]);
     const [phone, setPhone] = useState([]);
-    const [newAddress, setNewAddress] = useState([]);
-    const [addresses, setAddresses] = useState([]);
 
 
-    const [test, setTest] = useState([]);
-
-    const getFirstname = (e) => {
-        const firstname = e.target.value;
-        setFirstname(firstname);
-    };
-
-    const getLastname = (e) => {
-        const lastname = e.target.value;
-        setLastname(lastname);
-    };
-
-    const getEmail = (e) => {
-        const email = e.target.value;
-        setEmail(email);
-    };
-
+    //To Do: Kann man den nachfolgenden Block generischer machen?
     const getCompany = (e) => {
-        const company = e.target.value;
-        setCompany(company);
+        setCompany(e.target.value);
     };
 
     const getCustomerNumber = (e) => {
         const customerNumber = e.target.value;
         setCustomerNumber(customerNumber);
+    };
+
+    const getFirstname = (e) => {
+        setFirstname(e.target.value);
+    };
+
+    const getLastname = (e) => {
+        setLastname(e.target.value);
+    };
+
+    const getEmail = (e) => {
+        setEmail(e.target.value);
     };
 
     const getPhone = (e) => {
@@ -52,27 +49,30 @@ export default function FormCreateCustomer() {
     };
 
 
+    /**
+     * creates a new customer
+     * @param {*} event 
+     */
     async function submitForm(event) {
         event.preventDefault();
         try {
             const response = await axios.post(url + '/customers',
                 {
                     company: company,
-                    firstName: firstname,
-                    lastName: lastname,
+                    person: {
+                        firstName: firstname,
+                        lastName: lastname
+                    },
                     customerNumber: customerNumber
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
             console.log("Post res", response.data);
+            console.log("Post res id", response.data.id);
+            setCustomerID(response.data.id);
 
-            const newCustomer = await axios.post(url + '/customers/' + response.data.id + '/addresses',
-                {
-                    addresses: addresses.push(newAddress)
-                },
-                { headers: { 'Content-Type': 'application/json' } });
-
-            console.log("Customer", newCustomer.data);
+            //hier Fkt. in Adresse auslösen
+            childRef.current && childRef.current.triggerFunctionInChild(response.data.id);
 
             Swal.fire({
                 position: 'top-end',
@@ -129,7 +129,7 @@ export default function FormCreateCustomer() {
                         <input className='light-blue' type="text" name="phone" onChange={getPhone} required />
                     </label>
                 </div>
-                <FormCreateAddress value={newAddress} />
+                <FormCreateAddress ref={childRef} id={customerID} />
                 <label>
                     Lieferaddresse abweichend
                     <input className='btn primary' type='checkbox' value="" />
