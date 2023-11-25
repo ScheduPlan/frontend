@@ -1,6 +1,6 @@
 .sidebar {
     width: 25%;
-    height: calc(100vh - 150px);
+    height: calc(100vh - 174px);
     padding: 1rem;
     background: var(--primary);
     color: #fff;
@@ -13,14 +13,39 @@
     background: #fff;
     color: var(--primary);
     overflow: scroll;
+    padding: 0 0.4rem;
+}
+
+.appointment_box_wrapper::before,
+.appointment_box_wrapper::after {
+    content: "";
+    background-color: #fff;
+    width: 100%;
+    height: 0.4rem;
+    display: flex;
+    position: sticky;
+    top: 0;
+}
+
+.appointment_box_wrapper::after {
+    top: unset;
+    bottom: 0;
 }
 
 .appointment_box {
     width: auto;
-    margin: 0.4rem;
+    margin: 0.4rem 0;
     padding: 0.8rem;
     background: #e6e6e6;
     cursor: pointer;
+}
+
+.appointment_box:first-child {
+    margin-top: 0 !important;
+}
+
+.appointment_box:last-child {
+    margin-bottom: 0 !important;
 }
 
 .appointment_box .title {
