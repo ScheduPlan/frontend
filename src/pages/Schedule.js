@@ -19,9 +19,14 @@ export default function Schedule() {
   ]
 
   return (
-    <div className='content-wrapper'>
-      <Sidebar />
-      <Calendar appointments={testAppointments} />
-    </div>
+    <>
+      <div className='content-container'>
+        <h1>Planungsassistent</h1>
+      </div>
+      <div className='content-wrapper'>
+        <Sidebar />
+        <Calendar appointments={testAppointments} />
+      </div>
+    </>
   )
 }
