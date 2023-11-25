@@ -2,15 +2,35 @@ import React, { useEffect, useState } from 'react'
 import TestUser from '../UserExample'
 import axios from 'axios'
 import url from '../BackendURL'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import style from './ListItems.module.css'
 import PopUp from '../components/PopUp'
 import Path from '../icons/Paths'
+import Swal from 'sweetalert2'
 
 export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
+
+  const navigate = useNavigate();
+
   const { items: ItemComponent } = props;
   const [itemObjects, setItemObjects] = useState([]);
   const [isPopUpOpen, setPopUpOpen] = useState(false);
+
+  useEffect(() => {
+    getItemObjects();
+  }, []);
+
+  /**
+   * get all Items from database for the list
+   */
+  function getItemObjects() {
+    axios.get(url + props.path)
+      .then(response => {
+        const itemData = response.data;
+        setItemObjects(itemData);
+        console.log("Items", itemData);
+      });
+  }
 
   function togglePopUp() {
     if (isPopUpOpen) {
@@ -20,30 +40,40 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
     }
   }
 
-  useEffect(() => {
-    getItemObjects();
-  }, []);
-
-  function getItemObjects() {
-    axios.get(url + props.path)
-      .then(response => {
-        const itemData = response.data;
-        setItemObjects(itemData);
-        console.log("Response ", response.data);
-      });
-  }
-
   function editItem(event) {
-    console.log(event.target.id);
-    const id = event.target.id;
-    console.log(id);
+    //navigate to PatchForm
+    navigate('/' + TestUser.role + props.path + "/" + event.target.id);
   }
 
+  /**
+   * deletes element from list & fire swal pop-up
+   * @param {*} event 
+   */
   function deleteItem(event) {
-    console.log(event.target.id);
-    const id = event.target.id;
-    console.log(id);
-    axios.delete(url + props.path + "/" + id);
+    Swal.fire({
+      title: "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
+      icon: "warning",
+      iconColor: "#A50000AB",
+      showCancelButton: true,
+      confirmButtonColor: "var(--green)",
+      cancelButtonColor: "var(--red)",
+      cancelButtonText: "Nein",
+      confirmButtonText: "Ja",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(url + props.path + "/" + event.target.id);
+
+        Swal.fire({
+          title: "Element gelöscht!",
+          icon: "success",
+          showConfirmButton: false,
+        });
+
+        setTimeout(function () {
+          window.location.reload();
+        }, 2500);
+      }
+    });
   }
 
   return (
