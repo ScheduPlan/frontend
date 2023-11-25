@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import TestUser from '../UserExample'
 import axios from 'axios'
 import url from '../BackendURL'
@@ -11,6 +11,8 @@ import Swal from 'sweetalert2'
 export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
   const navigate = useNavigate();
+  // Ref für die Kindkomponente erstellen
+  const childRef = useRef(null);
 
   const { items: ItemComponent } = props;
   const [itemObjects, setItemObjects] = useState([]);
@@ -61,7 +63,13 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
       confirmButtonText: "Ja",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(url + props.path + "/" + event.target.id);
+        if (props.path == "/orders") {
+          //hier Fkt. in Adresse auslösen
+          childRef.current && childRef.current.triggerFunctionInChild(event.target.id);
+
+        } else {
+          axios.delete(url + props.path + "/" + event.target.id);
+        }
 
         Swal.fire({
           title: "Element gelöscht!",
@@ -70,7 +78,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
         });
 
         setTimeout(function () {
-          window.location.reload();
+          //window.location.reload();
         }, 2500);
       }
     });
@@ -89,7 +97,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
             return (
               <div className={style.item} key={index}>
                 <div className={style.item_content}>
-                  <ItemComponent object={item} />
+                  <ItemComponent ref={childRef} object={item} />
                 </div>
                 <div className={style.item_icons}>
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={editItem} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
