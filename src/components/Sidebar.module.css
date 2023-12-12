@@ -65,6 +65,7 @@
     border-radius: 13px;
     box-shadow: 1px 1px 8px #00000030;
     cursor: pointer;
+    transition: 0.4s ease;
 }
 
 .appointment_box:first-child {
@@ -73,6 +74,11 @@
 
 .appointment_box:last-child {
     margin-bottom: 0 !important;
+}
+
+.appointment_box:hover {
+    transform: scale(1.05);
+    transition: 0.2s ease;
 }
 
 .appointment_box .title {
