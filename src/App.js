@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import React, { Component, useContext } from 'react';
 import AuthContext from './AuthProvider';
-import TestUser , {roles} from './UserExample'; //später raus
+import { AuthProvider } from './AuthProvider';
+import TestUser, { roles } from './UserExample'; //später raus
 import Layout from './components/Layout';
 
 // import pages
@@ -27,17 +28,17 @@ export default function App() {
   const { auth } = useContext(AuthContext);
 
   function redirect() {
-    if (TestUser.role=="admin") {
+    if (TestUser.role == "admin") {
       window.location.href = 'admin';
       return (
         <Navigate to="/admin" replace />
       )
-    } else if (TestUser.role=="manager") {
+    } else if (TestUser.role == "manager") {
       window.location.href = '/manager';
       return (
         <Navigate to="/manager" replace />
       )
-    } else if (TestUser.role=="assembler") {
+    } else if (TestUser.role == "assembler") {
       return (
         <Navigate to="/assembler" replace />
       )
@@ -50,10 +51,10 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      {/*<AuthProvider>*/}
-      <Layout>
-        <Routes>
-          {/*{roles.map((role, index) => (
+      <AuthProvider>
+        <Layout>
+          <Routes>
+            {/*{roles.map((role, index) => (
             <Route key={index} path={role.role} element={<Dashboard />}> {// für jede Rolle wird ein Pfad erstellt und das Dashboard ausgegeben}
               {role.links?.map((link, index) => (
                 console.log(link.path),
@@ -62,32 +63,32 @@ export default function App() {
             </Route>
           ))}*/}
 
-          <Route path='/' element={<Login />} />
+            <Route path='/' element={<Login />} />
 
-          <Route path='/admin' element={<Dashboard />} />
+            <Route path='/admin' element={<Dashboard />} />
             <Route path='/admin/employees' element={<ListItems items={Employee} path="/employees" h1="Alle Mitarbeiter" />} />
             <Route path='/admin/employees/new' element={<FormCreateEmployee />} />
             <Route path='/admin/teams' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />} />
             <Route path='/admin/teams/new' element={<FormCreateTeam />} />
             <Route path='/admin/teams/:id' element={<FormPatchTeam />} />
-      
-          <Route path='/manager' element={<Dashboard />} />
+
+            <Route path='/manager' element={<Dashboard />} />
             <Route path='/manager/schedule' element={<Schedule />} />
             <Route path='/manager/orders' element={<ListItems items={Order} path="/orders" h1="Alle Aufträge" />} />
             <Route path='/manager/orders/new' element={<FormCreateOrder />} />
             <Route path='/manager/customers' element={<ListItems items={Customer} path="/customers" h1="Alle Kunden" />} />
             <Route path='/manager/customers/new' element={<FormCreateCustomer />} />
-        
 
-          <Route path='/assembler' element={<Dashboard />} />
 
-          <Route path='/unauthorized' element={<Unauthorized />} />
-          <Route path='/password' element={<ChangePassword />} />
-          <Route path='*' element={<Error404 />} />
-          <Route path='/error' element={<Error404 />} />
-        </Routes>
-      </Layout>
-      {/*</AuthProvider>*/}
+            <Route path='/assembler' element={<Dashboard />} />
+
+            <Route path='/unauthorized' element={<Unauthorized />} />
+            <Route path='/password' element={<ChangePassword />} />
+            <Route path='*' element={<Error404 />} />
+            <Route path='/error' element={<Error404 />} />
+          </Routes>
+        </Layout>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

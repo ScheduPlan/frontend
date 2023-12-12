@@ -9,15 +9,15 @@ import style from './Login.module.css';
 
 export default function Login() {
 
-    const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const { setAuth } = useContext(AuthContext);
-    const { auth } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-    const getEmail = (e) => {
-        setEmail(e.target.value);
-        console.log(email);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const getUsername = (e) => {
+        setUsername(e.target.value);
+        console.log(username);
     }
 
     const getPassword = (e) => {
@@ -28,29 +28,26 @@ export default function Login() {
     async function submitForm(event) {
         try {
             event.preventDefault();
-            const response = await axios.post(url + '/api/login',
+            const response = await axios.post(url + '/auth/login',
                 {
-                    email: email,
+                    username: username,
                     password: password
                 },
                 { headers: { 'Content-Type': 'application/json' } }
             );
-            const accessToken = response?.data?.access_token;
-            const roles = response?.data?.roles; //?
-            const obj = { email, roles, accessToken };
+            
+            console.log("Login response:", response);
+
+            const accessToken = response?.data?.token;
+            const roles = response?.data?.roles; //To Do: Ich brauch 3 Rollen
+            
+            const obj = { username, roles, accessToken }; //To Do: ID, statt Username (o. beides)
             setAuth(obj);
             sessionStorage.setItem("auth", JSON.stringify(obj));
-            if (auth.is_admin === true) {
-                navigate('/admin');
-            } else if (auth.is_manager === true) {
-                navigate('/manager');
-            } else if (auth.is_assembler === true) {
-                navigate('/assembler');
-            } else {
-                navigate('/error');
-            }
+
+            navigate('/assembler');
         } catch (error) {
-            alert(error.response.data.message);
+            alert(error);
         }
     }
 
@@ -59,8 +56,8 @@ export default function Login() {
             <h1>Login</h1>
             <form onSubmit={submitForm}>
                 <label>
-                    E-Mail-Adresse:
-                    <input type="email" name="email" onChange={getEmail} />
+                    Benutzername:
+                    <input type="text" name="username" onChange={getUsername} />
                 </label>
                 <label>
                     Passwort:

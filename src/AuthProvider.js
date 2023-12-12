@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         console.log(auth);
         setHeader(auth.accessToken);
-        axios.get(url + '/api/user') 
+        axios.get(url + '/employees/' ) 
             .then(res => {
                 const data = res.data;
                 setUser(data);
