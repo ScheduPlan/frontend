@@ -19,6 +19,8 @@ import Customer from './components/Customer';
 import Employee from './components/Employee';
 import Team from './components/Team';
 import Order from './components/Order';
+import FormPatchTeam from './forms/FormPatchTeam';
+import Unauthorized from './pages/Unauthorized';
 
 export default function App() {
 
@@ -31,6 +33,7 @@ export default function App() {
         <Navigate to="/admin" replace />
       )
     } else if (TestUser.role=="manager") {
+      window.location.href = '/manager';
       return (
         <Navigate to="/manager" replace />
       )
@@ -66,6 +69,7 @@ export default function App() {
             <Route path='/admin/employees/new' element={<FormCreateEmployee />} />
             <Route path='/admin/teams' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />} />
             <Route path='/admin/teams/new' element={<FormCreateTeam />} />
+            <Route path='/admin/teams/:id' element={<FormPatchTeam />} />
       
           <Route path='/manager' element={<Dashboard />} />
             <Route path='/manager/schedule' element={<Schedule />} />
@@ -77,6 +81,7 @@ export default function App() {
 
           <Route path='/assembler' element={<Dashboard />} />
 
+          <Route path='/unauthorized' element={<Unauthorized />} />
           <Route path='/password' element={<ChangePassword />} />
           <Route path='*' element={<Error404 />} />
           <Route path='/error' element={<Error404 />} />
