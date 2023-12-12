@@ -25,16 +25,27 @@ export const appoint = [
 export default function Sidebar() {
 
     const [orders, setOrders] = useState([]);
+    const [isOpen, setOpen] = useState(true);
 
     useEffect(() => {
-        axios.get(url + "/orders").then(res => {
+        /*axios.get(url + "/orders").then(res => {
             console.log("Orders", res.data);
             setOrders(res.data);
-        })
+        })*/
     }, []);
+
+    function toggleSidebar(e) {
+        if (isOpen) {
+            setOpen(false);
+        } else {
+            setOpen(true);
+        }
+    }
+
     return (
-        <div className={style.sidebar}>
+        <div className={style.sidebar + (!isOpen ? " " + style.sidebar_closed : " ")}>
             <h2>Aufträge</h2>
+            <div className={style.btn_close} onClick={toggleSidebar}>{'<'}</div>
             <div className={style.appointment_box_wrapper}>
                 {appoint.map((a, index) => (
                     <div key={index} className={style.appointment_box}>

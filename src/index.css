@@ -21,7 +21,7 @@
 
 body {
   margin: 0;
-  font-family: 'PT Sans';
+  font-family: 'Poppins';
   overflow-x: hidden;
 }
 
@@ -83,6 +83,10 @@ a:hover {
 a:hover::after {
   text-decoration: none !important;
   margin-left: 15px;
+}
+
+b {
+  font-weight: 600;
 }
 
 /* Button styles */

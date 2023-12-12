@@ -1,42 +1,69 @@
 .sidebar {
+    position: relative;
     width: 25%;
     height: calc(100vh - 174px);
     padding: 1rem;
-    background: var(--primary);
+    background: linear-gradient(45deg, #2440BDDB 0%, #00C3FFDB 100%);
     color: #fff;
+    border-radius: 0 24px 0 0;
+    box-shadow: 2px 2px 8px #0000003d;
+    transition: 0.4s ease-in-out;
     display: none;
 }
 
+.sidebar h2 {
+    text-align: center;
+    font-weight: 400;
+    margin-top: 0;
+    font-size: 1.5rem;
+    display: inline-block;
+    width: 83%;
+}
+
+.sidebar .btn_close {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.5rem;
+    background-color: #fff;
+    border-radius: 9px;
+    margin: 0 0 0 auto;
+    color: black;
+    mix-blend-mode: screen;
+    top: 18px;
+    right: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.75;
+    transition: 0.4s ease;
+}
+
+.sidebar .btn_close:hover {
+    cursor: pointer;
+    opacity: 1;
+}
+
 .appointment_box_wrapper {
-    width: 100%;
+    width: 106%;
     height: 88%;
-    background: #fff;
+    background: transparent;
     color: var(--primary);
     overflow: scroll;
-    padding: 0 0.4rem;
-}
-
-.appointment_box_wrapper::before,
-.appointment_box_wrapper::after {
-    content: "";
-    background-color: #fff;
-    width: 100%;
-    height: 0.4rem;
-    display: flex;
-    position: sticky;
-    top: 0;
-}
-
-.appointment_box_wrapper::after {
-    top: unset;
-    bottom: 0;
+    padding: 3%;
+    border-radius: 8px;
+    margin-left: -3%;
+    margin-top: -6%;
 }
 
 .appointment_box {
     width: auto;
-    margin: 0.4rem 0;
+    margin: 0.5rem 0;
     padding: 0.8rem;
-    background: #e6e6e6;
+    background: #fff;
+    opacity: 0.75;
+    border-radius: 13px;
+    box-shadow: 1px 1px 8px #00000030;
     cursor: pointer;
 }
 
@@ -49,14 +76,31 @@
 }
 
 .appointment_box .title {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     margin-top: 0;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.4rem;
 }
 
 .appointment_detail p {
     margin: 0;
+    font-size: 13px;
+}
+
+/* sidebar closed */
+
+
+.sidebar_closed {
+    margin-left: -310px;
+}
+
+.sidebar_closed .btn_close {
+    transform: translateX(3rem) rotate(180deg);
+    background-color: var(--primary);
+    border-radius: 9px 0 0 9px;
+    color: #fff;
+    transition: 0.4s ease;
+    height: 2.2rem;
 }
 
 @media screen and (min-width: 768px) {
