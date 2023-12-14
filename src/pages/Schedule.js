@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Calendar from '../components/Calendar'
 import Sidebar from '../components/Sidebar'
 import axios from 'axios'
 import url from '../BackendURL'
+import { testTeams } from '../UserExample'
 
 export default function Schedule() {
   const testAppointments = [
@@ -18,6 +19,26 @@ export default function Schedule() {
     }
   ]
 
+  const [teams, setTeams] = useState([]);
+
+  useEffect(() => {
+    getTeams();
+  }, []);
+
+  function getTeams() {
+    setTeams(testTeams);
+  }
+
+  function openCity(e) {
+    console.log(e.target.id);
+    var i;
+    var x = document.getElementsByClassName("tab-container");
+    for (i = 0; i < x.length; i++) {
+      x[i].style.display = "none";
+    }
+    document.getElementById("team" + e.target.id).style.display = "block";
+  }
+
   return (
     <>
       <div className='content-container'>
@@ -25,7 +46,23 @@ export default function Schedule() {
       </div>
       <div className='content-wrapper'>
         <Sidebar />
-        <Calendar appointments={testAppointments} />
+
+        <div className='calendar-wrapper'>
+          <div className="tab-bar">
+            {teams.map(team => {
+              return (
+                <button key={team.id} className="btn tab-btn" id={team.id} onClick={openCity}>{team.name}</button>
+              )
+            })}
+          </div>
+
+          {teams.map(team => {
+            return (
+              <div key={team.id} id={"team" + team.id} className="tab-container">
+                <Calendar appointments={testAppointments} />
+              </div>)
+          })}
+        </div>
       </div>
     </>
   )
