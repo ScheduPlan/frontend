@@ -3,6 +3,9 @@
     margin: 0;
     background-color: #fff;
     box-shadow: 1px 1px 6px var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .header_wrapper .header_content {
@@ -12,7 +15,7 @@
     justify-content: space-between;
     align-items: flex-start;
     max-width: 1200px;
-    margin: 0 auto 40px;
+    margin: 0 auto;
 }
 
 .header_wrapper svg {
