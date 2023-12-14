@@ -3,10 +3,11 @@ import style from './Header.module.css';
 import Path from '../icons/Paths';
 import Menue from './Menue';
 import TestUser, { roles } from '../UserExample';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
     //const { auth, user } = useContext(AuthContext);
+    const navigate = useNavigate();
     const [isMenueOpen, setMenueOpen] = useState(false);
     const [menueIcon, setMenueIcon] = useState("menue");
     const menueButton = useRef(null);
@@ -37,15 +38,15 @@ export default function Header() {
 
     return (
         <div className={style.header_wrapper}>
-            <Link className='icon' to={'/' + TestUser.role}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960" fill="var(--primary)">
+            <div className={style.header_content}>
+                <svg onClick={() => { navigate('/' + TestUser.role) }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960" fill="var(--primary)">
                     <path d={Path("home")} />
                 </svg>
-            </Link>
-            <svg ref={menueButton} onClick={toggleMenue} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960" fill="var(--primary)">
-                <path d={Path(menueIcon)} />
-            </svg>
-            <Menue trigger={isMenueOpen} links={roles.find((r) => r.role === TestUser.role).links} />
+                <svg ref={menueButton} onClick={toggleMenue} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960" fill="var(--primary)">
+                    <path d={Path(menueIcon)} />
+                </svg>
+                <Menue trigger={isMenueOpen} links={roles.find((r) => r.role === TestUser.role).links} />
+            </div>
         </div>
     )
 }
