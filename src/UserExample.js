@@ -6,7 +6,7 @@ import ListItems from './pages/ListItems';
 
 const user = {
   is_loged_in: true,
-  role: "manager",
+  role: "",
   firstname: "Max",
   lastname: "Mustermann",
   email: "max@muster.de"
@@ -60,96 +60,35 @@ export const roles = [
   }
 ]
 
-export function initiate() {
-  createTeams();
-  //createCustomers();
-}
-
-function createTeams() {
-  const teams = [
-    "Süd 1",
-    "Süd 2",
-    "West 1",
-    "Ost 1",
-    "Nord 1",
-    "Nord 2",
-    "Berlin"
-  ]
-
-  teams.map((team) => {
-    try {
-      axios.post(url + '/teams',
-        { name: team, description: "" },
-        { headers: { 'Content-Type': 'application/json' } });
-    } catch (error) {
-      alert("createTeams", error);
-    }
-  })
-}
-
-function createCustomers() {
-
-  const customers = [
-    {
-      firstname: "Kunde1",
-      lastname: "Testkunde",
-      company: "Testfirma",
-      addresses: [
-        createAddresses
-      ]
-    }, 
-    {
-      firstname: "Kunde2",
-      lastname: "Testkunde2",
-      description: "Hier könnte was stehen",
-    },
-    {
-      company: "Testfirma 3",
-      description: "Hier könnte noch was stehen",
-    }
-  ]
-
-  customers.map((customer) => {
-    try {
-      axios.post(url + '/teams',
-        {
-          firstname: customer.firstname,
-          lastname: customer.lastname,
-          company: customer.company,
-          description: customer.description
-        },
-        { headers: { 'Content-Type': 'application/json' } });
-    } catch (error) {
-      alert("createCustomers", error);
-    }
-  })
-}
-
-function createAddresses() {
-  const addresses = [
-    {
-      country: "Land",
-      street: "Straße",
-      streetNumber: 123,
-      city: "Stadt",
-      zip: "012345",
-      description: "string",
-      addressSuffix: "Zusatzinfo",
-      addressType: "DELIVERY"
-    },
-    {
-      country: "Land1",
-      street: "Straße1",
-      streetNumber: 123,
-      city: "Stadt",
-      zip: "012345",
-      description: "string1",
-      addressSuffix: "Zusatzinfo1",
-      addressType: "DELIVERY"
-    }
-  ]
-
-  return addresses;
-}
+export const testEmployees = [
+  {
+    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    firstName: "Mitarbeiter1",
+    lastName: "Test",
+    employeeNumber: 1234,
+    //position: "Monteur", Wofür?
+  },
+  {
+    id: "3fa85f64-5717-4562-b3fc-2c963f66afb7",
+    firstName: "Mitarbeiter2",
+    lastName: "Test",
+    employeeNumber: 1235,
+    //position: "Monteur", Wofür?
+  },
+  {
+    id: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
+    firstName: "Mitarbeiter3",
+    lastName: "Test",
+    employeeNumber: 1236,
+    //position: "Monteur", Wofür?
+  },
+  {
+    id: "3fa85f64-5717-4562-b3fc-2c963f66afb8",
+    firstName: "Mitarbeiter4",
+    lastName: "Test",
+    employeeNumber: 1237,
+    //position: "Monteur", Wofür?
+  }
+]
 
 export default user;

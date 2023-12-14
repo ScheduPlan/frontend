@@ -7,6 +7,7 @@ const AuthContext = createContext({}); // Erstellt einen neuen Kontext
 export const AuthProvider = ({ children }) => {
 
     const storageItem = sessionStorage.getItem("auth");
+    console.log("Sess.Storage", sessionStorage);
     const parsedItem = storageItem ? JSON.parse(storageItem) : {};
 
     // Verwalte den Zustand der Authentifizierung
@@ -15,14 +16,14 @@ export const AuthProvider = ({ children }) => {
     setHeader(parsedItem.accessToken);
 
     useEffect(() => {
-        console.log(auth);
+        console.log("auth", auth);
         setHeader(auth.accessToken);
-        axios.get(url + '/employees/' ) 
+        /*axios.get(url + '/employees/' + auth.userId ) 
             .then(res => {
                 const data = res.data;
                 setUser(data);
                 console.log("ResData: ", res.data);
-            })
+            })*/
     }, [auth]);
 
     function setHeader(accessToken) {

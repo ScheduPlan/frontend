@@ -25,8 +25,6 @@ import Unauthorized from './pages/Unauthorized';
 
 export default function App() {
 
-  const { auth } = useContext(AuthContext);
-
   function redirect() {
     if (TestUser.role == "admin") {
       window.location.href = 'admin';

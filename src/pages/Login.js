@@ -1,10 +1,11 @@
 import AuthContext from '../AuthProvider';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useContext} from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 import url from "../BackendURL";
 import '../index.css';
 import style from './Login.module.css';
+import TestUser from '../UserExample';
 
 
 export default function Login() {
@@ -24,7 +25,7 @@ export default function Login() {
         setPassword(e.target.value);
         console.log(password); //Verschlüsseln?
     }
-   
+
     async function submitForm(event) {
         try {
             event.preventDefault();
@@ -35,17 +36,21 @@ export default function Login() {
                 },
                 { headers: { 'Content-Type': 'application/json' } }
             );
-            
+
             console.log("Login response:", response);
 
-            const accessToken = response?.data?.token;
-            const roles = response?.data?.roles; //To Do: Ich brauch 3 Rollen
-            
-            const obj = { username, roles, accessToken }; //To Do: ID, statt Username (o. beides)
+            const accessToken = response?.data?.accessToken;
+            const refreshToken = response?.data?.refreshToken;
+            //const roles = response?.data?.roles; //To Do: Ich brauch 3 Rollen
+            const userId = response?.data?.userId;
+
+            const obj = { userId, refreshToken, accessToken };
             setAuth(obj);
+            TestUser.role = "manager";
+
             sessionStorage.setItem("auth", JSON.stringify(obj));
 
-            navigate('/assembler');
+            navigate('/' + TestUser.role);
         } catch (error) {
             alert(error);
         }
@@ -53,21 +58,23 @@ export default function Login() {
 
     return (
         <div className={style.login_wrapper} >
-            <h1>Login</h1>
-            <form onSubmit={submitForm}>
-                <label>
-                    Benutzername:
-                    <input type="text" name="username" onChange={getUsername} />
-                </label>
-                <label>
-                    Passwort:
-                    <input type="password" name="password" onChange={getPassword}/>
-                </label>
-                <input className="btn primary" type="submit" value="Anmelden" />
-                <Link to="/admin">zum Admin</Link>
-                <Link to="/manager">zum Manager</Link>
-                <Link to="/assembler">zum Monteur</Link>
-            </form>
+            <div className={style.login_content} >
+                <h1>Login</h1>
+                <form onSubmit={submitForm}>
+                    <label>
+                        Benutzername:
+                        <input type="text" name="username" onChange={getUsername} />
+                    </label>
+                    <label>
+                        Passwort:
+                        <input type="password" name="password" onChange={getPassword} />
+                    </label>
+                    <input className="btn primary" type="submit" value="Anmelden" />
+                    <Link to="/admin">zum Admin</Link>
+                    <Link to="/manager">zum Manager</Link>
+                    <Link to="/assembler">zum Monteur</Link>
+                </form>
+            </div>
         </div>
     );
 }
