@@ -31,6 +31,7 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
+  overflow: hidden;
 }
 
 .content-wrapper {
@@ -127,6 +128,17 @@ b {
 
 .btn.primary:hover {
   background-color: var(--primary-dark);
+}
+
+.btn.tab {
+  outline: none;
+  border: none;
+  width: inherit;
+  border-radius: 10px 10px 0 0;
+  font-family: 'Poppins';
+  color: #fff;
+  box-shadow: 1px 1px 6px #00000032;
+  margin-top: 8px;
 }
 
 svg.btn-icon {

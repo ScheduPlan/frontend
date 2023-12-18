@@ -1,0 +1,19 @@
+.calendar_wrapper {
+    width: 100%;
+    height: calc(100vh - 179px);
+    overflow: hidden;
+    padding: 0 2rem;
+}
+
+.calendar_wrapper .tab_bar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.calendar_wrapper .tab_container {
+    padding: 2rem 0;
+    display: none;
+}

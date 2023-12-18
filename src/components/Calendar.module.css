@@ -1,8 +1,8 @@
 .calendar_wrapper {
     width: 100%;
-    height: calc(100vh - 174px);
+    height: calc(100vh - 287px);
     overflow: scroll;
-    padding: 0 2rem;
+    padding: 0;
     max-width: 1200px;
     margin: 0 auto;
 }
