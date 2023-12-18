@@ -4,11 +4,12 @@ import moment from 'moment';
 import 'moment/locale/de';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import style from './Calendar.module.css';
+import style from './ScheduleCalendar.module.css';
 import AuthContext from '../AuthProvider';
 import PopUp from './PopUp';
 import url from '../BackendURL';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function CalendarComponent(props) {
 
@@ -16,6 +17,7 @@ export default function CalendarComponent(props) {
     const [appointments, setAppointments] = useState([]);
     const [appointment, setAppointment] = useState([]);
     const [orders, setOrders] = useState([]);
+    const [newEvent, setNewEvent] = useState({});
 
     const [isPopUpOpen, setPopUpOpen] = useState(false);
 
@@ -115,16 +117,38 @@ export default function CalendarComponent(props) {
     ), [appointments]);
 
     //set new event dates
-    async function setEvent(e) {
+    function setNewEventDates(e) {
         console.log("event " + e.event + ", start " + e.start + ", end " + e.end);
-        ///customers/{customerId}/orders/{orderId}/events/{eventId}
-
-        const newEvent = await axios.patch(url + '/customers/' + e.event.customer. id + '/orders/' + e.event.orders.id + '/events' + e.event.id,
-            {
-                startDate: e.start,
-                endDate: e.end
-            },
-            { headers: { 'Content-Type': 'application/json' } });
+        
+        Swal.fire({
+            title: "Sind Sie sicher, dass Sie den Termin verschieben möchten?",
+            icon: "warning",
+            iconColor: "#A50000AB",
+            showCancelButton: true,
+            confirmButtonColor: "var(--green)",
+            cancelButtonColor: "var(--red)",
+            cancelButtonText: "Nein",
+            confirmButtonText: "Ja",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+                const newEvent = await axios.patch(url + '/customers/' + e.event.customer. id + '/orders/' + e.event.orders.id + '/events' + e.event.id,
+                {
+                    startDate: e.start,
+                    endDate: e.end
+                },
+                { headers: { 'Content-Type': 'application/json' } });
+      
+              Swal.fire({
+                title: "Element gelöscht!",
+                icon: "success",
+                showConfirmButton: false,
+              });
+      
+              setTimeout(function () {
+                //window.location.reload();
+              }, 2500);
+            }
+          });
     }
 
     return (
@@ -135,7 +159,7 @@ export default function CalendarComponent(props) {
                 events={/*appointments*/ props.appointments}
                 /*backgroundEvents={timeslots}*/
                 /*eventPropGetter={eventPropGetter}*/
-                onEventDrop={setEvent}
+                onEventDrop={setNewEventDates}
                 localizer={localizer}
                 max={max}
                 showMultiDayTimes

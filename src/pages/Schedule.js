@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Calendar from '../components/Calendar'
+import Calendar from '../components/ScheduleCalendar'
 import Sidebar from '../components/Sidebar'
 import axios from 'axios'
 import url from '../BackendURL'
@@ -24,13 +24,21 @@ export default function Schedule() {
 
   useEffect(() => {
     getTeams();
+
+    if(document.getElementById("team1") != null) {
+      document.getElementById("team1").style.display = "block";
+    }
   }, []);
 
   function getTeams() {
     setTeams(testTeams);
   }
 
-  function openCity(e) {
+  /**
+   * opens team tab with specific calendar
+   * @param {*} e 
+   */
+  function openTab(e) {
     console.log(e.target.id);
     var i;
     var x = document.getElementsByClassName(style.tab_container);
@@ -52,7 +60,7 @@ export default function Schedule() {
           <div className={style.tab_bar}>
             {teams.map(team => {
               return (
-                <button key={team.id} className="btn tab" id={team.id} onClick={openCity}>{team.name}</button>
+                <button key={team.id} className="btn tab" id={team.id} onClick={openTab}>{team.name}</button>
               )
             })}
           </div>
