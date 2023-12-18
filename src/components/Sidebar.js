@@ -19,6 +19,38 @@ export const appoint = [
         order: "Prod03_2023",
         time: 4,
         category: "Reklamation"
+    },
+    {
+        order: "Prod01_2023",
+        time: 2.5,
+        category: "Montage"
+    },
+    {
+        order: "Prod02_2023",
+        time: 4,
+        category: "Reklamation"
+    }
+    ,
+    {
+        order: "Prod03_2023",
+        time: 4,
+        category: "Reklamation"
+    },
+    {
+        order: "Prod01_2023",
+        time: 2.5,
+        category: "Montage"
+    },
+    {
+        order: "Prod02_2023",
+        time: 4,
+        category: "Reklamation"
+    }
+    ,
+    {
+        order: "Prod03_2023",
+        time: 4,
+        category: "Reklamation"
     }
 ]
 

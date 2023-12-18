@@ -3,17 +3,23 @@ import { Calendar, Views, DateLocalizer, momentLocalizer } from 'react-big-calen
 import moment from 'moment';
 import 'moment/locale/de';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import style from './Calendar.module.css';
 import AuthContext from '../AuthProvider';
 import PopUp from './PopUp';
+import url from '../BackendURL';
+import axios from 'axios';
 
 export default function CalendarComponent(props) {
 
     const { auth, user } = useContext(AuthContext);
     const [appointments, setAppointments] = useState([]);
     const [appointment, setAppointment] = useState([]);
+    const [orders, setOrders] = useState([]);
 
     const [isPopUpOpen, setPopUpOpen] = useState(false);
+
+    const DnDCalendar = withDragAndDrop(Calendar);
 
     function togglePopUp(appointment) {
         if (isPopUpOpen) {
@@ -57,6 +63,23 @@ export default function CalendarComponent(props) {
             appointments = [...appointments, elem];
         });
         setAppointments(appointments);
+
+        //get all orders
+        axios.get(url + "/orders")
+                .then(response => {
+                    const itemData = response.data;
+                    setOrders(itemData);
+                    console.log("Orders", itemData);
+                });
+
+        //get all events
+        axios.get(url + "/events")
+                .then(response => {
+                    const itemData = response.data;
+                    setOrders(itemData);
+                    console.log("Orders", itemData);
+                });
+
     }, [props.appointments]);
 
     //style of different appointments
@@ -77,7 +100,7 @@ export default function CalendarComponent(props) {
                     backgroundColor: 'var(--primary)',
                     border: '0',
                     opacity: '1',
-                    display: 'block'                 
+                    display: 'block'
                 }
             }),
             ...(event.title === "Reklamation" && { //ToDo: title in timeslot z-index:1 setzen
@@ -85,20 +108,34 @@ export default function CalendarComponent(props) {
                     backgroundColor: 'var(--primary-dark)',
                     border: '0',
                     opacity: '1',
-                    display: 'block'                 
+                    display: 'block'
                 }
             })
         }
     ), [appointments]);
 
+    //set new event dates
+    async function setEvent(e) {
+        console.log("event " + e.event + ", start " + e.start + ", end " + e.end);
+        ///customers/{customerId}/orders/{orderId}/events/{eventId}
+
+        const newEvent = await axios.patch(url + '/customers/' + e.event.customer. id + '/orders/' + e.event.orders.id + '/events' + e.event.id,
+            {
+                startDate: e.start,
+                endDate: e.end
+            },
+            { headers: { 'Content-Type': 'application/json' } });
+    }
+
     return (
         <div className={style.calendar_wrapper} >
-            <Calendar
+            <DnDCalendar
                 defaultView="week"
                 components={components}
-                events={appointments}
+                events={/*appointments*/ props.appointments}
                 /*backgroundEvents={timeslots}*/
-                eventPropGetter={eventPropGetter}
+                /*eventPropGetter={eventPropGetter}*/
+                onEventDrop={setEvent}
                 localizer={localizer}
                 max={max}
                 showMultiDayTimes
@@ -112,9 +149,10 @@ export default function CalendarComponent(props) {
                 culture='de'
                 style={style}
                 length={6}
-                messages={{next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag"}} 
+                resizable={false}
+                messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag" }}
             />
-            <PopUp trigger={isPopUpOpen} close={togglePopUp} type="dateDetail" appointment={appointment}/>
+            <PopUp trigger={isPopUpOpen} close={togglePopUp} type="dateDetail" appointment={appointment} />
         </div>
     )
 }
