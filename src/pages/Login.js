@@ -40,17 +40,19 @@ export default function Login() {
             console.log("Login response:", response);
 
             const accessToken = response?.data?.accessToken;
+            console.log("accessToken", accessToken);
             const refreshToken = response?.data?.refreshToken;
-            //const roles = response?.data?.roles; //To Do: Ich brauch 3 Rollen
+            //const userRole = response?.data?.roles; //To Do: Ich brauch 3 Rollen
             const userId = response?.data?.userId;
 
             const obj = { userId, refreshToken, accessToken };
             setAuth(obj);
-            TestUser.role = "manager";
 
             sessionStorage.setItem("auth", JSON.stringify(obj));
 
-            navigate('/' + TestUser.role);
+            TestUser.role = "manager";
+
+            navigate('/manager');
         } catch (error) {
             alert(error);
         }

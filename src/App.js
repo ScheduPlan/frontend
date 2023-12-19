@@ -26,17 +26,18 @@ import Unauthorized from './pages/Unauthorized';
 export default function App() {
 
   function redirect() {
-    if (TestUser.role == "admin") {
+    const userRole = TestUser.role.toLowerCase();
+    if (userRole == "admin") {
       window.location.href = 'admin';
       return (
         <Navigate to="/admin" replace />
       )
-    } else if (TestUser.role == "manager") {
+    } else if (userRole == "manager") {
       window.location.href = '/manager';
       return (
         <Navigate to="/manager" replace />
       )
-    } else if (TestUser.role == "assembler") {
+    } else if (userRole == "assembler") {
       return (
         <Navigate to="/assembler" replace />
       )

@@ -39,13 +39,13 @@ export default function Header() {
     return (
         <div className={style.header_wrapper}>
             <div className={style.header_content}>
-                <svg onClick={() => { navigate('/' + TestUser.role) }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960" fill="var(--primary)">
+                <svg onClick={() => { navigate('/' + TestUser.role.toLowerCase()) }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960" fill="var(--primary)">
                     <path d={Path("home")} />
                 </svg>
                 <svg ref={menueButton} onClick={toggleMenue} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960" fill="var(--primary)">
                     <path d={Path(menueIcon)} />
                 </svg>
-                <Menue trigger={isMenueOpen} links={roles.find((r) => r.role === TestUser.role).links} />
+                <Menue trigger={isMenueOpen} links={roles.find((r) => r.role === TestUser.role.toLowerCase()).links} />
             </div>
         </div>
     )

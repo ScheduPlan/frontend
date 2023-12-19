@@ -44,7 +44,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
   function editItem(event) {
     //navigate to PatchForm
-    navigate('/' + TestUser.role + props.path + "/" + event.target.id);
+    navigate('/' + TestUser.role.toLowerCase() + props.path + "/" + event.target.id);
   }
 
   /**
@@ -89,7 +89,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
       <div className='content-container'>
         <div className='container-header-wrapper'>
           <h1>{props.h1}</h1>
-          <Link className='btn primary' to={'/' + TestUser.role + props.path + '/new'}>Neu +</Link>
+          <Link className='btn primary' to={'/' + TestUser.role.toLowerCase() + props.path + '/new'}>Neu +</Link>
         </div>
 
         <div className={style.item_wrapper}>

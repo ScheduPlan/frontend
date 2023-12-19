@@ -11,13 +11,13 @@ export default function Dashboard() {
 
     function setContent() {
         let content;
-        if (window.location.href === "http://localhost:3000/" + TestUser.role) {
+        if (window.location.href === "http://localhost:3000/" + TestUser.role.toLowerCase()) {
             content = (
                 <div className='fancy-background'>
                     <div className='content-container'>
                         <h1>{TestUser.role} Dashboard</h1>
                         <div className='button-wrapper'>
-                            {roles.find((r) => r.role === TestUser.role).links?.map((link, index) => (
+                            {roles.find((r) => r.role === TestUser.role.toLowerCase()).links?.map((link, index) => (
                                 <Link key={index} to={link.path} className="btn primary" replace>{link.title}</Link> //hier machts immer zwei Mal die Rolle
                             ))
                             }
