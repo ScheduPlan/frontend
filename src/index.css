@@ -31,7 +31,6 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  overflow: hidden;
 }
 
 .content-wrapper {
@@ -39,11 +38,24 @@ body {
 }
 
 .content-container {
-  padding: 2rem 2rem 0;
+  padding: 1rem 2rem 0.5rem;
   max-width: 1200px;
   margin: 0 auto;
   /*max-height: calc(100vh - 131px);*/
   overflow: scroll;
+}
+
+.content-container h1 {
+  position: relative;
+}
+
+@media screen and (min-width: 576px) {
+  .content-container h1 {
+    position: absolute;
+    z-index: 10;
+    top: 12px;
+    left: 110px;
+  }
 }
 
 .container-header-wrapper {
@@ -55,8 +67,16 @@ body {
   background-color: #fff;
 }
 
+.container-header-wrapper h1 {
+  position: relative !important;
+  font-size: 35px;
+  z-index: unset;
+  top: unset;
+  left: unset;
+}
+
 .container-header-wrapper a {
-  margin-left: 3rem;
+  margin-left: 2rem;
 }
 
 .fancy-background {
@@ -72,12 +92,10 @@ body {
 /* Font styles */
 
 h1 {
-  font-size: 52px;
-  font-weight: 600;
-  color: var(--primary);
+  font-size: 30px;
+  font-weight: 400;
+  color: var(--grey-dark);
   margin: 0;
-  margin-bottom: 0px;
-  margin-bottom: 12px;
 }
 
 /* Link styles */
@@ -134,16 +152,21 @@ b {
   outline: none;
   border: none;
   width: inherit;
-  border-radius: 10px 10px 0 0;
+  border-radius: 0;
   font-family: 'Poppins';
   color: #fff;
-  box-shadow: 1px 1px 6px #00000032;
-  margin-top: 8px;
+  border-right: 1px solid white;
 }
 
-svg.btn-icon {
-  cursor: pointer;
-  transition: 0.2s ease;
+.btn.tab:last-child {
+  border: none;
+}
+
+.btn.icon {
+  border: none;
+  height: auto;
+  aspect-ratio: 1/1;
+  padding: 5px;
 }
 
 svg.blue:hover {
@@ -174,10 +197,11 @@ form {
 }
 
 form label {
-  margin: 10px 0 10px 7px;
+  margin: 0 0 10px 7px;
   display: flex;
   flex-direction: column;
-  color: #fff;
+  /*color: #fff; -> Warum weiß?*/
+  color: red; 
   font-size: 1rem;
   font-weight: 600;
 }
@@ -189,6 +213,7 @@ form .form-row {
   flex-flow: row wrap;
   column-gap: 1rem;
   justify-content: space-between;
+  row-gap: 1rem;
 }
 
 form .form-row label {

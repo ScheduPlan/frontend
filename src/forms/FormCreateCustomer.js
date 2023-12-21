@@ -93,10 +93,7 @@ export default function FormCreateCustomer() {
 
     return (
         <div className='content-container'>
-            <div className='container-header-wrapper'>
-                <h1>Neuen Kunden anlegen</h1>
-            </div>
-
+            <h1>Neuen Kunden anlegen</h1>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>

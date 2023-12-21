@@ -25,9 +25,6 @@ export default function Schedule() {
   useEffect(() => {
     getTeams();
 
-    if(document.getElementById("team1") != null) {
-      document.getElementById("team1").style.display = "block";
-    }
   }, []);
 
   function getTeams() {

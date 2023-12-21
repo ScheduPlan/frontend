@@ -23,11 +23,4 @@
     min-height: 32px;
     cursor: pointer;
     fill: var(--grey-dark);
-    transition: 0.2s linear;
-    cursor: pointer;
-}
-
-.header_wrapper svg:hover {
-    fill: var(--primary);
-    transition: 0.1s linear;
 }

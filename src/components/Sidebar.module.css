@@ -2,7 +2,7 @@
     position: relative;
     width: 33%;
     min-width: 250px;
-    height: calc(100vh - 174px);
+    height: calc(100vh - 90px);
     padding: 1rem;
     background: linear-gradient(45deg, #2440BDDB 0%, #00C3FFDB 100%);
     color: #fff;
@@ -48,7 +48,7 @@
 
 .appointment_box_wrapper {
     width: 106%;
-    height: 88%;
+    height: calc(100% - 42px);
     background: transparent;
     color: var(--primary);
     overflow: scroll;

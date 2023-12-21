@@ -75,12 +75,12 @@ export default function CalendarComponent(props) {
                 });
 
         //get all events
-        axios.get(url + "/events")
+        /*axios.get(url + "/events")
                 .then(response => {
                     const itemData = response.data;
                     setOrders(itemData);
                     console.log("Orders", itemData);
-                });
+                });*/
 
     }, [props.appointments]);
 

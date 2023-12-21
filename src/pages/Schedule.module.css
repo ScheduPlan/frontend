@@ -1,7 +1,5 @@
 .calendar_wrapper {
     width: 100%;
-    height: calc(100vh - 179px);
-    overflow: hidden;
     padding: 0 2rem;
 }
 
@@ -11,9 +9,16 @@
     width: 100%;
     display: flex;
     flex-flow: row nowrap;
+    justify-content: space-between;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .calendar_wrapper .tab_container {
     padding: 2rem 0;
     display: none;
+}
+
+.calendar_wrapper .tab_container:nth-child(2) {
+    display: block;
 }

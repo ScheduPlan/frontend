@@ -1,6 +1,6 @@
 .calendar_wrapper {
     width: 100%;
-    height: calc(100vh - 287px);
+    height: calc(100vh - 183px);
     overflow: scroll;
     padding: 0;
     max-width: 1200px;
