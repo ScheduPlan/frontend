@@ -9,11 +9,13 @@ import { testTeams } from '../UserExample'
 export default function Schedule() {
   const testAppointments = [
     {
+      id: 1,
       start: new Date(2023, 11, 18, 8, 0),
       end: new Date(2023, 11, 18, 13, 0),
       category: "Montage"
     },
     {
+      id: 2,
       start: new Date(2023, 12, 20, 9, 0),
       end: new Date(2023, 12, 20, 10, 30),
       category: "Reklamation"
@@ -36,13 +38,19 @@ export default function Schedule() {
    * @param {*} e 
    */
   function openTab(e) {
-    console.log(e.target.id);
+    console.log(e.target);
     var i;
     var x = document.getElementsByClassName(style.tab_container);
     for (i = 0; i < x.length; i++) {
       x[i].style.display = "none";
     }
     document.getElementById("team" + e.target.id).style.display = "block";
+
+    var y = document.getElementsByClassName("btn tab");
+    for (i = 0; i < y.length; i++) {
+      y[i].classList.remove("active");
+    }
+    document.getElementById(e.target.id).classList.add("active");
   }
 
   return (

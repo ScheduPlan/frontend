@@ -67,7 +67,7 @@ export default function CalendarComponent(props) {
         setAppointments(appointments);
 
         //get all orders
-        axios.get(url + "/orders")
+        axios.get(url + '/orders')
                 .then(response => {
                     const itemData = response.data;
                     setOrders(itemData);
@@ -117,8 +117,8 @@ export default function CalendarComponent(props) {
     ), [appointments]);
 
     //set new event dates
-    function setNewEventDates(e) {
-        console.log("event " + e.event + ", start " + e.start + ", end " + e.end);
+    function changeEventDateTime(e) {
+        console.log(e.event.id, " event " + e.event, ", start " + e.start, ", end " + e.end);
         
         Swal.fire({
             title: "Sind Sie sicher, dass Sie den Termin verschieben möchten?",
@@ -131,12 +131,12 @@ export default function CalendarComponent(props) {
             confirmButtonText: "Ja",
           }).then(async (result) => {
             if (result.isConfirmed) {
-                const newEvent = await axios.patch(url + '/customers/' + e.event.customer. id + '/orders/' + e.event.orders.id + '/events' + e.event.id,
+                /*const newEvent = await axios.patch(url + '/customers/' + e.event.customer. id + '/orders/' + e.event.orders.id + '/events' + e.event.id,
                 {
                     startDate: e.start,
                     endDate: e.end
                 },
-                { headers: { 'Content-Type': 'application/json' } });
+                { headers: { 'Content-Type': 'application/json' } });*/
       
               Swal.fire({
                 title: "Element gelöscht!",
@@ -159,7 +159,7 @@ export default function CalendarComponent(props) {
                 events={/*appointments*/ props.appointments}
                 /*backgroundEvents={timeslots}*/
                 /*eventPropGetter={eventPropGetter}*/
-                onEventDrop={setNewEventDates}
+                onEventDrop={changeEventDateTime}
                 localizer={localizer}
                 max={max}
                 showMultiDayTimes
