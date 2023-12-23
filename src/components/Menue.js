@@ -13,7 +13,7 @@ export default function Menue(props) {
 
     return (
         <div className={style.menue_wrapper} state={props.trigger ? "open" : ""}>    
-            <p><b>{user.firstname} {user.lastname}</b></p>
+            <p><b>{user.firstName} {user.lastName}</b></p>
             <div className={style.menue_links}>
                 <Link to={'/' + user.user.role.toLowerCase()} replace>Dashboard</Link>
                 {roles.find((r) => r.role === user.user.role.toLowerCase()).links.map((link, index) => (
