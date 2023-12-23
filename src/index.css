@@ -133,6 +133,7 @@ b {
   cursor: pointer;
   transition: 0.2s ease;
   border-radius: 10px;
+  font-family: 'Poppins';
 }
 
 .btn:hover {
@@ -153,13 +154,17 @@ b {
   border: none;
   width: inherit;
   border-radius: 0;
-  font-family: 'Poppins';
-  color: #fff;
+  color: #333;
   border-right: 1px solid white;
 }
 
 .btn.tab:last-child {
   border: none;
+}
+
+.btn.tab.active {
+  background-color: var(--grey);
+  color: #fff;
 }
 
 .btn.icon {

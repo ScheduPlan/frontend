@@ -37,6 +37,7 @@ export default function FormCreateEmployee() {
         })
     }
 
+    //To Do: Checkbox für Rolle idManager (default Rolle Assembler)
     return (
         <div className='content-container'>
             <h1>Neuen Mitarbeiter anlegen</h1>
