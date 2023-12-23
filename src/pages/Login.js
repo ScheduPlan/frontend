@@ -74,9 +74,6 @@ export default function Login() {
                         <input type="password" name="password" onChange={getPassword} />
                     </label>
                     <input className="btn primary" type="submit" value="Anmelden" />
-                    <Link to="/admin">zum Admin</Link>
-                    <Link to="/manager">zum Manager</Link>
-                    <Link to="/assembler">zum Monteur</Link>
                 </form>
             </div>
         </div>
