@@ -11,7 +11,7 @@ export default function Layout(props) {
     }, []); //auth, user
 
     function setContent() {
-        if (user.role != null || userTest.role != "") {
+        if (user?.user?.role != null) {
             return (
                 <>
                     <Header />

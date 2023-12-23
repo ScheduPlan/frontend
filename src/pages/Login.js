@@ -1,20 +1,27 @@
 import AuthContext from '../AuthProvider';
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 import url from "../BackendURL";
 import '../index.css';
 import style from './Login.module.css';
-import TestUser from '../UserExample';
 
 
 export default function Login() {
 
-    const { setAuth } = useContext(AuthContext);
+    const { setAuth, user, auth } = useContext(AuthContext);
     const navigate = useNavigate();
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    useEffect(() => {
+        if(auth.userId != null) {
+            axios.get(url + '/employees/' + auth.userId).then(res => {
+                navigate('/' + res.data.user.role.toLowerCase());
+            });
+        }
+    }, [user]);
 
     const getUsername = (e) => {
         setUsername(e.target.value);
@@ -42,17 +49,12 @@ export default function Login() {
             const accessToken = response?.data?.accessToken;
             console.log("accessToken", accessToken);
             const refreshToken = response?.data?.refreshToken;
-            //const userRole = response?.data?.roles; //To Do: Ich brauch 3 Rollen
             const userId = response?.data?.userId;
 
             const obj = { userId, refreshToken, accessToken };
             setAuth(obj);
 
             sessionStorage.setItem("auth", JSON.stringify(obj));
-
-            TestUser.role = "manager";
-
-            navigate('/manager');
         } catch (error) {
             alert(error);
         }
