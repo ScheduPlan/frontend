@@ -1,12 +1,13 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useContext } from 'react'
 import style from './Header.module.css';
 import Path from '../icons/Paths';
 import Menue from './Menue';
-import TestUser, { roles } from '../UserExample';
+import roles from '../ROLES';
 import { Link, useNavigate } from 'react-router-dom';
+import AuthContext from '../AuthProvider';
 
 export default function Header() {
-    //const { auth, user } = useContext(AuthContext);
+    const { auth, user } = useContext(AuthContext);
     const navigate = useNavigate();
     const [isMenueOpen, setMenueOpen] = useState(false);
     const [menueIcon, setMenueIcon] = useState("menue");
@@ -40,7 +41,7 @@ export default function Header() {
         <div className={style.header_wrapper}>
             <div className={style.header_content}>
                 <button className='btn icon'>
-                    <svg onClick={() => { navigate('/' + TestUser.role.toLowerCase()) }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
+                    <svg onClick={() => { navigate('/' + user.user.role.toLowerCase()) }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
                         <path d={Path("home")} />
                     </svg>
                 </button>
@@ -49,7 +50,7 @@ export default function Header() {
                         <path d={Path(menueIcon)} />
                     </svg>
                 </button>
-                <Menue trigger={isMenueOpen} links={roles.find((r) => r.role === TestUser.role.toLowerCase()).links} />
+                <Menue trigger={isMenueOpen} links={roles.find((r) => r.role === user.user.role.toLowerCase()).links} />
             </div>
         </div>
     )

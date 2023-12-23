@@ -22,6 +22,7 @@ import Team from './components/Team';
 import Order from './components/Order';
 import FormPatchTeam from './forms/FormPatchTeam';
 import Unauthorized from './pages/Unauthorized';
+import AssemblerDashboard from './pages/AssemblerDashboard';
 
 export default function App() {
 
@@ -64,12 +65,12 @@ export default function App() {
 
             <Route path='/' element={<Login />} />
 
-            <Route path='/admin' element={<Dashboard />} />
-            <Route path='/admin/employees' element={<ListItems items={Employee} path="/employees" h1="Alle Mitarbeiter" />} />
-            <Route path='/admin/employees/new' element={<FormCreateEmployee />} />
-            <Route path='/admin/teams' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />} />
-            <Route path='/admin/teams/new' element={<FormCreateTeam />} />
-            <Route path='/admin/teams/:id' element={<FormPatchTeam />} />
+            <Route path='/administrator' element={<Dashboard />} />
+            <Route path='/administrator/employees' element={<ListItems items={Employee} path="/employees" h1="Alle Mitarbeiter" />} />
+            <Route path='/administrator/employees/new' element={<FormCreateEmployee />} />
+            <Route path='/administrator/teams' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />} />
+            <Route path='/administrator/teams/new' element={<FormCreateTeam />} />
+            <Route path='/administrator/teams/:id' element={<FormPatchTeam />} />
 
             <Route path='/manager' element={<Dashboard />} />
             <Route path='/manager/schedule' element={<Schedule />} />
@@ -79,7 +80,8 @@ export default function App() {
             <Route path='/manager/customers/new' element={<FormCreateCustomer />} />
 
 
-            <Route path='/assembler' element={<Dashboard />} />
+            <Route path='/fitter' element={<Dashboard />} />
+            <Route path='/fitter/calendar' element={<AssemblerDashboard />} />
 
             <Route path='/unauthorized' element={<Unauthorized />} />
             <Route path='/password' element={<ChangePassword />} />
