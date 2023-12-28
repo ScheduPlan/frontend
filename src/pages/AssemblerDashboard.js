@@ -1,7 +1,9 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import CalendarComponent from '../components/SimpleCalendar';
+import AuthContext from '../AuthProvider';
 
 export default function AssemblerDashboard() {
+  const {user} = useContext(AuthContext);
   const [appointments, setAppointments] = useState([]);
 
   const appoint = [
@@ -21,15 +23,15 @@ export default function AssemblerDashboard() {
   useEffect(() => {
     let appointments = [];
     appoint.forEach((appointment) => {
-        let elem = {
-            title: appointment.category,
-            start: new Date(appointment.start),
-            end: new Date(appointment.end),
-            appointment: appointment.category,
-        };
-        appointments = [...appointments, elem];
+      let elem = {
+        title: appointment.category,
+        start: new Date(appointment.start),
+        end: new Date(appointment.end),
+        appointment: appointment.category,
+      };
+      appointments = [...appointments, elem];
     });
-    setAppointments(appointments);
+    //setAppointments(appointments);
 
     //get all events
     /*axios.get(url + "/events")
@@ -39,10 +41,11 @@ export default function AssemblerDashboard() {
                 console.log("Orders", itemData);
             });*/
 
-}, [appointments]);
+  }, [appoint]);
 
   return (
-    <div>
+    <div className='content-container'>
+      <h1>{user.user.role} Kalender</h1>
       <CalendarComponent appointments={appoint} />
     </div>
   )

@@ -10,7 +10,8 @@ export default function Dashboard() {
 
     useEffect(() => {
         setContent();
-    }, [user]);
+        console.log(user);
+    }, []);
 
 
     function setContent() {

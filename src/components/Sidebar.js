@@ -59,12 +59,12 @@ export default function Sidebar() {
     const [orders, setOrders] = useState([]);
     const [isOpen, setOpen] = useState(true);
 
-    useEffect(() => {
-        /*axios.get(url + "/orders").then(res => {
+    /*useEffect(() => {
+        axios.get(url + "/orders").then(res => {
             console.log("Orders", res.data);
             setOrders(res.data);
-        })*/
-    }, []);
+        })
+    }, []);*/
 
     function toggleSidebar(e) {
         if (isOpen) {
