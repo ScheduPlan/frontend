@@ -5,6 +5,7 @@ import AssemblerDashboard from './pages/AssemblerDashboard';
 const roles = [
     {
         role: "administrator",
+        title: "Admin",
         links: [
             {
                 path: "employees",
@@ -20,6 +21,7 @@ const roles = [
     },
     {
         role: "manager",
+        title: "Manager",
         links: [
             {
                 path: "schedule",
@@ -40,6 +42,7 @@ const roles = [
     },
     {
         role: "fitter",
+        title: "Monteur",
         links: [
             {
                 path: "calendar",
