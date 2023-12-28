@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useContext } from 'react'
 import TestUser from '../UserExample'
 import axios from 'axios'
 import url from '../BackendURL'
@@ -7,10 +7,13 @@ import style from './ListItems.module.css'
 import PopUp from '../components/PopUp'
 import Path from '../icons/Paths'
 import Swal from 'sweetalert2'
+import AuthContext from '../AuthProvider'
 
 export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
   const navigate = useNavigate();
+  const {user} = useContext(AuthContext);
+
   // Ref für die Kindkomponente erstellen
   const childRef = useRef(null);
 
@@ -44,7 +47,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
   function editItem(event) {
     //navigate to PatchForm
-    navigate('/' + TestUser.role.toLowerCase() + props.path + "/" + event.target.id);
+    navigate('/' + user.user.role.toLowerCase() + props.path + "/" + event.target.id);
   }
 
   /**
@@ -89,7 +92,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
       <div className='content-container'>
         <div className='container-header-wrapper'>
           <h1>{props.h1}</h1>
-          <Link className='btn primary' to={'/' + TestUser.role.toLowerCase() + props.path + '/new'}>Neu +</Link>
+          <Link className='btn primary' to={'/' + user.user.role.toLowerCase() + props.path + '/new'}>Neu +</Link>
         </div>
 
         <div className={style.item_wrapper}>
