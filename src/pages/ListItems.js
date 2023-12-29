@@ -8,17 +8,19 @@ import PopUp from '../components/PopUp'
 import Path from '../icons/Paths'
 import Swal from 'sweetalert2'
 import AuthContext from '../AuthProvider'
+import deleteItem from '../utility/deleteItem'
 
 export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
   const navigate = useNavigate();
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   // Ref für die Kindkomponente erstellen
   const childRef = useRef(null);
 
   const { items: ItemComponent } = props;
   const [itemObjects, setItemObjects] = useState([]);
+  const [pathToItem, setPathToItem] = useState([]);
   const [isPopUpOpen, setPopUpOpen] = useState(false);
 
   useEffect(() => {
@@ -37,10 +39,11 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
       });
   }
 
-  function togglePopUp() {
+  function togglePopUp(item) {
     if (isPopUpOpen) {
       setPopUpOpen(false);
     } else {
+      setPathToItem(url +  props.path + "/" + item.target.id);
       setPopUpOpen(true);
     }
   }
@@ -51,10 +54,11 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   }
 
   /**
+   * To Do: Löschen!
    * deletes element from list & fire swal pop-up
    * @param {*} event 
    */
-  function deleteItem(event) {
+  function deleteItem2(event) {
     Swal.fire({
       title: "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
       icon: "warning",
@@ -98,7 +102,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
         <div className={style.item_wrapper}>
           {itemObjects.map((item, index) => {
             return (
-              <div className={style.item} key={index}>
+              <div className={style.item} key={index} id={item.id} onClick={togglePopUp}>
                 <div className={style.item_content}>
                   <ItemComponent ref={childRef} object={item} />
                 </div>
@@ -106,7 +110,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={editItem} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("edit")} />
                   </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" onClick={deleteItem} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
+                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { deleteItem(props.path + "/" + item.id) }} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("delete")} />
                   </svg>
                 </div>
@@ -115,7 +119,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
           })}
         </div>
       </div>
-      <PopUp trigger={isPopUpOpen} close={togglePopUp} type="remove" /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
+      <PopUp trigger={isPopUpOpen} close={togglePopUp} type="userDetail" path={pathToItem} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
     </>
   )
 }

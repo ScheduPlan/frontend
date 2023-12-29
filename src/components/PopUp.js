@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './PopUp.module.css';
 import Path from '../icons/Paths';
-
-export function test() {
-    alert("Hello");
-}
+import axios from 'axios';
+import Employee from './Employee';
+import { render } from '@testing-library/react';
 
 export default function PopUp(props) {
+    const [item, setItem] = useState({});
 
     function renderContent() {
         if (props.type === "remove") {
@@ -35,6 +35,20 @@ export default function PopUp(props) {
                     <h2>{props.appointment.title}</h2>
                     <div className={style.popup_details}>
                         <p><b>Datum: </b>{props.appointment.start.toUTCString()}</p>
+                    </div>
+                </div>
+            )
+        } else if (props.type === "userDetail") {
+            axios.get(props.path).then(res => {
+                return (
+                    setItem(res.data)
+                );
+            });
+            return (
+                <div className={style.popup_content}>
+                    <h2>{item.firstName} {item.lastName}</h2>
+                    <div className={style.popup_details}>
+                        <p><b>Personalnummer: </b>{item.employeeNumber}</p>
                     </div>
                 </div>
             )
