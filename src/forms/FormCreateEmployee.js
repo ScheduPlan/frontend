@@ -53,8 +53,8 @@ export default function FormCreateEmployee() {
         try {
             const response = await axios.post(url + '/auth/create',
                 {
+                    employeeNumber: employeeNumber,
                     person: {
-                        employeeNumber: employeeNumber,
                         firstName: firstname,
                         lastName: lastname
                     },
