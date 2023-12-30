@@ -13,12 +13,12 @@ export default function FormCreateTeam() {
     const [teamName, setTeamName] = useState("");
     const [teamDesc, setTeamDesc] = useState("");
 
-    const [allEmployees, setAllEmployees] = useState(testEmployees);
+    const [allEmployees, setAllEmployees] = useState([]);
     const [availableEmployees, setAvailableEmployees] = useState([]);
     const [pickedEmployees, setPickedEmployees] = useState([]);
 
     useEffect(() => {
-        //getAllEmployees();
+        getAllEmployees();
     }, []);
 
     useEffect(() => {
@@ -29,11 +29,10 @@ export default function FormCreateTeam() {
      * gets all employees from database
      */
     function getAllEmployees() {
-        axios.get(url + 'employees')
+        axios.get(url + '/employees')
             .then(response => {
                 const itemData = response.data;
                 setAllEmployees(itemData);
-                console.log("Employees", itemData);
             });
     }
 
