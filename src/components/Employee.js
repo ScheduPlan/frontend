@@ -1,8 +1,6 @@
 import React from 'react'
 
 export default function Employee(props) {
-  console.log("EMP", props.object);
-  console.log("ext", props);
   return (
     props.extended ? 
     <div>
@@ -10,7 +8,7 @@ export default function Employee(props) {
       
     </div>
     : <div>
-      <b>{props.object.firstName} {props.object.lastName}</b> 
+      <b>{props.object.firstName} {props.object.lastName} </b> 
       {props.object.employeeNumber ? "(" + props.object.employeeNumber + ")" : ""}
     </div>
 

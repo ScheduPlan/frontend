@@ -6,9 +6,7 @@ import axios from "axios";
    * deletes element from list & fire swal pop-up
    * @param {*} event 
    */
-export default function deleteItem(path) {
-    console.log(path);
-    
+export default function deleteItem(path) {    
     Swal.fire({
         title: "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
         icon: "warning",

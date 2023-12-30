@@ -2,11 +2,19 @@ import React, { useEffect, useState } from 'react';
 import style from './PopUp.module.css';
 import Path from '../icons/Paths';
 import axios from 'axios';
-import Employee from './Employee';
-import { render } from '@testing-library/react';
 
 export default function PopUp(props) {
     const [item, setItem] = useState({});
+
+    useEffect(() =>{
+        if(props.trigger) {
+            axios.get(props.path).then(res => {
+                return (
+                    setItem(res.data)
+                );
+            });
+        }
+    }, [props.path]);
 
     function renderContent() {
         if (props.type === "remove") {
@@ -39,11 +47,6 @@ export default function PopUp(props) {
                 </div>
             )
         } else if (props.type === "userDetail") {
-            axios.get(props.path).then(res => {
-                return (
-                    setItem(res.data)
-                );
-            });
             return (
                 <div className={style.popup_content}>
                     <h2>{item.firstName} {item.lastName}</h2>

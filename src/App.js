@@ -23,6 +23,7 @@ import Order from './components/Order';
 import FormPatchTeam from './forms/FormPatchTeam';
 import Unauthorized from './pages/Unauthorized';
 import AssemblerDashboard from './pages/AssemblerDashboard';
+import FormPatchEmployee from './forms/FormPatchEmployee';
 
 export default function App() {
 
@@ -68,6 +69,7 @@ export default function App() {
             <Route path='/administrator' element={<Dashboard />} />
             <Route path='/administrator/employees' element={<ListItems items={Employee} path="/employees" h1="Alle Mitarbeiter" />} />
             <Route path='/administrator/employees/new' element={<FormCreateEmployee />} />
+            <Route path='/administrator/employees/:id' element={<FormPatchEmployee />} />
             <Route path='/administrator/teams' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />} />
             <Route path='/administrator/teams/new' element={<FormCreateTeam />} />
             <Route path='/administrator/teams/:id' element={<FormPatchTeam />} />

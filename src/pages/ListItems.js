@@ -40,55 +40,12 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   }
 
   function togglePopUp(item) {
-    if (isPopUpOpen) {
+    if (isPopUpOpen || item.target.nodeName == "svg") {
       setPopUpOpen(false);
     } else {
       setPathToItem(url +  props.path + "/" + item.target.id);
       setPopUpOpen(true);
     }
-  }
-
-  function editItem(event) {
-    //navigate to PatchForm
-    navigate('/' + user.user.role.toLowerCase() + props.path + "/" + event.target.id);
-  }
-
-  /**
-   * To Do: Löschen!
-   * deletes element from list & fire swal pop-up
-   * @param {*} event 
-   */
-  function deleteItem2(event) {
-    Swal.fire({
-      title: "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
-      icon: "warning",
-      iconColor: "#A50000AB",
-      showCancelButton: true,
-      confirmButtonColor: "var(--green)",
-      cancelButtonColor: "var(--red)",
-      cancelButtonText: "Nein",
-      confirmButtonText: "Ja",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (props.path == "/orders") {
-          //hier Fkt. in Adresse auslösen
-          childRef.current && childRef.current.triggerFunctionInChild(event.target.id);
-
-        } else {
-          axios.delete(url + props.path + "/" + event.target.id);
-        }
-
-        Swal.fire({
-          title: "Element gelöscht!",
-          icon: "success",
-          showConfirmButton: false,
-        });
-
-        setTimeout(function () {
-          //window.location.reload();
-        }, 2500);
-      }
-    });
   }
 
   return (
@@ -107,7 +64,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
                   <ItemComponent ref={childRef} object={item} />
                 </div>
                 <div className={style.item_icons}>
-                  <svg xmlns="http://www.w3.org/2000/svg" onClick={editItem} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
+                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => {navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id)}} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("edit")} />
                   </svg>
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { deleteItem(props.path + "/" + item.id) }} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
