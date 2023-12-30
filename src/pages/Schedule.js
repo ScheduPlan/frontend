@@ -26,11 +26,13 @@ export default function Schedule() {
 
   useEffect(() => {
     getTeams();
-
   }, []);
 
   function getTeams() {
-    setTeams(testTeams);
+    axios.get(url + "/teams").then(res => {
+      console.log(res.data);
+      setTeams(res.data);
+    })
   }
 
   /**
@@ -65,7 +67,7 @@ export default function Schedule() {
           <div className={style.tab_bar}>
             {teams.map(team => {
               return (
-                <button key={team.id} className="btn tab" id={team.id} onClick={openTab}>{team.name}</button>
+                <button key={team.id} className="btn tab" id={team.id} onClick={openTab}>{team.description.name}</button>
               )
             })}
           </div>
