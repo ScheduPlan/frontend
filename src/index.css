@@ -206,10 +206,9 @@ form label {
   margin: 0 0 10px 7px;
   display: flex;
   flex-direction: column;
-  /*color: #fff; -> Warum weiß?*/
-  color: red; 
+  color: var(--grey-dark); 
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 
