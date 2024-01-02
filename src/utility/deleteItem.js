@@ -1,5 +1,4 @@
 import Swal from "sweetalert2";
-import url from "../BackendURL";
 import axios from "axios";
 
 /**
@@ -18,7 +17,7 @@ export default function deleteItem(path) {
         confirmButtonText: "Ja",
     }).then((result) => {
         if (result.isConfirmed) {
-            axios.delete(url + path);
+            axios.delete(path);
 
             Swal.fire({
                 title: "Element gelöscht!",

@@ -1,7 +1,7 @@
 .item_wrapper {}
 
 .item {
-    background-color: var(--grey-light);
+    background-color: var(--grey-superlight);
     padding: 0.4rem 1.4rem;
     margin: 10px 0;
     padding: 0.6rem 1rem;
@@ -22,7 +22,7 @@
 }
 
 .item:hover {
-    background-color: #d6d6d6;
+    background-color: var(--grey-light);
     margin: 16px 0;
 }
 

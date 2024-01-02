@@ -21,11 +21,11 @@ export default function FormPatchEmployee() {
 
     useEffect(() => {
         axios.get(url + '/employees/' + id)
-        .then(res => {
-            const data = res.data;
-            setEmployee(data);
-            console.log(data);
-        });
+            .then(res => {
+                const data = res.data;
+                setEmployee(data);
+                console.log(data);
+            });
         console.log(employee);
         console.log(employee.user);
     }, [id]);
@@ -126,9 +126,9 @@ export default function FormPatchEmployee() {
                         Benutzerrolle
                         <select className='light-blue' name="userRole" onChange={getUserRole} required>
                             <option readOnly hidden>
-                                {employee.user != null ? 
+                                {employee.user != null ?
                                     roles.find(role => role.role == employee.user.role.toLowerCase()).title :
-                                "Bitte wählen"}
+                                    "Bitte wählen"}
                             </option>
                             {roles.map((role, index) => {
                                 return (<option key={index} value={role.role}>{role.title}</option>)
@@ -136,9 +136,11 @@ export default function FormPatchEmployee() {
                         </select>
                     </label>
                 </div>
-                <input className="btn primary" type="submit" value="Speichern" />
-                <input className="btn secondary" type="button" value="Löschen" onClick={() => {deleteItem("/employees/" + employee.id)}} />
-                <input className="btn secondary" type="button" value="Zurück" onClick={() => {navigate("..", { relative: "path" });}} />
+                <div className='btn-wrapper'>
+                    <input className="btn primary" type="submit" value="Speichern" />
+                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem("/employees/" + employee.id) }} />
+                    <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
+                </div>
             </form>
         </div>
     )
