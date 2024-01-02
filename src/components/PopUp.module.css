@@ -22,7 +22,11 @@
 
 .popup_content_wrapper svg {
     position: absolute;
-    top: 2rem;
-    right: 2rem;
+    top: 1.5rem;
+    right: 1.75rem;
     cursor: pointer;
+}
+
+.popup_content {
+    margin-bottom: 2rem;
 }
