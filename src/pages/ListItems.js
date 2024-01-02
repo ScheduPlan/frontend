@@ -20,8 +20,8 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
   const { items: ItemComponent } = props;
   const [itemObjects, setItemObjects] = useState([]);
-  const [pathToItem, setPathToItem] = useState([]);
-  const [pathToEdit, setPathToEdit] = useState([]);
+  const [pathToItem, setPathToItem] = useState("");
+  const [pathToEdit, setPathToEdit] = useState("");
   const [isPopUpOpen, setPopUpOpen] = useState(false);
 
   useEffect(() => {
@@ -47,7 +47,9 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
     } else {
       setPathToItem(url +  props.path + "/" + item.target.id);
       setPathToEdit('/' + user.user.role.toLowerCase() + props.path + "/" + item.target.id);
-      setPopUpOpen(true);
+      setTimeout(() => {
+        setPopUpOpen(true);
+      }, 250);
     }
   }
 

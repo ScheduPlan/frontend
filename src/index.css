@@ -130,7 +130,7 @@ b {
 
 /* Button styles */
 .btn {
-  width: auto;
+  width: fit-content;
   padding: 8px 18px;
   margin-left: 0px;
   font-weight: 500;
