@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import AuthContext from '../AuthProvider';
 import deleteItem from '../utility/deleteItem';
 import Team from './Team';
+import Customer from './Customer';
 
 export default function PopUp(props) {
     const [item, setItem] = useState({});
@@ -46,6 +47,10 @@ export default function PopUp(props) {
             case "/teams":
                 return (
                     <Team extended object={item} />
+                )
+            case "/customers":
+                return (
+                    <Customer extended object={item} />
                 )
             default:
                 break;

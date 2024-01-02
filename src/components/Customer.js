@@ -1,10 +1,19 @@
-import React from 'react'
+import React from 'react';
+import popupStyle from './PopUp.module.css';
 
 export default function Customer(props) {
   return (
-    <>
+    props.extended ?
+      <>
+      {console.log(props.object)}
+        <h2>{props.object.customerNumber} {props.object.company}</h2>
+        <div className={popupStyle.popup_details}>
+          <p><b>Ansprechpartner: </b>{props.object.firstname} {props.object.lastname}</p>
+        </div>
+      </> :
+      <>
         <h3>{props.object.customerNumber} {props.object.company}</h3>
         <p>{props.object.firstname} {props.object.lastname}</p>
-    </>
+      </>
   )
 }
