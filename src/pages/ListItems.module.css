@@ -1,4 +1,7 @@
-.item_wrapper {}
+.item_wrapper {
+    height: calc(100% - 93px);
+    overflow: scroll;
+}
 
 .item {
     background-color: var(--grey-superlight);

@@ -25,8 +25,9 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   const [isPopUpOpen, setPopUpOpen] = useState(false);
 
   useEffect(() => {
+    console.log("USER", user);
     getItemObjects();
-  }, [props.path]);
+  }, [user, props.path]);
 
   /**
    * get all Items from database for the list
@@ -55,7 +56,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
       <div className='content-container'>
         <div className='container-header-wrapper'>
           <h1>{props.h1}</h1>
-          <Link className='btn primary' to={'/' + user.user.role.toLowerCase() + props.path + '/new'}>Neu +</Link>
+          <Link className='btn primary' to={'/' + user.user?.role.toLowerCase() + props.path + '/new'}>Neu +</Link>
         </div>
 
         <div className={style.item_wrapper}>
@@ -78,7 +79,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
           })}
         </div>
       </div>
-      <PopUp trigger={isPopUpOpen} close={togglePopUp} type="userDetail" pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
+      <PopUp trigger={isPopUpOpen} close={togglePopUp} path={props.path} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
     </>
   )
 }

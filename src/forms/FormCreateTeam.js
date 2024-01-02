@@ -23,7 +23,7 @@ export default function FormCreateTeam() {
 
     useEffect(() => {
         updateAvailableEmployees();
-    }, [pickedEmployees]);
+    }, [allEmployees, pickedEmployees]);
 
     /**
      * gets all employees from database
@@ -31,8 +31,7 @@ export default function FormCreateTeam() {
     function getAllEmployees() {
         axios.get(url + '/employees')
             .then(response => {
-                const itemData = response.data;
-                setAllEmployees(itemData);
+                setAllEmployees(response.data);
             });
     }
 
@@ -84,7 +83,7 @@ export default function FormCreateTeam() {
                 {
                     name: teamName,
                     description: teamDesc,
-                    employees: pickedEmployees
+                    members: pickedEmployees
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -126,8 +125,7 @@ export default function FormCreateTeam() {
                         Mitarbeiter
                         <select className='light-blue' name="customer" onChange={getPickedEmployees} required>
                             <option readOnly hidden>Bitte wählen</option>
-                            {availableEmployees
-                                .map((emp) => {
+                            {availableEmployees.map((emp) => {
                                     return (
                                         <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
                                     )
