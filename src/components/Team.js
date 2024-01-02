@@ -13,7 +13,7 @@ export default function Team(props) {
         </div>
       </> :
       <>
-        <h3>Team {props.object.description?.name}</h3>
+        <p>Team {props.object.description?.name}</p>
         {(props.object.description?.description != "") ?
           <p>{props.object.description?.description}</p> : ""}
       </>

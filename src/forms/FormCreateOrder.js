@@ -104,7 +104,7 @@ export default function FormCreateOrder() {
     async function submitForm(event) {
         event.preventDefault();
         try {
-            const response = await axios.post(url + '/customer/' + customerID + '/orders',
+            const response = await axios.post(url + '/customers/' + customerID + '/orders',
                 {
                     number: number,
                     description: "",
@@ -211,7 +211,6 @@ export default function FormCreateOrder() {
                     </label>
                 </div>
                 <input className="btn primary" type="submit" value="Anlegen" />
-                <input onClick={submitForm} className="btn primary" type="button" value="AnlegenTest" />
             </form>
         </div>
     )
