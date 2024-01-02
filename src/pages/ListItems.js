@@ -21,11 +21,12 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   const { items: ItemComponent } = props;
   const [itemObjects, setItemObjects] = useState([]);
   const [pathToItem, setPathToItem] = useState([]);
+  const [pathToEdit, setPathToEdit] = useState([]);
   const [isPopUpOpen, setPopUpOpen] = useState(false);
 
   useEffect(() => {
     getItemObjects();
-  }, []);
+  }, [props.path]);
 
   /**
    * get all Items from database for the list
@@ -44,6 +45,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
       setPopUpOpen(false);
     } else {
       setPathToItem(url +  props.path + "/" + item.target.id);
+      setPathToEdit('/' + user.user.role.toLowerCase() + props.path + "/" + item.target.id);
       setPopUpOpen(true);
     }
   }
@@ -67,7 +69,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={() => {navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id)}} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("edit")} />
                   </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { deleteItem(props.path + "/" + item.id) }} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
+                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { deleteItem(url + props.path + "/" + item.id) }} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("delete")} />
                   </svg>
                 </div>
@@ -76,7 +78,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
           })}
         </div>
       </div>
-      <PopUp trigger={isPopUpOpen} close={togglePopUp} type="userDetail" path={pathToItem} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
+      <PopUp trigger={isPopUpOpen} close={togglePopUp} type="userDetail" pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
     </>
   )
 }
