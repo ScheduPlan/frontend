@@ -4,7 +4,7 @@ import axios from 'axios';
 import url from '../BackendURL';
 import Swal from 'sweetalert2';
 import Path from '../icons/Paths';
-import { testEmployees } from '../UserExample';
+import deleteItem from '../utility/deleteItem';
 
 export default function FormPatchTeam() {
 
@@ -15,30 +15,44 @@ export default function FormPatchTeam() {
     const [teamName, setTeamName] = useState("");
     const [teamDesc, setTeamDesc] = useState("");
 
-    const [allEmployees, setAllEmployees] = useState(testEmployees);
+    const [allEmployees, setAllEmployees] = useState([]);
     const [availableEmployees, setAvailableEmployees] = useState([]);
     const [pickedEmployees, setPickedEmployees] = useState([]);
 
     useEffect(() => {
-        console.log(id);
-        //get team by id
-        axios.get(url + '/teams/' + id)
-            .then(response => {
-                setTeam(response.data);
-                console.log("Response ", response.data);
-                console.log("Object", team);
-            });
-
-        //add all employees but in a different form
-        setAvailableEmployees(testEmployees.map(emp => {
-            return (
-                {
-                    id: emp.id,
-                    name: emp.firstName + " " + emp.lastName
-                }
-            )
-        }));
+        getAllEmployees();
     }, []);
+
+    useEffect(() => {
+        updateAvailableEmployees();
+    }, [allEmployees, pickedEmployees]);
+
+    useEffect(() => {
+        axios.get(url + '/teams/' + id)
+            .then(res => {
+                setTeam(res.data);
+            });
+    }, [id]);
+
+    /**
+     * gets all employees from database
+     */
+    function getAllEmployees() {
+        axios.get(url + '/employees')
+            .then(response => {
+                setAllEmployees(response.data);
+            });
+    }
+
+    /**
+     * filters the available employees that there are nor picked ones
+     */
+    function updateAvailableEmployees() {
+        setAvailableEmployees(
+            allEmployees.filter(obj =>
+                !pickedEmployees.some(pickedObj => pickedObj.id === obj.id))
+        )
+    }
 
     const getTeamName = (e) => {
         setTeamName(e.target.value);
@@ -48,42 +62,36 @@ export default function FormPatchTeam() {
         setTeamDesc(e.target.value);
     }
 
+    /**
+     * gets the selected employee and adds it to the picked employees
+     * @param {*} e 
+     */
     const getPickedEmployees = (e) => {
         const selectedOption = {
             id: e.target.selectedOptions[0].id,
-            name: e.target.value
+            value: e.target.value
         };
-        //add the picked element to pickedEmployees
         setPickedEmployees((prevEmployees) => [...prevEmployees, selectedOption]);
     }
 
-    function addEmployee() {
-        //remove the picked element from the avaiable ones
-        const filteredObjects = availableEmployees.filter(obj =>
-            !pickedEmployees.some(pickedObj => pickedObj.id === obj.id)
-        );
-        setAvailableEmployees(filteredObjects);
-    }
-
+    /**
+     * removes the employee from the picked list & adds the removed employee back to the select options
+     * @param {*} e 
+     */
     function removeEmployee(e) {
         const selectedOption = pickedEmployees.find(elem => elem.id === e.target.id);
-        //console.log(selectedOption);
-
-        //remove the employee from the picked list
         setPickedEmployees(pickedEmployees.filter(obj => obj != selectedOption));
-
-        //add the removed employee back to the select options
-        setAvailableEmployees((prevEmployees) => [...prevEmployees, selectedOption]);
+        updateAvailableEmployees();
     }
 
     async function submitForm(event) {
         event.preventDefault();
         try {
-            const response = await axios.put(url + '/teams/' + team.id,
+            const response = await axios.post(url + '/teams',
                 {
-                    name: (teamName == "" ? team.description.name : teamName),
-                    description: teamDesc,
-                    employees: pickedEmployees
+                    name: (teamName != null) ? teamName : team.description.name,
+                    description: (teamDesc != null) ? teamDesc : team.description.description,
+                    members: (pickedEmployees != null) ? pickedEmployees : team.members
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -92,7 +100,7 @@ export default function FormPatchTeam() {
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
-                title: 'Neues Team angelegt!',
+                title: 'Änderungen gespeichert!',
                 showConfirmButton: false,
                 timer: 2000
             });
@@ -108,16 +116,16 @@ export default function FormPatchTeam() {
 
     return (
         <div className='content-container'>
-            <h1>Team {team.description.name} bearbeiten</h1>
+            <h1>Team bearbeiten</h1>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>
                         Name des Teams
-                        <input className='light-blue' type="text" name="team" onChange={getTeamName} required />
+                        <input placeholder={team.description?.name} className='light-blue' type="text" name="team" onChange={getTeamName} required />
                     </label>
                     <label>
                         Beschreibung
-                        <input className='light-blue' type="text" name="description" onChange={getTeamDesc} />
+                        <input placeholder={team.description?.description} className='light-blue' type="text" name="description" onChange={getTeamDesc} />
                     </label>
                 </div>
                 <div className='form-row'>
@@ -126,16 +134,18 @@ export default function FormPatchTeam() {
                         <select className='light-blue' name="customer" onChange={getPickedEmployees} required>
                             <option readOnly hidden>Bitte wählen</option>
                             {availableEmployees.map((emp) => {
-                                return (<option onClick={addEmployee} key={emp.id} id={emp.id} value={emp.name}>{emp.name}</option>)
+                                return (
+                                    <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
+                                )
                             })}
                         </select>
                     </label>
                     <div className='pickedItem-wrapper'>
                         {(pickedEmployees != [] ?
-                            pickedEmployees.map((emp, index) => {
+                            pickedEmployees.map((emp) => {
                                 return (
-                                    <div key={index} className='pickedItem'>
-                                        <p>{emp.name} {emp.lastName}</p>
+                                    <div key={emp.id} className='pickedItem'>
+                                        <p>{emp.value}</p>
                                         <svg onClick={removeEmployee} id={emp.id} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
                                             <path d={Path("close")} />
                                         </svg>
@@ -144,7 +154,11 @@ export default function FormPatchTeam() {
                             }) : "")}
                     </div>
                 </div>
-                <input className="btn primary" type="submit" value="Anlegen" />
+                <div className='btn-wrapper'>
+                    <input className="btn primary" type="submit" value="Speichern" />
+                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem("/teams/" + team.id) }} />
+                    <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
+                </div>
             </form>
         </div>
     )

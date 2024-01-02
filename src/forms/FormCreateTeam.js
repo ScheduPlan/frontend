@@ -3,7 +3,6 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import url from '../BackendURL';
 import { useNavigate } from 'react-router-dom';
-import { testEmployees } from '../UserExample';
 import Path from '../icons/Paths';
 
 export default function FormCreateTeam() {

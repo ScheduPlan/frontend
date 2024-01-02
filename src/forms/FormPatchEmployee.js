@@ -22,12 +22,8 @@ export default function FormPatchEmployee() {
     useEffect(() => {
         axios.get(url + '/employees/' + id)
             .then(res => {
-                const data = res.data;
-                setEmployee(data);
-                console.log(data);
+                setEmployee(res.data);
             });
-        console.log(employee);
-        console.log(employee.user);
     }, [id]);
 
     const getFirstName = (e) => {
@@ -79,7 +75,7 @@ export default function FormPatchEmployee() {
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
-                title: 'Geänderte Daten gespeichert!',
+                title: 'Änderungen gespeichert!',
                 showConfirmButton: false,
                 timer: 2000
             });
