@@ -30,9 +30,14 @@ export default function Schedule() {
 
   function getTeams() {
     axios.get(url + "/teams").then(res => {
-      console.log(res.data);
-      setTeams(res.data);
-    })
+      setTeams(
+        res.data.sort(function (a, b) {
+          if (a.description.name < b.description.name) { return -1; }
+          if (a.description.name > b.description.name) { return 1; }
+          return 0;
+        })
+      );
+    });
   }
 
   /**
