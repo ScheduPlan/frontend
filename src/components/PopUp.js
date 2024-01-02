@@ -8,6 +8,7 @@ import AuthContext from '../AuthProvider';
 import deleteItem from '../utility/deleteItem';
 import Team from './Team';
 import Customer from './Customer';
+import Order from './Order';
 
 export default function PopUp(props) {
     const [item, setItem] = useState({});
@@ -50,6 +51,10 @@ export default function PopUp(props) {
             case "/customers":
                 return (
                     <Customer extended object={item} />
+                )
+            case "/orders":
+                return (
+                    <Order extended object={item} />
                 )
             default:
                 break;

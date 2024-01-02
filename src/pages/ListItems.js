@@ -24,8 +24,11 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   const [pathToEdit, setPathToEdit] = useState("");
   const [isPopUpOpen, setPopUpOpen] = useState(false);
 
+  const [customerIds, setCustomerIds] = useState([]);
+
   useEffect(() => {
     console.log("USER", user);
+    setCustomerIds([]);
     getItemObjects();
   }, [user, props.path]);
 
@@ -35,9 +38,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   function getItemObjects() {
     axios.get(url + props.path)
       .then(response => {
-        const itemData = response.data;
-        setItemObjects(itemData);
-        console.log("Items", itemData);
+        setItemObjects(response.data);
       });
   }
 
@@ -45,7 +46,12 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
     if (isPopUpOpen || item.target.nodeName == "svg") {
       setPopUpOpen(false);
     } else {
-      setPathToItem(url +  props.path + "/" + item.target.id);
+      if (props.path == "/orders") {
+        const customerId = itemObjects.find(elem => elem.id == item.target.id).customer.id;
+        setPathToItem(url + "/customers/" + customerId + props.path + "/" + item.target.id);
+      } else {
+        setPathToItem(url + props.path + "/" + item.target.id);
+      }
       setPathToEdit('/' + user.user.role.toLowerCase() + props.path + "/" + item.target.id);
       setTimeout(() => {
         setPopUpOpen(true);
@@ -69,7 +75,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
                   <ItemComponent ref={childRef} object={item} />
                 </div>
                 <div className={style.item_icons}>
-                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => {navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id)}} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
+                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id) }} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("edit")} />
                   </svg>
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { deleteItem(url + props.path + "/" + item.id) }} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">

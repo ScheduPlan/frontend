@@ -1,22 +1,19 @@
-import React from 'react'
-import axios from 'axios';
-import url from '../BackendURL';
+import React from 'react';
+import popupStyle from './PopUp.module.css';
 
-const Orders = React.forwardRef((props, ref) => {
-  // Ref an die Elternkomponente übergeben
-  React.useImperativeHandle(ref, () => ({
-    triggerFunctionInChild,
-  }));
-
-  function triggerFunctionInChild(id) {
-    console.log("Test", props.object.id);
-    console.log("Test", props.object.customer.id);
-    axios.delete(url + "/customer/" + props.object.customer.id + "/orders/" + id);
-  }
-
+export default function Order(props) {
   return (
-    <div>{props.object.commissionNumber} {props.object.customer?.company}</div>
+    props.extended ?
+      <>
+      {console.log(props.object)}
+        <h2>{props.object.commissionNumber} {props.object.customer.company}</h2>
+        <div className={popupStyle.popup_details}>
+          <p><b>Ansprechpartner: </b>{props.object.customer.firstName} {props.object.customer.lastName}</p>
+          <p><b>Gewicht: </b>{props.object.weight}kg</p>
+        </div>
+      </> :
+      <div>
+        {props.object.commissionNumber} {props.object.customer.company}
+      </div>
   )
-});
-
-export default Orders;
+}
