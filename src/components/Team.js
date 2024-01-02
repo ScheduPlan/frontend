@@ -12,10 +12,10 @@ export default function Team(props) {
           <p><b>Mitglieder: </b></p>
         </div>
       </> :
-      <>
-        <p>Team {props.object.description?.name}</p>
+      <div>
+        <b>Team {props.object.description?.name}</b> <br />
         {(props.object.description?.description != "") ?
-          <p>{props.object.description?.description}</p> : ""}
-      </>
+          props.object.description?.description : ""}
+      </div>
   )
 }

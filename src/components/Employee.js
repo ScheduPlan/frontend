@@ -17,7 +17,6 @@ export default function Employee(props) {
             </>
             :
             <p>"Bitte wählen"</p>}
-
         </div>
         <div className={popupStyle.popup_details}>
           <p><b>Personalnummer: </b>{props.object.employeeNumber}</p>
@@ -28,6 +27,5 @@ export default function Employee(props) {
         <b>{props.object.firstName} {props.object.lastName} </b>
         {props.object.employeeNumber ? "(" + props.object.employeeNumber + ")" : ""}
       </div>
-
   )
 }

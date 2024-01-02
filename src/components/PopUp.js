@@ -16,8 +16,7 @@ export default function PopUp(props) {
 
 
     useEffect(() => {
-        console.log("Hier!!", props.pathToItem);
-        if (props.trigger) {
+        if (props.pathToItem != null && props.pathToItem != "") {
             axios.get(props.pathToItem).then(res => {
                 setItem(res.data);
             });
