@@ -24,11 +24,8 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   const [pathToEdit, setPathToEdit] = useState("");
   const [isPopUpOpen, setPopUpOpen] = useState(false);
 
-  const [customerIds, setCustomerIds] = useState([]);
-
   useEffect(() => {
     console.log("USER", user);
-    setCustomerIds([]);
     getItemObjects();
   }, [user, props.path]);
 
