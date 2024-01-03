@@ -4,7 +4,7 @@ import Sidebar from '../components/Sidebar'
 import axios from 'axios'
 import url from '../BackendURL'
 import style from './Schedule.module.css'
-import { testTeams } from '../UserExample'
+import sortItems from '../utility/sortItems'
 
 export default function Schedule() {
   const testAppointments = [
@@ -23,41 +23,54 @@ export default function Schedule() {
   ]
 
   const [teams, setTeams] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [events, setEvents] = useState([]);
+
+  const [activeTeamId, setActiveTeamId] = useState("");
 
   useEffect(() => {
     getTeams();
+    getOrders();
+    getEvents();
   }, []);
 
   function getTeams() {
     axios.get(url + "/teams").then(res => {
-      setTeams(
-        res.data.sort(function (a, b) {
-          if (a.description.name < b.description.name) { return -1; }
-          if (a.description.name > b.description.name) { return 1; }
-          return 0;
-        })
-      );
+      setTeams(sortItems(res.data, "description", "name"));
+    });
+  }
+
+  function getOrders() {
+    axios.get(url + "/orders").then(res => {
+      setOrders(res.data);
+    });
+  }
+
+  function getEvents() {
+    axios.get(url + "/events").then(res => {
+      setEvents(res.data);
     });
   }
 
   /**
-   * opens team tab with specific calendar
+   * opens team tab with specific calendar & sets the current team id
    * @param {*} e 
    */
   function openTab(e) {
-    console.log(e.target);
     var i;
     var x = document.getElementsByClassName(style.tab_container);
     for (i = 0; i < x.length; i++) {
       x[i].style.display = "none";
     }
-    document.getElementById("team" + e.target.id).style.display = "block";
+    document.getElementById("team " + e.target.id).style.display = "block";
 
     var y = document.getElementsByClassName("btn tab");
     for (i = 0; i < y.length; i++) {
       y[i].classList.remove("active");
     }
     document.getElementById(e.target.id).classList.add("active");
+
+    setActiveTeamId(e.target.id);
   }
 
   return (
@@ -66,7 +79,7 @@ export default function Schedule() {
         <h1>Planungsassistent</h1>
       </div>
       <div className='content-wrapper'>
-        <Sidebar />
+        <Sidebar activeTeamId={activeTeamId}/>
 
         <div className={style.calendar_wrapper}>
           <div className={style.tab_bar}>
@@ -79,7 +92,7 @@ export default function Schedule() {
 
           {teams.map(team => {
             return (
-              <div key={team.id} id={"team" + team.id} className={style.tab_container}>
+              <div key={team.id} id={"team " + team.id} className={style.tab_container}>
                 <Calendar appointments={testAppointments} />
               </div>)
           })}
