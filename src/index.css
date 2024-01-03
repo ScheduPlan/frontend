@@ -290,11 +290,13 @@ form input[type="password"]:focus-visible {
 
 .pickedItem-wrapper {
   display: flex;
-  width: 50%;
-  align-items: center;
+  width: 48%;
+  align-items: end;
+  justify-content: flex-start;
+  gap: 1rem;
+  margin: 0 0 10px 0;
+  flex-flow: row wrap;
   padding-top: 2rem;
-  padding-left: 1.5rem;
-  gap: 1rem 2rem;
 }
 
 .pickedItem {
@@ -303,6 +305,7 @@ form input[type="password"]:focus-visible {
   border-radius: 20px;
   display: flex;
   align-items: center;
+  margin-left: -7px;
 }
 
 .pickedItem p {

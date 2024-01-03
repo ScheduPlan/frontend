@@ -11,7 +11,7 @@ export default function deleteItem(path) {
         icon: "warning",
         iconColor: "#A50000AB",
         showCancelButton: true,
-        confirmButtonColor: "var(--green)",
+        confirmButtonColor: "var(--primary)",
         cancelButtonColor: "var(--red)",
         cancelButtonText: "Nein",
         confirmButtonText: "Ja",
