@@ -127,7 +127,10 @@ export default function FormCreateEmployee() {
                     Passwort
                     <input className='light-blue' type="password" name="password" onChange={getPassword} />
                 </label>
-                <input className="btn primary" type="submit" value="Anlegen" />
+                <div className='btn-wrapper'>
+                    <input className="btn primary" type="submit" value="Anlegen" />
+                    <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
+                </div>
             </form>
         </div>
     )

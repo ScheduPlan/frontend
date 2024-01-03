@@ -20,7 +20,7 @@ export default function FormCreateOrder() {
     const [date, setDate] = useState("");
     const [timeperiod, setTimeperiod] = useState("");
     const [datetype, setDatetype] = useState("");
-    const [teamID, setTeamID] = useState("");
+    const [teamID, setTeamID] = useState({});
 
     useEffect(() => {
         getCustomerList();
@@ -68,37 +68,40 @@ export default function FormCreateOrder() {
     const getCustomerID = (e) => {
         setCustomerID(e.target.value);
     }
-    
+
     const getNumber = (e) => {
         setNumber(e.target.value);
     }
-    
+
     const getProductID = (e) => {
         setProductID(e.target.value);
     }
-    
+
     const getCommissionNumber = (e) => {
         setCommissionNumber(e.target.value);
     }
-    
+
     const getWeight = (e) => {
         setWeight(e.target.value);
     }
-    
+
     const getDate = (e) => {
         setDate(e.target.value);
     }
-    
+
     const getTimeperiod = (e) => {
         setTimeperiod(e.target.value);
     }
-    
+
     const getDatetype = (e) => {
         setDatetype(e.target.value);
     }
 
     const getTeamID = (e) => {
-        setTeamID(e.target.value);
+        axios.get(url + '/teams/' + e.target.value).then(res => {
+            setTeamID(res.data);
+            console.log(res.data);
+        })
     }
 
     async function submitForm(event) {
@@ -110,9 +113,9 @@ export default function FormCreateOrder() {
                     description: "",
                     commissionNumber: commissionNumber,
                     weight: weight,
-                    state: "PLANNED"
+                    state: "PLANNED",
                     //products: productID,
-                    //team: teamID,
+                    team: teamID,
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -144,7 +147,11 @@ export default function FormCreateOrder() {
                         Kunde
                         <select className='light-blue' name="customer" onChange={getCustomerID} required>
                             <option readOnly hidden>Bitte wählen</option>
-                            {customerList.map((cust) => {
+                            {customerList.sort(function (a, b) {
+                                if (a.customerNumber < b.customerNumber) { return -1; }
+                                if (a.customerNumber > b.customerNumber) { return 1; }
+                                return 0;
+                            }).map((cust) => {
                                 return (<option key={cust.id} value={cust.id}>{cust.customerNumber} {cust.company}</option>)
                             })}
                         </select>
@@ -204,13 +211,20 @@ export default function FormCreateOrder() {
                         Team
                         <select className='light-blue' name="team" onChange={getTeamID} required> //To Do Teams
                             <option readOnly hidden>Bitte wählen</option>
-                            {teamList.map((team, index) => {
+                            {teamList.sort(function (a, b) {
+                                if (a.description.name < b.description.name) { return -1; }
+                                if (a.description.name > b.description.name) { return 1; }
+                                return 0;
+                            }).map((team, index) => {
                                 return (<option key={index} value={team.id}>{team.description.name}</option>)
                             })}
                         </select>
                     </label>
                 </div>
-                <input className="btn primary" type="submit" value="Anlegen" />
+                <div className='btn-wrapper'>
+                    <input className="btn primary" type="submit" value="Anlegen" />
+                    <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
+                </div>
             </form>
         </div>
     )

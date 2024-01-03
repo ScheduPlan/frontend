@@ -145,7 +145,10 @@ export default function FormCreateTeam() {
                             }) : "")}
                     </div>
                 </div>
-                <input className="btn primary" type="submit" value="Anlegen" />
+                <div className='btn-wrapper'>
+                    <input className="btn primary" type="submit" value="Anlegen" />
+                    <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
+                </div>
             </form>
         </div>
     )

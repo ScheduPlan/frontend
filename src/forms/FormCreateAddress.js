@@ -73,7 +73,7 @@ const FormCreateAddress = React.forwardRef((props, ref) => {
                 </label>
                 <label>
                     Hausnummer
-                    <input className='light-blue' type="number" name="streetNumber" onChange={getStreetNumber} required />
+                    <input className='light-blue' type="number" name="streetNumber" min="1" onChange={getStreetNumber} required />
                 </label>
             </div>
             <div className='form-row'>

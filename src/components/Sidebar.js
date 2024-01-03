@@ -59,12 +59,12 @@ export default function Sidebar() {
     const [orders, setOrders] = useState([]);
     const [isOpen, setOpen] = useState(true);
 
-    /*useEffect(() => {
+    useEffect(() => {
         axios.get(url + "/orders").then(res => {
             console.log("Orders", res.data);
             setOrders(res.data);
         })
-    }, []);*/
+    }, []);
 
     function toggleSidebar(e) {
         if (isOpen) {
@@ -79,6 +79,15 @@ export default function Sidebar() {
             <h2>Aufträge</h2>
             <div className={style.btn_close} onClick={toggleSidebar}>{'<'}</div>
             <div className={style.appointment_box_wrapper}>
+                {orders.map(order => {
+                    <div key={order.id} className={style.appointment_box}>
+                        <p className={style.title}>Komm.-Nr. {order.commissionNumber}</p>
+                        <div className={style.appointment_detail}>
+                            <p><b>Kategorie:</b> {order.customer.company}</p>
+                            <p><b>Zeitaufwand:</b> {order.weight}</p>
+                        </div>
+                    </div>
+                })}
                 {appoint.map((a, index) => (
                     <div key={index} className={style.appointment_box}>
                         <p className={style.title}>{a.order}</p>
