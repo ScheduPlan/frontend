@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from './Sidebar.module.css';
 import axios from 'axios';
 import url from '../BackendURL';
+import sortItems from '../utility/sortItems';
 
 export const appoint = [
     {
@@ -54,17 +55,21 @@ export const appoint = [
     }
 ]
 
-export default function Sidebar() {
+export default function Sidebar(props) {
 
     const [orders, setOrders] = useState([]);
     const [isOpen, setOpen] = useState(true);
 
     useEffect(() => {
-        axios.get(url + "/orders").then(res => {
-            console.log("Orders", res.data);
-            setOrders(res.data);
-        })
-    }, []);
+        if(props.activeTeamId != null && props.activeTeamId != "") {
+            axios.get(url + "/teams/" + props.activeTeamId + "/orders").then(res => {
+                setOrders(sortItems(res.data, "commissionNumber"))});
+        } else {
+            axios.get(url + "/orders").then(res => {
+                setOrders(sortItems(res.data, "commissionNumber"));
+            });
+        }
+    }, [props.activeTeamId]);
 
     function toggleSidebar(e) {
         if (isOpen) {
