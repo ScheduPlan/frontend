@@ -32,6 +32,10 @@ export default function FormPatchTeam() {
             .then(res => {
                 setTeam(res.data);
             });
+        axios.get(url + '/teams/' + id + '/members')
+            .then(res => {
+                setPickedEmployees(res.data);
+            });
     }, [id]);
 
     /**

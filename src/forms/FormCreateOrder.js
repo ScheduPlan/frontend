@@ -98,10 +98,7 @@ export default function FormCreateOrder() {
     }
 
     const getTeamID = (e) => {
-        axios.get(url + '/teams/' + e.target.value).then(res => {
-            setTeamID(res.data);
-            console.log(res.data);
-        })
+        setTeamID(e.target.value);
     }
 
     async function submitForm(event) {
@@ -115,7 +112,7 @@ export default function FormCreateOrder() {
                     weight: weight,
                     state: "PLANNED",
                     //products: productID,
-                    team: teamID,
+                    teamId: teamID,
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -209,7 +206,7 @@ export default function FormCreateOrder() {
                     </label>
                     <label>
                         Team
-                        <select className='light-blue' name="team" onChange={getTeamID} required> //To Do Teams
+                        <select className='light-blue' name="team" onChange={getTeamID} required>
                             <option readOnly hidden>Bitte wählen</option>
                             {teamList.sort(function (a, b) {
                                 if (a.description.name < b.description.name) { return -1; }

@@ -11,16 +11,22 @@ import Customer from './Customer';
 import Order from './Order';
 
 export default function PopUp(props) {
-    const [item, setItem] = useState({});
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
 
+    const [item, setItem] = useState({});
+    const [subItem, setSubItem] = useState({});
 
     useEffect(() => {
         if (props.pathToItem != null && props.pathToItem != "") {
             axios.get(props.pathToItem).then(res => {
                 setItem(res.data);
             });
+            if (props.path == "/teams") {
+                axios.get(props.pathToItem + "/members").then(res => {
+                    setSubItem(res.data);
+                });
+            }
         }
     }, [props.pathToItem]);
 
@@ -46,7 +52,7 @@ export default function PopUp(props) {
                 break;
             case "/teams":
                 return (
-                    <Team extended object={item} />
+                    <Team extended object={item} subItem={subItem} />
                 )
             case "/customers":
                 return (

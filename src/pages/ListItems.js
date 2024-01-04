@@ -38,7 +38,11 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
       });
   }
 
-  function togglePopUp(item) {
+  /**
+   * toggles pop up & sets path to items and path to the edit forms
+   * @param {*} item 
+   */
+  function togglePopUp(item) { // To Do: Id in Funktion mitgeben
     if (isPopUpOpen || item.target.nodeName == "svg") {
       setPopUpOpen(false);
     } else {

@@ -2,6 +2,7 @@ import React from 'react';
 import popupStyle from './PopUp.module.css';
 
 export default function Team(props) {
+  console.log(props.subItem);
   return (
     props.extended ?
       <>
@@ -9,7 +10,14 @@ export default function Team(props) {
         {(props.object.description?.description != "") ?
           <p>{props.object.description?.description}</p> : ""}
         <div className={popupStyle.popup_details}>
-          <p><b>Mitglieder: </b></p>
+          <p><b>Mitglieder: </b>{props.subItem.map(emp => {
+            return (
+              props.subItem.length > 1 ?
+              emp.firstName + " " + emp.lastName + ", "
+              :
+              emp.firstName + " " + emp.lastName
+            )
+          })}</p>
         </div>
       </> :
       <div>
