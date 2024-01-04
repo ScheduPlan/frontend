@@ -30,7 +30,8 @@ export default function FormCreateTeam() {
     function getAllEmployees() {
         axios.get(url + '/employees')
             .then(response => {
-                setAllEmployees(response.data);
+                console.log(response.data);
+                setAllEmployees(response.data.filter(data => (data.firstName != "Administrator") && (data.team?.id == null)));
             });
     }
 
@@ -82,11 +83,17 @@ export default function FormCreateTeam() {
                 {
                     name: teamName,
                     description: teamDesc,
-                    members: pickedEmployees
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
             console.log("res data", response.data);
+            const teamId = response.data.id;
+
+            pickedEmployees.forEach(emp => {
+                axios.patch(url + "/employees/" + emp.id, {
+                    teamId: teamId
+                });
+            })
 
             Swal.fire({
                 position: 'top-end',
