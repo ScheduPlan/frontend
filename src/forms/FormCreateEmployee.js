@@ -101,7 +101,7 @@ export default function FormCreateEmployee() {
                 <div className='form-row'>
                     <label>
                         Personalnummer
-                        <input className='light-blue' type="number" name="employeeNumber" onChange={getEmployeeNumber} />
+                        <input className='light-blue' type="number" name="employeeNumber" min="1" onChange={getEmployeeNumber} />
                     </label>
                     <label>
                         E-Mail-Adresse

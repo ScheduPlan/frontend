@@ -25,7 +25,6 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   const [isPopUpOpen, setPopUpOpen] = useState(false);
 
   useEffect(() => {
-    console.log("USER", user);
     getItemObjects();
   }, [user, props.path]);
 
