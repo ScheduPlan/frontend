@@ -120,7 +120,7 @@ export default function FormPatchEmployee() {
                     </label>
                     <label>
                         Benutzerrolle
-                        <select className='light-blue' name="userRole" onChange={getUserRole} required>
+                        <select className='light-blue' name="userRole" onChange={getUserRole} >
                             <option readOnly hidden>
                                 {employee.user != null ?
                                     roles.find(role => role.role == employee.user.role.toLowerCase()).title :

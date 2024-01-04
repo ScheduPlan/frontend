@@ -102,7 +102,7 @@ export default function FormCreateCustomer() {
                     </label>
                     <label>
                         Kundennummer
-                        <input className='light-blue' type="number" name="customerNumber" onChange={getCustomerNumber} required />
+                        <input className='light-blue' type="number" name="customerNumber" min="1" onChange={getCustomerNumber} required />
                     </label>
                 </div>
                 <h3>Ansprechpartner</h3>

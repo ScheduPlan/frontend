@@ -44,7 +44,7 @@ export default function FormPatchTeam() {
     function getAllEmployees() {
         axios.get(url + '/employees')
             .then(response => {
-                setAllEmployees(response.data);
+                setAllEmployees(response.data.filter(data => (data.firstName != "Administrator") && (data.team?.id == null)));
             });
     }
 
@@ -125,7 +125,7 @@ export default function FormPatchTeam() {
                 <div className='form-row'>
                     <label>
                         Name des Teams
-                        <input placeholder={team.description?.name} className='light-blue' type="text" name="team" onChange={getTeamName} required />
+                        <input placeholder={team.description?.name} className='light-blue' type="text" name="team" onChange={getTeamName} />
                     </label>
                     <label>
                         Beschreibung
@@ -135,7 +135,7 @@ export default function FormPatchTeam() {
                 <div className='form-row'>
                     <label>
                         Mitarbeiter
-                        <select className='light-blue' name="customer" onChange={getPickedEmployees} required>
+                        <select className='light-blue' name="customer" onChange={getPickedEmployees}>
                             <option readOnly hidden>Bitte wählen</option>
                             {availableEmployees.map((emp) => {
                                 return (
