@@ -13,7 +13,7 @@ export default function Order(props) {
         </div>
       </> :
       <div>
-        {props.object.commissionNumber} {props.object.customer.company}
+        {props.object.commissionNumber} {props.object.customer?.company}
       </div>
   )
 }

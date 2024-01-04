@@ -32,8 +32,8 @@ export default function Employee(props) {
         </div>
       </>
       : <div>
-        <b>{props.object.firstName} {props.object.lastName} </b>
-        {props.object.employeeNumber ? "(" + props.object.employeeNumber + ")" : ""}
+        <b>{props.object.employeeNumber} </b>
+        {props.object.firstName} {props.object.lastName}
       </div>
   )
 }
