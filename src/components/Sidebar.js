@@ -12,7 +12,7 @@ export default function Sidebar(props) {
     useEffect(() => {
         if (props.activeTeamId != null && props.activeTeamId != "") {
             axios.get(url + "/orders").then(res => {
-                setOrders(sortItems(res.data.filter(order => order.team.id == props.activeTeamId), "commissionNumber"));
+                setOrders(sortItems(res.data.filter(order => (order.team.id == props.activeTeamId) && (order.state == "PLANNED")), "commissionNumber"));
             });
         } else {
             getAllOrders();
@@ -21,7 +21,7 @@ export default function Sidebar(props) {
 
     function getAllOrders() {
         axios.get(url + "/orders").then(res => {
-            setOrders(sortItems(res.data, "commissionNumber"));
+            setOrders(sortItems(res.data.filter(order => order.state == "PLANNED"), "commissionNumber"));
         });
     }
 
@@ -31,6 +31,10 @@ export default function Sidebar(props) {
         } else {
             setOpen(true);
         }
+    }
+
+    function setOrderData(e) {
+        props.activeOrder(e);
     }
 
     return (
@@ -49,7 +53,7 @@ export default function Sidebar(props) {
                     </div>
                 })}
                 {orders.map((order) => (
-                    <div key={order.id} className={style.appointment_box}>
+                    <div key={order.id} className={style.appointment_box} draggable onDragStart={() => {setOrderData(order)}}>
                         <p className={style.title}>{order.commissionNumber}</p>
                         <div className={style.appointment_detail}>
                             <p><b>Kategorie:</b> XY</p>

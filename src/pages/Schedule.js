@@ -7,31 +7,16 @@ import style from './Schedule.module.css'
 import sortItems from '../utility/sortItems'
 
 export default function Schedule() {
-  const testAppointments = [
-    {
-      id: 1,
-      start: new Date(2023, 11, 18, 8, 0),
-      end: new Date(2023, 11, 18, 13, 0),
-      category: "Montage"
-    },
-    {
-      id: 2,
-      start: new Date(2023, 12, 20, 9, 0),
-      end: new Date(2023, 12, 20, 10, 30),
-      category: "Reklamation"
-    }
-  ]
-
   const [teams, setTeams] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [events, setEvents] = useState([]);
+
+  const [activeOrder, setActiveOrder] = useState({});
 
   const [activeTeamId, setActiveTeamId] = useState("");
 
   useEffect(() => {
     getTeams();
     getOrders();
-    getEvents();
   }, []);
 
   function getTeams() {
@@ -43,12 +28,6 @@ export default function Schedule() {
   function getOrders() {
     axios.get(url + "/orders").then(res => {
       setOrders(res.data);
-    });
-  }
-
-  function getEvents() {
-    axios.get(url + "/events").then(res => {
-      setEvents(res.data);
     });
   }
 
@@ -79,7 +58,7 @@ export default function Schedule() {
         <h1>Planungsassistent</h1>
       </div>
       <div className='content-wrapper'>
-        <Sidebar activeTeamId={activeTeamId}/>
+        <Sidebar activeTeamId={activeTeamId} activeOrder={(e) => setActiveOrder(e)}/>
 
         <div className={style.calendar_wrapper}>
           <div className={style.tab_bar}>
@@ -93,7 +72,7 @@ export default function Schedule() {
           {teams.map(team => {
             return (
               <div key={team.id} id={"team " + team.id} className={style.tab_container}>
-                <Calendar appointments={testAppointments} />
+                <Calendar activeOrder={activeOrder} />
               </div>)
           })}
         </div>

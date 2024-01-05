@@ -13,24 +13,26 @@ import Swal from 'sweetalert2';
 
 export default function CalendarComponent(props) {
 
-    const { auth, user } = useContext(AuthContext);
-    const [appointments, setAppointments] = useState([]);
-    const [appointment, setAppointment] = useState([]);
-    const [orders, setOrders] = useState([]);
-    const [newEvent, setNewEvent] = useState({});
+    const [activeOrder, setActiveOrder] = useState({});
+    const [events, setEvents] = useState([]);
 
-    const [isPopUpOpen, setPopUpOpen] = useState(false);
+    const [test, setTest] = useState([]);
+    const test2 = [
+        {
+            id: 1,
+            start: new Date(2023, 11, 18, 8, 0),
+            end: new Date(2023, 11, 18, 13, 0),
+            category: "Montage"
+        },
+        {
+            id: 2,
+            start: new Date(2023, 12, 20, 9, 0),
+            end: new Date(2023, 12, 20, 10, 30),
+            category: "Reklamation"
+        }
+    ]
 
     const DnDCalendar = withDragAndDrop(Calendar);
-
-    function togglePopUp(appointment) {
-        if (isPopUpOpen) {
-            setPopUpOpen(false);
-        } else {
-            setAppointment(appointment);
-            setPopUpOpen(true);
-        }
-    }
 
     //define the formats
     moment.locale('de');
@@ -54,35 +56,52 @@ export default function CalendarComponent(props) {
 
     //get all appointments
     useEffect(() => {
+        //getEvents();
+
         let appointments = [];
-        props.appointments.forEach((appointment) => {
-            let elem = {
-                title: appointment.category,
-                start: new Date(appointment.start),
-                end: new Date(appointment.end),
-                appointment: appointment.category,
-            };
-            appointments = [...appointments, elem];
+            test2.forEach((appointment) => {
+                let elem = {
+                    title: appointment.category,
+                    start: new Date(appointment.start),
+                    end: new Date(appointment.end),
+                };
+                appointments = [...appointments, elem];
+            });
+            setTest(appointments);
+    }, []);
+
+    useEffect(() => {
+        setActiveOrder(props.activeOrder);
+    }, [props.activeOrder]);
+
+    /**
+     * get all events in calendar
+     */
+    function getEvents() {
+        axios.get(url + "/events").then(res => {
+            //setEvents(res.data);
+
+            let appointments = [];
+            test2.forEach((appointment) => {
+                let elem = {
+                    title: appointment.category,
+                    start: new Date(appointment.start),
+                    end: new Date(appointment.end),
+                };
+                appointments = [...appointments, elem];
+            });
+            setEvents(appointments);
+
         });
-        setAppointments(appointments);
+    }
 
-        //get all orders
-        axios.get(url + '/orders')
-                .then(response => {
-                    const itemData = response.data;
-                    setOrders(itemData);
-                    console.log("Orders", itemData);
-                });
-
-        //get all events
-        /*axios.get(url + "/events")
-                .then(response => {
-                    const itemData = response.data;
-                    setOrders(itemData);
-                    console.log("Orders", itemData);
-                });*/
-
-    }, [props.appointments]);
+    //set new event dates
+    function changeEventDateTime(e) {
+        console.log(e);
+        //const event = appointments.find(event => event.id == e.event.id);
+        //event.start = e.start;
+        //event.end = e.end;
+    }
 
     //style of different appointments
     const eventPropGetter = useCallback((event, start, end, isSelected) => (
@@ -114,41 +133,34 @@ export default function CalendarComponent(props) {
                 }
             })
         }
-    ), [appointments]);
+    ), [test2]);
 
-    //set new event dates
-    function changeEventDateTime(e) {
-        console.log(e.event.id, " event " + e.event, ", start " + e.start, ", end " + e.end);
-        
-        Swal.fire({
-            title: "Sind Sie sicher, dass Sie den Termin verschieben möchten?",
-            icon: "warning",
-            iconColor: "#A50000AB",
-            showCancelButton: true,
-            confirmButtonColor: "var(--green)",
-            cancelButtonColor: "var(--red)",
-            cancelButtonText: "Nein",
-            confirmButtonText: "Ja",
-          }).then(async (result) => {
-            if (result.isConfirmed) {
-                /*const newEvent = await axios.patch(url + '/customers/' + e.event.customer. id + '/orders/' + e.event.orders.id + '/events' + e.event.id,
+    /**
+     * creates new event from sidebar order & sets order state to "CONFIRMED" to remove it from sidebar
+     * @param {*} e 
+     */
+    async function onDropFromOutside(e) {
+        console.log("dragEvent", e);
+        console.log("order", activeOrder);//patch order (state CONFIRMED)
+        try {
+            const response = await axios.post(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id + "/events",
                 {
-                    startDate: e.start,
-                    endDate: e.end
-                },
-                { headers: { 'Content-Type': 'application/json' } });*/
-      
-              Swal.fire({
-                title: "Element gelöscht!",
-                icon: "success",
-                showConfirmButton: false,
-              });
-      
-              setTimeout(function () {
-                //window.location.reload();
-              }, 2500);
-            }
-          });
+                    date: e.start,
+                    endDate: e.end,
+                    type: "ASSEMBLY",
+                    orderId: activeOrder.id
+                }, { headers: { 'Content-Type': 'application/json' } });
+            console.log(response);
+
+            //set order state confirmed to remove it from sidebar
+            axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
+                {
+                    state: "CONFIRMED"
+                }, { headers: { 'Content-Type': 'application/json' } });
+            getEvents();
+        } catch (error) {
+            alert(error);
+        }
     }
 
     return (
@@ -156,18 +168,17 @@ export default function CalendarComponent(props) {
             <DnDCalendar
                 defaultView="week"
                 components={components}
-                events={/*appointments*/ props.appointments}
-                /*backgroundEvents={timeslots}*/
+                events={test}
                 /*eventPropGetter={eventPropGetter}*/
                 onEventDrop={changeEventDateTime}
+                onDropFromOutside={onDropFromOutside}
                 localizer={localizer}
                 max={max}
                 showMultiDayTimes
                 step={30}
                 views={views}
-                onSelectEvent={togglePopUp}
+                /*onSelectEvent={togglePopUp}*/
                 dayLayoutAlgorithm="no-overlap"
-                tooltipAccessor={{}}
                 /*onSelectSlot={onSelectSlot}*/
                 selectable
                 culture='de'
@@ -176,7 +187,6 @@ export default function CalendarComponent(props) {
                 resizable={false}
                 messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag" }}
             />
-            <PopUp trigger={isPopUpOpen} close={togglePopUp} type="dateDetail" appointment={appointment} />
         </div>
     )
 }
