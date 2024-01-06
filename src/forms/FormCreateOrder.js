@@ -113,6 +113,7 @@ export default function FormCreateOrder() {
                     state: "PLANNED",
                     //products: productID,
                     teamId: teamID,
+                    plannedDuration: timeperiod
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -179,7 +180,7 @@ export default function FormCreateOrder() {
                 <div className='form-row'>
                     <label>
                         Gewicht
-                        <input className='light-blue' type="number" name="weight" onChange={getWeight} required />
+                        <input className='light-blue' type="number" min="1" step="0.05" name="weight" onChange={getWeight} required />
                     </label>
                 </div>
 
@@ -190,7 +191,7 @@ export default function FormCreateOrder() {
                     </label>
                     <label>
                         geplante Termindauer
-                        <input className='light-blue' type="number" name="timeperiod" onChange={getTimeperiod} required />
+                        <input className='light-blue' type="number" min="1" step="0.5" name="timeperiod" onChange={getTimeperiod} required />
                     </label>
                 </div>
 
