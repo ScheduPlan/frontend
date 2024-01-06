@@ -11,6 +11,7 @@ export default function FormPatchEmployee() {
     const { id } = useParams();
 
     const [employee, setEmployee] = useState({});
+    const [teamList, setTeamList] = useState([]);
 
     const [firstName, setFirstName] = useState();
     const [lastName, setLastName] = useState();
@@ -18,13 +19,27 @@ export default function FormPatchEmployee() {
     const [email, setEmail] = useState();
     const [username, setUsername] = useState();
     const [userRole, setUserRole] = useState();
+    const [teamId, setTeamId] = useState({});
 
     useEffect(() => {
         axios.get(url + '/employees/' + id)
             .then(res => {
                 setEmployee(res.data);
             });
+        getTeamList();
     }, [id]);
+
+    /**
+     * gets all teams from database
+     */
+    function getTeamList() {
+        axios.get(url + '/teams').then(
+            res => {
+                setTeamList(res.data);
+                console.log("Teams", res.data);
+            }
+        );
+    }
 
     const getFirstName = (e) => {
         setFirstName(e.target.value);
@@ -40,6 +55,10 @@ export default function FormPatchEmployee() {
 
     const getEmail = (e) => {
         setEmail(e.target.value);
+    }
+
+    const getTeamId = (e) => {
+        setTeamId(e.target.value);
     }
 
     const getUsername = (e) => {
@@ -60,6 +79,7 @@ export default function FormPatchEmployee() {
             const response = await axios.patch(url + '/employees/' + id,
                 {
                     employeeNumber: (employeeNumber != null) ? employeeNumber : employee.employeeNumber,
+                    teamId: (teamId != null) ? teamId : employee.teamId,
                     person: {
                         firstName: (firstName != null) ? firstName : employee.firstName,
                         lastName: (lastName != null) ? lastName : employee.lastName
@@ -114,10 +134,29 @@ export default function FormPatchEmployee() {
                     </label>
                 </div>
                 <div className='form-row'>
+                        <label>
+                            Team
+                            <select className='light-blue' name="team" onChange={getTeamId}>
+                                <option readOnly hidden>
+                                    {employee.team != null ?
+                                        employee.team?.description?.name :
+                                        "Bitte wählen"}
+                                </option>
+                                {teamList.sort(function (a, b) {
+                                    if (a.description.name < b.description.name) { return -1; }
+                                    if (a.description.name > b.description.name) { return 1; }
+                                    return 0;
+                                }).map((team, index) => {
+                                    return (<option key={index} value={team.id}>{team.description.name}</option>)
+                                })}
+                            </select>
+                        </label>
                     <label>
                         Benutzername
                         <input placeholder={employee.user?.username} className='light-blue' type="text" name="username" onChange={getUsername} />
                     </label>
+                </div>
+                <div className='form-row'>
                     <label>
                         Benutzerrolle
                         <select className='light-blue' name="userRole" onChange={getUserRole} >

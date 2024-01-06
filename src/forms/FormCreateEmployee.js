@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,8 @@ import roles from '../ROLES';
 export default function FormCreateEmployee() {
     const navigate = useNavigate();
 
+    const [teamList, setTeamList] = useState([]);
+
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [employeeNumber, setEmployeeNumber] = useState('');
@@ -15,6 +17,23 @@ export default function FormCreateEmployee() {
     const [username, setUsername] = useState('');
     const [userRole, setUserRole] = useState('');
     const [password, setPassword] = useState('');
+    const [teamId, setTeamId] = useState({});
+
+    useEffect(() => {
+        getTeamList();
+    }, []);
+
+    /**
+     * gets all teams from database
+     */
+    function getTeamList() {
+        axios.get(url + '/teams').then(
+            res => {
+                setTeamList(res.data);
+                console.log("Teams", res.data);
+            }
+        );
+    }
 
     const getFirstname = (e) => {
         setFirstname(e.target.value);
@@ -32,12 +51,16 @@ export default function FormCreateEmployee() {
         setEmail(e.target.value);
     }
 
-    const getUsername = (e) => {
-        setUsername(e.target.value);
-    }
-
     const getUserRole = (e) => {
         setUserRole(e.target.value.toUpperCase());
+    }
+
+    const getTeamId = (e) => {
+        setTeamId(e.target.value);
+    }
+
+    const getUsername = (e) => {
+        setUsername(e.target.value);
     }
 
     const getPassword = (e) => {
@@ -54,6 +77,7 @@ export default function FormCreateEmployee() {
             const response = await axios.post(url + '/auth/create',
                 {
                     employeeNumber: employeeNumber,
+                    teamId: teamId != null ? teamId : null,
                     person: {
                         firstName: firstname,
                         lastName: lastname
@@ -109,10 +133,21 @@ export default function FormCreateEmployee() {
                     </label>
                 </div>
                 <div className='form-row'>
-                    <label>
-                        Benutzername
-                        <input className='light-blue' type="text" name="username" onChange={getUsername} />
-                    </label>
+                    {(teamList.length > 0) ?
+                        <label>
+                            Team
+                            <select className='light-blue' name="team" onChange={getTeamId} required>
+                                <option readOnly hidden>Bitte wählen</option>
+                                {teamList.sort(function (a, b) {
+                                    if (a.description.name < b.description.name) { return -1; }
+                                    if (a.description.name > b.description.name) { return 1; }
+                                    return 0;
+                                }).map((team, index) => {
+                                    return (<option key={index} value={team.id}>{team.description.name}</option>)
+                                })}
+                            </select>
+                        </label> : ""
+                    }
                     <label>
                         Benutzerrolle
                         <select className='light-blue' name="userRole" onChange={getUserRole} required>
@@ -123,10 +158,16 @@ export default function FormCreateEmployee() {
                         </select>
                     </label>
                 </div>
-                <label>
-                    Passwort
-                    <input className='light-blue' type="password" name="password" onChange={getPassword} />
-                </label>
+                <div className='form-row'>
+                    <label>
+                        Benutzername
+                        <input className='light-blue' type="text" name="username" onChange={getUsername} />
+                    </label>
+                    <label>
+                        Passwort
+                        <input className='light-blue' type="password" name="password" onChange={getPassword} />
+                    </label>
+                </div>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Anlegen" />
                     <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
