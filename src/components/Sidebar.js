@@ -41,7 +41,7 @@ export default function Sidebar(props) {
         <div className={style.sidebar + (!isOpen ? " " + style.sidebar_closed : " ")}>
             <h2>Aufträge</h2>
             <div className={style.btn_close} onClick={toggleSidebar}>{'<'}</div>
-            <button className='btn secondary' onClick={getAllOrders}>alle anzeigen</button>
+            <button className={'btn secondary ' + style.btn_showAll} onClick={getAllOrders}>alle anzeigen</button>
             <div className={style.appointment_box_wrapper}>
                 {orders.map(order => {
                     <div key={order.id} className={style.appointment_box}>
