@@ -16,22 +16,6 @@ export default function CalendarComponent(props) {
     const [activeOrder, setActiveOrder] = useState({});
     const [events, setEvents] = useState([]);
 
-    const [test, setTest] = useState([]);
-    const test2 = [
-        {
-            id: 1,
-            start: new Date(2023, 11, 18, 8, 0),
-            end: new Date(2023, 11, 18, 13, 0),
-            category: "Montage"
-        },
-        {
-            id: 2,
-            start: new Date(2023, 12, 20, 9, 0),
-            end: new Date(2023, 12, 20, 10, 30),
-            category: "Reklamation"
-        }
-    ]
-
     const DnDCalendar = withDragAndDrop(Calendar);
 
     //define the formats
@@ -56,51 +40,50 @@ export default function CalendarComponent(props) {
 
     //get all appointments
     useEffect(() => {
-        //getEvents();
-
-        let appointments = [];
-            test2.forEach((appointment) => {
-                let elem = {
-                    title: appointment.category,
-                    start: new Date(appointment.start),
-                    end: new Date(appointment.end),
-                };
-                appointments = [...appointments, elem];
-            });
-            setTest(appointments);
-    }, []);
+        getEvents();
+    }, [props.events]);
 
     useEffect(() => {
         setActiveOrder(props.activeOrder);
     }, [props.activeOrder]);
 
     /**
-     * get all events in calendar
+     * get all events from API & puts it in correct form for the calendar
      */
     function getEvents() {
-        axios.get(url + "/events").then(res => {
-            //setEvents(res.data);
-
-            let appointments = [];
-            test2.forEach((appointment) => {
-                let elem = {
-                    title: appointment.category,
-                    start: new Date(appointment.start),
-                    end: new Date(appointment.end),
-                };
-                appointments = [...appointments, elem];
-            });
-            setEvents(appointments);
-
+        let allEvents = [];
+        props.events.forEach(event => {
+            let elem = {
+                id: event.id,
+                title: event.order?.commissionNumber,
+                start: new Date(event.startDate),
+                end: new Date(event.endDate),
+                event: event
+            }
+            allEvents = [...allEvents, elem];
         });
+        setEvents(allEvents);
     }
 
-    //set new event dates
-    function changeEventDateTime(e) {
+    /**
+     * calls patch function for event to set new start and end date
+     * @param {*} e 
+     */
+    async function changeEventDateTime(e) {
         console.log(e);
-        //const event = appointments.find(event => event.id == e.event.id);
-        //event.start = e.start;
-        //event.end = e.end;
+        console.log("start", e.start);
+        console.log("end", e.end);
+        var addMlSeconds = (2 * 60) * 60000;
+        console.log("END?", new Date(e.start.getTime() + addMlSeconds));
+        const newEnd = new Date(e.start.getTime() + addMlSeconds);
+
+        const response = await axios.patch(url + "/customers/" + e.event?.event?.order?.customer?.id + "/orders/" + e.event?.event?.order?.id + "/events/" + e.event?.event?.id,
+            {
+                date: e.start,
+                endDate: newEnd,
+            }, { headers: { 'Content-Type': 'application/json' } });
+        console.log("response", response);
+        //getEvents();
     }
 
     //style of different appointments
@@ -116,7 +99,7 @@ export default function CalendarComponent(props) {
                     display: 'block'
                 }
             }),
-            ...(event.title === "Montage" && { //ToDo: title in timeslot z-index:1 setzen
+            ...(event.event.type === "ASSEMBLY" && { //ToDo: title in timeslot z-index:1 setzen
                 style: {
                     backgroundColor: 'var(--primary)',
                     border: '0',
@@ -133,7 +116,7 @@ export default function CalendarComponent(props) {
                 }
             })
         }
-    ), [test2]);
+    ), [events]);
 
     /**
      * creates new event from sidebar order & sets order state to "CONFIRMED" to remove it from sidebar
@@ -168,8 +151,8 @@ export default function CalendarComponent(props) {
             <DnDCalendar
                 defaultView="week"
                 components={components}
-                events={test}
-                /*eventPropGetter={eventPropGetter}*/
+                events={events}
+                eventPropGetter={eventPropGetter}
                 onEventDrop={changeEventDateTime}
                 onDropFromOutside={onDropFromOutside}
                 localizer={localizer}
