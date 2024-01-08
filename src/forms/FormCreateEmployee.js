@@ -77,7 +77,7 @@ export default function FormCreateEmployee() {
             const response = await axios.post(url + '/auth/create',
                 {
                     employeeNumber: employeeNumber,
-                    teamId: (teamId != null) ? teamId : null,
+                    teamId: ((teamId != null) && (teamId != "")) ? teamId : null,
                     person: {
                         firstName: firstname,
                         lastName: lastname
@@ -136,7 +136,7 @@ export default function FormCreateEmployee() {
                         <label>
                             Team
                             <select className='light-blue' name="team" onChange={getTeamId}>
-                                <option readOnly hidden>Bitte wählen</option>
+                                <option value={""}>Bitte wählen</option>
                                 {teamList.sort(function (a, b) {
                                     if (a.description.name < b.description.name) { return -1; }
                                     if (a.description.name > b.description.name) { return 1; }
