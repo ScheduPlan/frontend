@@ -17,7 +17,7 @@ export default function FormCreateEmployee() {
     const [username, setUsername] = useState('');
     const [userRole, setUserRole] = useState('');
     const [password, setPassword] = useState('');
-    const [teamId, setTeamId] = useState({});
+    const [teamId, setTeamId] = useState("");
 
     useEffect(() => {
         getTeamList();
@@ -77,7 +77,7 @@ export default function FormCreateEmployee() {
             const response = await axios.post(url + '/auth/create',
                 {
                     employeeNumber: employeeNumber,
-                    teamId: teamId != null ? teamId : null,
+                    teamId: (teamId != null) ? teamId : null,
                     person: {
                         firstName: firstname,
                         lastName: lastname
@@ -133,10 +133,9 @@ export default function FormCreateEmployee() {
                     </label>
                 </div>
                 <div className='form-row'>
-                    {(teamList.length > 0) ?
                         <label>
                             Team
-                            <select className='light-blue' name="team" onChange={getTeamId} required>
+                            <select className='light-blue' name="team" onChange={getTeamId}>
                                 <option readOnly hidden>Bitte wählen</option>
                                 {teamList.sort(function (a, b) {
                                     if (a.description.name < b.description.name) { return -1; }
@@ -146,8 +145,7 @@ export default function FormCreateEmployee() {
                                     return (<option key={index} value={team.id}>{team.description.name}</option>)
                                 })}
                             </select>
-                        </label> : ""
-                    }
+                        </label>
                     <label>
                         Benutzerrolle
                         <select className='light-blue' name="userRole" onChange={getUserRole} required>
