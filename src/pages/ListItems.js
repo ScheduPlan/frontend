@@ -43,16 +43,17 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
    * @param {*} item 
    */
   function togglePopUp(item) { // To Do: Id in Funktion mitgeben
-    if (isPopUpOpen || item.target.nodeName == "svg") {
+    if (isPopUpOpen || item.target?.nodeName == "svg") {
       setPopUpOpen(false);
     } else {
       if (props.path == "/orders") {
-        const customerId = itemObjects.find(elem => elem.id == item.target.id).customer.id;
-        setPathToItem(url + "/customers/" + customerId + props.path + "/" + item.target.id);
+        const customerId = itemObjects.find(elem => elem.id == item.id).customer.id;
+        setPathToItem(url + "/customers/" + customerId + props.path + "/" + item.id);
       } else {
-        setPathToItem(url + props.path + "/" + item.target.id);
+        setPathToItem(url + props.path + "/" + item.id);
       }
-      setPathToEdit('/' + user.user.role.toLowerCase() + props.path + "/" + item.target.id);
+      setPathToEdit('/' + user.user.role.toLowerCase() + props.path + "/" + item.id);
+
       setTimeout(() => {
         setPopUpOpen(true);
       }, 250);
@@ -70,9 +71,9 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
         <div className={style.item_wrapper}>
           {itemObjects.map((item, index) => {
             return (
-              <div className={style.item} key={index} id={item.id} onClick={togglePopUp}>
+              <div className={style.item} key={index} id={item.id} onClick={() => togglePopUp(item)}>
                 <div className={style.item_content}>
-                  <ItemComponent ref={childRef} object={item} />
+                  <ItemComponent ref={childRef} object={item} onClick={() => togglePopUp(item)} />
                 </div>
                 <div className={style.item_icons}>
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id) }} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
