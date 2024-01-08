@@ -19,7 +19,7 @@ export default function FormPatchEmployee() {
     const [email, setEmail] = useState();
     const [username, setUsername] = useState();
     const [userRole, setUserRole] = useState();
-    const [teamId, setTeamId] = useState({});
+    const [teamId, setTeamId] = useState();
 
     useEffect(() => {
         axios.get(url + '/employees/' + id)
@@ -84,7 +84,7 @@ export default function FormPatchEmployee() {
                         firstName: (firstName != null) ? firstName : employee.firstName,
                         lastName: (lastName != null) ? lastName : employee.lastName
                     },
-                    userDefinition: {
+                    user: {
                         email: (email != null) ? email : employee.user.email,
                         username: (username != null) ? username : employee.user.username,
                         role: (userRole != null) ? userRole : employee.user.role
