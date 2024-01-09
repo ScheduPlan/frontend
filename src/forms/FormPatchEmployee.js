@@ -36,7 +36,6 @@ export default function FormPatchEmployee() {
         axios.get(url + '/teams').then(
             res => {
                 setTeamList(res.data);
-                console.log("Teams", res.data);
             }
         );
     }

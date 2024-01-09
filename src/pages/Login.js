@@ -25,12 +25,10 @@ export default function Login() {
 
     const getUsername = (e) => {
         setUsername(e.target.value);
-        console.log(username);
     }
 
     const getPassword = (e) => {
         setPassword(e.target.value);
-        console.log(password); //Verschlüsseln?
     }
 
     async function submitForm(event) {
@@ -44,10 +42,7 @@ export default function Login() {
                 { headers: { 'Content-Type': 'application/json' } }
             );
 
-            console.log("Login response:", response);
-
             const accessToken = response?.data?.accessToken;
-            console.log("accessToken", accessToken);
             const refreshToken = response?.data?.refreshToken;
             const userId = response?.data?.userId;
 

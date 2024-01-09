@@ -30,7 +30,6 @@ export default function FormCreateTeam() {
     function getAllEmployees() {
         axios.get(url + '/employees')
             .then(response => {
-                console.log(response.data);
                 setAllEmployees(response.data.filter(data => (data.firstName != "Administrator") && (data.team?.id == null)));
             });
     }
@@ -86,7 +85,6 @@ export default function FormCreateTeam() {
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
-            console.log("res data", response.data);
             const teamId = response.data.id;
 
             pickedEmployees.forEach(emp => {

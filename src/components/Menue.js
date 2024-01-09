@@ -1,6 +1,5 @@
 import React, {useContext} from 'react';
 import style from './Menue.module.css';
-import user from '../UserExample';
 import { Link } from 'react-router-dom';
 import roles from '../ROLES';
 import AuthContext from '../AuthProvider';

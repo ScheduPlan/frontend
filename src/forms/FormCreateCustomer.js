@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import url from '../BackendURL';
@@ -17,10 +17,6 @@ export default function FormCreateCustomer() {
     const [phone, setPhone] = useState("");
 
     const [addressElement, setAddressElement] = useState({});
-
-    useEffect(() => {
-        console.log(addressElement);
-    }, [addressElement]);
 
     const getCompany = (e) => {
         setCompany(e.target.value);
@@ -68,8 +64,6 @@ export default function FormCreateCustomer() {
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
-            console.log(response.data);
-
             const response2 = await axios.post(url + '/customers/' + response.data.id + '/addresses',
                 {
                     country: addressElement.country,
@@ -82,8 +76,6 @@ export default function FormCreateCustomer() {
                     addressType: addressElement.addressType
                 },
                 { headers: { 'Content-Type': 'application/json' } });
-
-            console.log(response2.data);
 
             Swal.fire({
                 position: 'top-end',

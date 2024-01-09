@@ -2,7 +2,6 @@ import React from 'react';
 import popupStyle from './PopUp.module.css';
 
 export default function Team(props) {
-  console.log(props.subItem);
   return (
     props.extended ?
       <>

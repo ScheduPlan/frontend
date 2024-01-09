@@ -35,7 +35,6 @@ export default function FormCreateOrder() {
         axios.get(url + '/customers').then(
             res => {
                 setCustomerList(res.data);
-                console.log(res.data);
             }
         );
     }
@@ -48,7 +47,6 @@ export default function FormCreateOrder() {
         axios.get(url + '/teams').then(
             res => {
                 setTeamList(res.data);
-                console.log("Teams", res.data);
             }
         );
     }
@@ -60,7 +58,6 @@ export default function FormCreateOrder() {
         axios.get(url + '/products').then(
             res => {
                 setProductList(res.data);
-                console.log(res.data);
             }
         );
     }
@@ -116,8 +113,6 @@ export default function FormCreateOrder() {
                     plannedDuration: timeperiod
                 },
                 { headers: { 'Content-Type': 'application/json' } });
-
-            console.log("res data", response.data);
 
             Swal.fire({
                 position: 'top-end',

@@ -24,7 +24,6 @@ export default function FormCreateAddress(props) {
     });
 
     useEffect(() => {
-        console.log(addressElement);
         setAddress();
     }, [addressElement]);
 

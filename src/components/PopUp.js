@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import style from './PopUp.module.css';
 import Path from '../icons/Paths';
 import axios from 'axios';
@@ -29,19 +29,6 @@ export default function PopUp(props) {
             }
         }
     }, [props.pathToItem]);
-
-    function renderContent2() {
-        if (props.type === "dateDetail") {
-            return (
-                <div className={style.popup_content}>
-                    <h2>{props.appointment.title}</h2>
-                    <div className={style.popup_details}>
-                        <p><b>Datum: </b>{props.appointment.start.toUTCString()}</p>
-                    </div>
-                </div>
-            )
-        }
-    }
 
     function renderContent() {
         switch (props.path) {

@@ -15,15 +15,11 @@ export const AuthProvider = ({ children }) => {
     setHeader(parsedItem.accessToken);
 
     useEffect(() => {
-        console.log("storageItem", storageItem);
-        console.log(auth);
         setHeader(auth.accessToken);
         if (storageItem != null) {
             axios.get(url + '/employees/' + auth.userId)
                 .then(res => {
-                    const data = res.data;
-                    setUser(data);
-                    console.log("user", user);
+                    setUser(res.data);
                 });
         }
     }, [auth]);

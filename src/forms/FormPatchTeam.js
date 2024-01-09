@@ -99,8 +99,6 @@ export default function FormPatchTeam() {
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
-            console.log("res data", response.data);
-
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',

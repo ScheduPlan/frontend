@@ -6,11 +6,10 @@ import logout from '../utility/logout';
 
 export default function Dashboard() {
 
-    const { setAuth, user, auth } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         setContent();
-        console.log(user);
     }, []);
 
 

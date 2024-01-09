@@ -1,9 +1,3 @@
-import AssemblerDashboard from './pages/AssemblerDashboard';
-import Schedule from './pages/Schedule';
-import axios from 'axios';
-import url from './BackendURL';
-import ListItems from './pages/ListItems';
-
 const user = {
   is_loged_in: true,
   role: "manager",

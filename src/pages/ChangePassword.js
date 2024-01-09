@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import user from '../UserExample';
 import Swal from 'sweetalert2';
-import { Navigate } from 'react-router-dom';
 
 export default function ChangePassword() {
   const [password, setPassword] = useState('');
 
   const getPassword = (e) => {
     setPassword(e.target.value);
-    console.log(password); //Verschlüsseln?
   }
-
-  const sleep = ms => new Promise(r => setTimeout(r, ms));
 
   async function submitForm() { //To Do: User danach abmelden -> muss sich mit neuem Passwort anmelden
     Swal.fire({

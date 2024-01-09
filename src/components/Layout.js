@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from "react";
-import userTest from '../UserExample';
 import Header from "./Header";
 import AuthContext from "../AuthProvider";
 

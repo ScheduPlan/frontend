@@ -3,11 +3,11 @@ import style from './Header.module.css';
 import Path from '../icons/Paths';
 import Menue from './Menue';
 import roles from '../ROLES';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import AuthContext from '../AuthProvider';
 
 export default function Header() {
-    const { auth, user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const navigate = useNavigate();
     const [isMenueOpen, setMenueOpen] = useState(false);
     const [menueIcon, setMenueIcon] = useState("menue");

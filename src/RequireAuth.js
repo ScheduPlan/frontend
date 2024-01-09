@@ -7,12 +7,11 @@ const RequireAuth = ({ allowedRoles }) => {
     const { auth } = useContext(AuthContext);
 
     return (
-        auth?.roles?.find(role => {console.log("Rolle:", role);
+        auth?.roles?.find(role => {
             return allowedRoles?.includes(role);
-
-            }) //alles hinter auth? nur aufrufen, wenn auth nicht null //find = for each "role"
+        }) //alles hinter auth? nur aufrufen, wenn auth nicht null //find = for each "role"
             ? <Outlet /> // Rendere eingebetete Route(n) im Routing (greift element aus Route ab)
-            : auth?.email 
+            : auth?.email
                 ? window.location.href = '/unauthorized' //<Navigate to="/unauthorized" replace /> // falsche Rolle
                 : <Navigate to="/" replace /> // nicht angemeldet
     );
