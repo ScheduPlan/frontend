@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useContext, useCallback, useEffect, useRef } from 'react';
-import { Calendar, Views, DateLocalizer, momentLocalizer } from 'react-big-calendar';
+import React, { useMemo, useState, useContext, useCallback, useEffect } from 'react';
+import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/de';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -38,7 +38,6 @@ export default function CalendarComponent(props) {
         []
     )
 
-    //get all appointments
     useEffect(() => {
         getEvents();
     }, [props.events]);
@@ -66,24 +65,60 @@ export default function CalendarComponent(props) {
     }
 
     /**
+     * calls function in parent component to update all events (from API)
+     */
+    function updateEvents() {
+        props.getEvents();
+    }
+
+    /**
      * calls patch function for event to set new start and end date
      * @param {*} e 
      */
     async function changeEventDateTime(e) {
         console.log(e);
         console.log("start", e.start);
-        console.log("end", e.end);
-        var addMlSeconds = (2 * 60) * 60000;
-        console.log("END?", new Date(e.start.getTime() + addMlSeconds));
-        const newEnd = new Date(e.start.getTime() + addMlSeconds);
 
-        const response = await axios.patch(url + "/customers/" + e.event?.event?.order?.customer?.id + "/orders/" + e.event?.event?.order?.id + "/events/" + e.event?.event?.id,
+        var addMlSeconds = moment(e.end).diff(moment(e.start));
+        const newEnd = new Date(e.start.getTime() + addMlSeconds);
+        console.log("newEnd", newEnd);
+
+        console.log("ZEITSPANNE", addMlSeconds);
+
+        Swal.fire({
+            title: "Sind Sie sicher, dass Sie das Element verschieben möchten?",
+            icon: "warning",
+            iconColor: "#A50000AB",
+            showCancelButton: true,
+            confirmButtonColor: "var(--primary)",
+            cancelButtonColor: "var(--red)",
+            cancelButtonText: "Nein",
+            confirmButtonText: "Ja",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //To Do patch event
+
+                Swal.fire({
+                    title: "Element verschoben!",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2500);
+            }
+        });
+
+        /*const response = await axios.patch(url + "/customers/" + e.event?.event?.order?.customer?.id + "/orders/" + e.event?.event?.order?.id + "/events/" + e.event?.event?.id,
             {
-                date: e.start,
+                date: new Date(e.start),
                 endDate: newEnd,
             }, { headers: { 'Content-Type': 'application/json' } });
-        console.log("response", response);
-        //getEvents();
+        console.log("response", response);*/
+
+        updateEvents();
     }
 
     //style of different appointments
@@ -99,7 +134,7 @@ export default function CalendarComponent(props) {
                     display: 'block'
                 }
             }),
-            ...(event.event.type === "ASSEMBLY" && { //ToDo: title in timeslot z-index:1 setzen
+            ...(event.event?.type === "ASSEMBLY" && { //ToDo: title in timeslot z-index:1 setzen
                 style: {
                     backgroundColor: 'var(--primary)',
                     border: '0',
@@ -123,24 +158,29 @@ export default function CalendarComponent(props) {
      * @param {*} e 
      */
     async function onDropFromOutside(e) {
-        console.log("dragEvent", e);
-        console.log("order", activeOrder);//patch order (state CONFIRMED)
+        const duration = activeOrder.plannedDuration * 3600000;
+        const newEndDate = new Date(e.start.getTime() + duration);
+
         try {
             const response = await axios.post(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id + "/events",
                 {
                     date: e.start,
-                    endDate: e.end,
+                    endDate: newEndDate,
                     type: "ASSEMBLY",
                     orderId: activeOrder.id
                 }, { headers: { 'Content-Type': 'application/json' } });
-            console.log(response);
 
             //set order state confirmed to remove it from sidebar
             axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
                 {
                     state: "CONFIRMED"
                 }, { headers: { 'Content-Type': 'application/json' } });
-            getEvents();
+
+
+            setTimeout(function () {
+                updateEvents();
+                window.location.reload();
+            }, 250);
         } catch (error) {
             alert(error);
         }
