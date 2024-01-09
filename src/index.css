@@ -26,6 +26,7 @@
 body {
   margin: 0;
   font-family: 'Poppins';
+  color: var(--grey-dark);
   overflow-x: hidden;
 }
 

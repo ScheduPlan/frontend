@@ -52,8 +52,11 @@
     padding: 2px 10px;
 }
 
-.sidebar .btn_close:hover, .sidebar .btn_showAll:hover {
+.sidebar .btn_showAll:hover {
     background-color: #fff;
+}
+
+.sidebar .btn_close:hover, .sidebar .btn_showAll:hover {
     cursor: pointer;
     opacity: 1;
 }

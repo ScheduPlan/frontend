@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './PopUp.module.css';
 import Path from '../icons/Paths';
 import axios from 'axios';
 import Employee from './Employee';
 import { useNavigate } from 'react-router-dom';
-import AuthContext from '../AuthProvider';
 import deleteItem from '../utility/deleteItem';
 import Team from './Team';
 import Customer from './Customer';
@@ -12,7 +11,6 @@ import Order from './Order';
 
 export default function PopUp(props) {
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
 
     const [item, setItem] = useState({});
     const [subItem, setSubItem] = useState({});
