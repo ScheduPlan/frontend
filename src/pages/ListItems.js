@@ -79,7 +79,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id) }} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("edit")} />
                   </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { deleteItem(url + props.path + "/" + item.id) }} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
+                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { (props.path == "/orders") ? deleteOrderWithEvents(props.pathToItem) : deleteItem(url + props.path + "/" + item.id) }} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("delete")} />
                   </svg>
                 </div>

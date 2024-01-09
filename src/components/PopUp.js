@@ -4,7 +4,7 @@ import Path from '../icons/Paths';
 import axios from 'axios';
 import Employee from './Employee';
 import { useNavigate } from 'react-router-dom';
-import deleteItem from '../utility/deleteItem';
+import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem';
 import Team from './Team';
 import Customer from './Customer';
 import Order from './Order';
@@ -63,7 +63,7 @@ export default function PopUp(props) {
                 </div>
                 <div className='btn-wrapper'>
                     {props.pathToEdit != null ? <button onClick={() => { navigate(props.pathToEdit) }} className='btn secondary'>Bearbeiten</button> : ""}
-                    {props.pathToItem != null ? <button onClick={() => { deleteItem(props.pathToItem) }} className='btn red'>Löschen</button> : ""}
+                    {props.pathToItem != null ? <button onClick={() => { (props.path == "/orders") ? deleteOrderWithEvents(props.pathToItem) : deleteItem(props.pathToItem) }} className='btn red'>Löschen</button> : ""}
                 </div>
             </div>
         </div> : ""
