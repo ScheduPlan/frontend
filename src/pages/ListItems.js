@@ -8,7 +8,7 @@ import PopUp from '../components/PopUp'
 import Path from '../icons/Paths'
 import Swal from 'sweetalert2'
 import AuthContext from '../AuthProvider'
-import deleteItem from '../utility/deleteItem'
+import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem'
 
 export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
