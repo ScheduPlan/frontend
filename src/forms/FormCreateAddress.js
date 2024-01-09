@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import url from '../BackendURL';
 import axios from 'axios';
 
-const FormCreateAddress = React.forwardRef((props, ref) => {
+export default function FormCreateAddress(props) {
 
     const [street, setStreet] = useState("");
     const [streetNumber, setStreetNumber] = useState("");
@@ -12,55 +12,48 @@ const FormCreateAddress = React.forwardRef((props, ref) => {
     const [addressSuffix, setAddressSuffix] = useState("");
     const [addressType, setAddressType] = useState("DELIVERY");
 
-    // Ref an die Elternkomponente übergeben
-    React.useImperativeHandle(ref, () => ({
-        triggerFunctionInChild,
-    }));
+    const [addressElement, setAddressElement] = useState({
+        country: country,
+        street: street,
+        streetNumber: streetNumber,
+        city: city,
+        zip: zip,
+        //description: "string",
+        addressSuffix: addressSuffix,
+        addressType: addressType
+    });
 
+    useEffect(() => {
+        console.log(addressElement);
+        setAddress();
+    }, [addressElement]);
 
     const getStreet = (e) => {
-        setStreet(e.target.value);
+        addressElement.street = e.target.value;
     };
 
     const getStreetNumber = (e) => {
-        setStreetNumber(e.target.value);
+        addressElement.streetNumber = e.target.value;
     };
 
     const getZip = (e) => {
-        setZip(e.target.value);
+        addressElement.zip = e.target.value;
     };
 
     const getCity = (e) => {
-        setCity(e.target.value);
+        addressElement.city = e.target.value;
     };
 
     const getCountry = (e) => {
-        setCountry(e.target.value);
+        addressElement.country = e.target.value;
     };
 
     const getAddressSuffix = (e) => {
-        setAddressSuffix(e.target.value);
+        addressElement.addressSuffix = e.target.value;
     };
 
-    /**
-     * sends address form
-     */
-    async function triggerFunctionInChild(id) {
-        console.log("Id in address", id);
-        const newCustomer = await axios.post(url + '/customers/' + id + '/addresses',
-            {
-                country: {country},
-                street: {street},
-                streetNumber: {streetNumber},
-                city: {city},
-                zip: {zip},
-                //description: "string",
-                addressSuffix: {addressSuffix},
-                addressType: {addressType}
-            },
-            { headers: { 'Content-Type': 'application/json' } });
-
-        console.log("Customer", newCustomer.data);
+    function setAddress() {
+        props.addressElement(addressElement);
     }
 
     return (
@@ -98,6 +91,4 @@ const FormCreateAddress = React.forwardRef((props, ref) => {
             </div>
         </div>
     )
-});
-
-export default FormCreateAddress;
+};

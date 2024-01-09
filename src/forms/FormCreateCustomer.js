@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import url from '../BackendURL';
@@ -8,27 +8,26 @@ import FormCreateAddress from './FormCreateAddress';
 export default function FormCreateCustomer() {
 
     const navigate = useNavigate();
-    // Ref für die Kindkomponente erstellen
-    const childRef = useRef(null);
 
-    const [customerID, setCustomerID] = useState("");
+    const [company, setCompany] = useState("");
+    const [customerNumber, setCustomerNumber] = useState("");
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
 
-    const [company, setCompany] = useState([]);
-    const [customerNumber, setCustomerNumber] = useState([]);
-    const [firstname, setFirstname] = useState([]);
-    const [lastname, setLastname] = useState([]);
-    const [email, setEmail] = useState([]);
-    const [phone, setPhone] = useState([]);
+    const [addressElement, setAddressElement] = useState({});
 
+    useEffect(() => {
+        console.log(addressElement);
+    }, [addressElement]);
 
-    //To Do: Kann man den nachfolgenden Block generischer machen?
     const getCompany = (e) => {
         setCompany(e.target.value);
     };
 
     const getCustomerNumber = (e) => {
-        const customerNumber = e.target.value;
-        setCustomerNumber(customerNumber);
+        setCustomerNumber(e.target.value);
     };
 
     const getFirstname = (e) => {
@@ -44,35 +43,47 @@ export default function FormCreateCustomer() {
     };
 
     const getPhone = (e) => {
-        const phone = e.target.value;
-        setPhone(phone);
+        setPhone(e.target.value);
     };
 
+    function getAddressElement(e) {
+        setAddressElement(e);
+    }
 
     /**
      * creates a new customer
-     * @param {*} event 
+     * @param {*} event
      */
     async function submitForm(event) {
         event.preventDefault();
         try {
             const response = await axios.post(url + '/customers',
                 {
+                    customerNumber: customerNumber,
                     company: company,
                     person: {
                         firstName: firstname,
                         lastName: lastname
-                    },
-                    customerNumber: customerNumber
+                    }
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
-            console.log("Post res", response.data);
-            console.log("Post res id", response.data.id);
-            setCustomerID(response.data.id);
+            console.log(response.data);
 
-            //hier Fkt. in Adresse auslösen
-            childRef.current && childRef.current.triggerFunctionInChild(response.data.id);
+            const response2 = await axios.post(url + '/customers/' + response.data.id + '/addresses',
+                {
+                    country: addressElement.country,
+                    street: addressElement.street,
+                    streetNumber: addressElement.streetNumber,
+                    city: addressElement.city,
+                    zip: addressElement.zip,
+                    //description: "string",
+                    addressSuffix: addressElement.addressSuffix,
+                    addressType: addressElement.addressType
+                },
+                { headers: { 'Content-Type': 'application/json' } });
+
+            console.log(response2.data);
 
             Swal.fire({
                 position: 'top-end',
@@ -126,7 +137,7 @@ export default function FormCreateCustomer() {
                         <input className='light-blue' type="text" name="phone" onChange={getPhone} required />
                     </label>
                 </div>
-                <FormCreateAddress ref={childRef} id={customerID} />
+                <FormCreateAddress addressElement={(elem) => { getAddressElement(elem) }} />
                 <label>
                     Lieferaddresse abweichend
                     <input className='btn primary' type='checkbox' value="" />
