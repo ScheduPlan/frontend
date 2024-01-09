@@ -125,7 +125,7 @@ export default function FormPatchOrder() {
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
-                title: 'Neuen Auftrag angelegt!',
+                title: 'Änderungen gespeichert!',
                 showConfirmButton: false,
                 timer: 2000
             });

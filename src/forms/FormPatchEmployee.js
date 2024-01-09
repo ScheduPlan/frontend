@@ -133,23 +133,23 @@ export default function FormPatchEmployee() {
                     </label>
                 </div>
                 <div className='form-row'>
-                        <label>
-                            Team
-                            <select className='light-blue' name="team" onChange={getTeamId}>
-                                <option readOnly hidden>
-                                    {employee.team != null ?
-                                        employee.team?.description?.name :
-                                        "Bitte wählen"}
-                                </option>
-                                {teamList.sort(function (a, b) {
-                                    if (a.description.name < b.description.name) { return -1; }
-                                    if (a.description.name > b.description.name) { return 1; }
-                                    return 0;
-                                }).map((team, index) => {
-                                    return (<option key={index} value={team.id}>{team.description.name}</option>)
-                                })}
-                            </select>
-                        </label>
+                    <label>
+                        Team
+                        <select className='light-blue' name="team" onChange={getTeamId}>
+                            <option readOnly hidden>
+                                {employee.team != null ?
+                                    employee.team?.description?.name :
+                                    "Bitte wählen"}
+                            </option>
+                            {teamList.sort(function (a, b) {
+                                if (a.description.name < b.description.name) { return -1; }
+                                if (a.description.name > b.description.name) { return 1; }
+                                return 0;
+                            }).map((team, index) => {
+                                return (<option key={index} value={team.id}>{team.description.name}</option>)
+                            })}
+                        </select>
+                    </label>
                     <label>
                         Benutzername
                         <input placeholder={employee.user?.username} className='light-blue' type="text" name="username" onChange={getUsername} />
