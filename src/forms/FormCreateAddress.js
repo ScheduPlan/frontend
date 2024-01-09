@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import url from '../BackendURL';
-import axios from 'axios';
 
 export default function FormCreateAddress(props) {
 
