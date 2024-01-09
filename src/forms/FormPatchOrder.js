@@ -2,25 +2,35 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import url from '../BackendURL';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-export default function FormCreateOrder() {
+export default function FormPatchOrder() {
 
+    const { id } = useParams();
     const navigate = useNavigate();
+    const [order, setOrder] = useState({});
 
     const [customerList, setCustomerList] = useState([]);
     const [productList, setProductList] = useState([]);
     const [teamList, setTeamList] = useState([]);
 
-    const [customerID, setCustomerID] = useState("");
-    const [number, setNumber] = useState("");
-    const [productID, setProductID] = useState("");
-    const [commissionNumber, setCommissionNumber] = useState("");
-    const [weight, setWeight] = useState("");
-    const [date, setDate] = useState("");
-    const [timeperiod, setTimeperiod] = useState("");
-    const [datetype, setDatetype] = useState("");
+    const [customerID, setCustomerID] = useState();
+    const [number, setNumber] = useState();
+    const [productID, setProductID] = useState();
+    const [commissionNumber, setCommissionNumber] = useState();
+    const [weight, setWeight] = useState();
+    const [date, setDate] = useState();
+    const [timeperiod, setTimeperiod] = useState();
+    const [datetype, setDatetype] = useState();
     const [teamID, setTeamID] = useState();
+
+    useEffect(() => {
+        axios.get(url + '/orders')
+            .then(res => {
+                setOrder(res.data.find(data => data.id == id));
+            });
+        setCustomerID(order.customer?.id);
+    }, [id]);
 
     useEffect(() => {
         getCustomerList();
@@ -38,7 +48,6 @@ export default function FormCreateOrder() {
             }
         );
     }
-
 
     /**
      * gets all teams from database
@@ -101,16 +110,15 @@ export default function FormCreateOrder() {
     async function submitForm(event) {
         event.preventDefault();
         try {
-            const response = await axios.post(url + '/customers/' + customerID + '/orders',
+            const response = await axios.patch(url + '/customers/' + customerID + '/orders/' + order.id,
                 {
-                    number: number,
-                    description: "",
-                    commissionNumber: commissionNumber,
-                    weight: weight,
+                    number: (number != null) ? number : order.number,
+                    commissionNumber: (commissionNumber != null) ? commissionNumber : order.commissionNumber,
+                    weight: (weight != null) ? weight : order.weight,
                     state: "PLANNED",
                     //products: productID,
-                    teamId: teamID,
-                    plannedDuration: timeperiod
+                    teamId: (teamID != null) ? teamID : order.teamID,
+                    plannedDuration: (timeperiod != null) ? timeperiod : order.timeperiod
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -133,28 +141,9 @@ export default function FormCreateOrder() {
 
     return (
         <div className='content-container'>
-            <h1>Neuen Auftrag anlegen</h1>
+            <h1>Auftrag <b>{order.number}</b> bearbeiten</h1>
             <form onSubmit={submitForm}>
-                <div className='form-row'>
-                    <label>
-                        Kunde
-                        <select className='light-blue' name="customer" onChange={getCustomerID} required>
-                            <option readOnly hidden>Bitte wählen</option>
-                            {customerList.sort(function (a, b) {
-                                if (a.customerNumber < b.customerNumber) { return -1; }
-                                if (a.customerNumber > b.customerNumber) { return 1; }
-                                return 0;
-                            }).map((cust) => {
-                                return (<option key={cust.id} value={cust.id}>{cust.customerNumber} {cust.company}</option>)
-                            })}
-                        </select>
-                    </label>
-                    <label>
-                        Auftragsnummer
-                        <input className='light-blue' type="number" name="number" min="1" onChange={getNumber} required />
-                    </label>
-                </div>
-
+                <h3>Kunde: {order.customer?.customerNumber} {order.customer?.company}</h3>
                 <div className='form-row'>
                     <label>
                         Produkt
@@ -164,36 +153,36 @@ export default function FormCreateOrder() {
                                 return (<option key={index} value={prod.id}>{prod.productNumber} {prod.name}</option>)
                             })}
                         </select>*/}
-                        <input className='light-blue' type="text" name="product" onChange={getProductID} required />
+                        <input className='light-blue' type="text" name="product" onChange={getProductID} />
                     </label>
                     <label>
                         Kommisionsnummer
-                        <input className='light-blue' type="number" name="commissionNumber" min="1" onChange={getCommissionNumber} required />
+                        <input placeholder={order.commissionNumber} className='light-blue' type="number" name="commissionNumber" min="1" onChange={getCommissionNumber} />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
                         Gewicht
-                        <input className='light-blue' type="number" min="1" step="0.05" name="weight" onChange={getWeight} required />
+                        <input placeholder={order.weight} className='light-blue' type="number" min="1" step="0.05" name="weight" onChange={getWeight} />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
                         freigegebener Termin
-                        <input className='light-blue' type="date" name="date" onChange={getDate} required />
+                        <input className='light-blue' type="date" name="date" onChange={getDate} />
                     </label>
                     <label>
                         geplante Termindauer
-                        <input className='light-blue' type="number" min="1" step="0.5" name="timeperiod" onChange={getTimeperiod} required />
+                        <input placeholder={order.plannedDuration} className='light-blue' type="number" min="1" step="0.5" name="timeperiod" onChange={getTimeperiod} />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
                         Terminart
-                        <select className='light-blue' name="datetype" onChange={getDatetype} required> {/*To Do: alle mgl typen ziehen und hier ausgeben */}
+                        <select className='light-blue' name="datetype" onChange={getDatetype}> {/*To Do: alle mgl typen ziehen und hier ausgeben */}
                             <option readOnly hidden>Bitte auswählen</option>
                             <option>Montage</option>
                             <option>Reklamation</option>
@@ -202,8 +191,12 @@ export default function FormCreateOrder() {
                     </label>
                     <label>
                         Team
-                        <select className='light-blue' name="team" onChange={getTeamID} required>
-                            <option readOnly hidden>Bitte wählen</option>
+                        <select className='light-blue' name="team" onChange={getTeamID}>
+                            <option readOnly hidden>
+                                {order.team != null ?
+                                    order.team?.description?.name :
+                                    "Bitte wählen"}
+                            </option>
                             {teamList.sort(function (a, b) {
                                 if (a.description.name < b.description.name) { return -1; }
                                 if (a.description.name > b.description.name) { return 1; }

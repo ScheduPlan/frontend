@@ -25,6 +25,7 @@ import Unauthorized from './pages/Unauthorized';
 import AssemblerDashboard from './pages/AssemblerDashboard';
 import FormPatchEmployee from './forms/FormPatchEmployee';
 import FormPatchCustomer from './forms/FormPatchCustomer';
+import FormPatchOrder from './forms/FormPatchOrder';
 
 export default function App() {
 
@@ -79,6 +80,7 @@ export default function App() {
             <Route path='/manager/schedule' element={<Schedule />} />
             <Route path='/manager/orders' element={<ListItems items={Order} path="/orders" h1="Alle Aufträge" />} />
             <Route path='/manager/orders/new' element={<FormCreateOrder />} />
+            <Route path='/manager/orders/:id' element={<FormPatchOrder />} />
             <Route path='/manager/customers' element={<ListItems items={Customer} path="/customers" h1="Alle Kunden" />} />
             <Route path='/manager/customers/new' element={<FormCreateCustomer />} />
             <Route path='/manager/customers/:id' element={<FormPatchCustomer />} />
