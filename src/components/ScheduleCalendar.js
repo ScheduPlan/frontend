@@ -76,15 +76,7 @@ export default function CalendarComponent(props) {
      * @param {*} e 
      */
     async function changeEventDateTime(e) {
-        console.log(e);
-        console.log("start", e.start);
-
-        var addMlSeconds = moment(e.end).diff(moment(e.start));
-        const newEnd = new Date(e.start.getTime() + addMlSeconds);
-        console.log("newEnd", newEnd);
-
-        console.log("ZEITSPANNE", addMlSeconds);
-
+        console.log("event", e.event.event.order.customer);
         Swal.fire({
             title: "Sind Sie sicher, dass Sie das Element verschieben möchten?",
             icon: "warning",
@@ -96,7 +88,11 @@ export default function CalendarComponent(props) {
             confirmButtonText: "Ja",
         }).then((result) => {
             if (result.isConfirmed) {
-                //To Do patch event
+                axios.patch(url + "/customers/" + e.event.event.order.customer.id + "/orders/" + e.event.event.order.id + "/events/" + e.event.event.id,
+                    {
+                        date: e.start,
+                        endDate: e.end,
+                    }, { headers: { 'Content-Type': 'application/json' } });
 
                 Swal.fire({
                     title: "Element verschoben!",
@@ -106,7 +102,7 @@ export default function CalendarComponent(props) {
                 });
 
                 setTimeout(function () {
-                    window.location.reload();
+                    window.location.reload(); //To Do: hier kein reload, das is scheiße, man muss im gleichen Team Kalender bleiben
                 }, 2500);
             }
         });
