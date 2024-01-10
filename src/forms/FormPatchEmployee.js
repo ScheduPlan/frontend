@@ -25,6 +25,7 @@ export default function FormPatchEmployee() {
         axios.get(url + '/employees/' + id)
             .then(res => {
                 setEmployee(res.data);
+                setUserRole(res.data.user?.role);
             });
         getTeamList();
     }, [id]);
@@ -134,28 +135,9 @@ export default function FormPatchEmployee() {
                 </div>
                 <div className='form-row'>
                     <label>
-                        Team
-                        <select className='light-blue' name="team" onChange={getTeamId}>
-                            <option readOnly hidden>
-                                {employee.team != null ?
-                                    employee.team?.description?.name :
-                                    "Bitte wählen"}
-                            </option>
-                            {teamList.sort(function (a, b) {
-                                if (a.description.name < b.description.name) { return -1; }
-                                if (a.description.name > b.description.name) { return 1; }
-                                return 0;
-                            }).map((team, index) => {
-                                return (<option key={index} value={team.id}>{team.description.name}</option>)
-                            })}
-                        </select>
-                    </label>
-                    <label>
                         Benutzername
                         <input placeholder={employee.user?.username} className='light-blue' type="text" name="username" onChange={getUsername} />
                     </label>
-                </div>
-                <div className='form-row'>
                     <label>
                         Benutzerrolle
                         <select className='light-blue' name="userRole" onChange={getUserRole} >
@@ -169,6 +151,26 @@ export default function FormPatchEmployee() {
                             })}
                         </select>
                     </label>
+                </div>
+                <div className='form-row'>
+                    {userRole == "FITTER" ?
+                        <label>
+                            Team
+                            <select className='light-blue' name="team" onChange={getTeamId}>
+                                <option readOnly hidden>
+                                    {employee.team != null ?
+                                        employee.team?.description?.name :
+                                        "Bitte wählen"}
+                                </option>
+                                {teamList.sort(function (a, b) {
+                                    if (a.description.name < b.description.name) { return -1; }
+                                    if (a.description.name > b.description.name) { return 1; }
+                                    return 0;
+                                }).map((team, index) => {
+                                    return (<option key={index} value={team.id}>{team.description.name}</option>)
+                                })}
+                            </select>
+                        </label> : ""}
                 </div>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Speichern" />

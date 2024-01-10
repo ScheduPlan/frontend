@@ -20,14 +20,17 @@ export default function Employee(props) {
         </div>
         <div className={popupStyle.popup_details}>
           <p><b>Personalnummer: </b>{props.object.employeeNumber}</p>
-          {(props.object.team != null) ?
-            <p>
-              <b>Team: </b>
-              {props.object.team.description.name}
-              {(props.object.team.description.description != "") ?
-                " (" + props.object.team.description.description + ")" : ""
-              }
-            </p> : "--aktuell keinem Team zugewiesen--"
+          {(props.object.user.role == "FITTER") ?
+            (
+              (props.object.team != null) ?
+                <p>
+                  <b>Team: </b>
+                  {props.object.team.description.name}
+                  {(props.object.team.description.description != "") ?
+                    " (" + props.object.team.description.description + ")" : ""
+                  }
+                </p> : "--aktuell keinem Team zugewiesen--"
+            ) : ""
           }
         </div>
       </>

@@ -129,11 +129,11 @@ export default function FormCreateTeam() {
                         Mitarbeiter
                         <select className='light-blue' name="customer" onChange={getPickedEmployees} required>
                             <option readOnly hidden>Bitte wählen</option>
-                            {availableEmployees.map((emp) => {
-                                    return (
-                                        <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
-                                    )
-                                })}
+                            {availableEmployees.filter(emp => emp.user?.role == "FITTER").map((emp) => {
+                                return (
+                                    <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
+                                )
+                            })}
                         </select>
                     </label>
                     <div className='pickedItem-wrapper'>

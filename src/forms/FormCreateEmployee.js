@@ -132,6 +132,26 @@ export default function FormCreateEmployee() {
                     </label>
                 </div>
                 <div className='form-row'>
+                    <label>
+                        Benutzername
+                        <input className='light-blue' type="text" name="username" onChange={getUsername} />
+                    </label>
+                    <label>
+                        Passwort
+                        <input className='light-blue' type="password" name="password" onChange={getPassword} />
+                    </label>
+                </div>
+                <div className='form-row'>
+                    <label>
+                        Benutzerrolle
+                        <select className='light-blue' name="userRole" onChange={getUserRole} required>
+                            <option readOnly hidden>Bitte wählen</option>
+                            {roles.map((role, index) => {
+                                return (<option key={index} value={role.role}>{role.title}</option>)
+                            })}
+                        </select>
+                    </label>
+                    {userRole == "FITTER" ?
                         <label>
                             Team
                             <select className='light-blue' name="team" onChange={getTeamId}>
@@ -144,26 +164,7 @@ export default function FormCreateEmployee() {
                                     return (<option key={index} value={team.id}>{team.description.name}</option>)
                                 })}
                             </select>
-                        </label>
-                    <label>
-                        Benutzerrolle
-                        <select className='light-blue' name="userRole" onChange={getUserRole} required>
-                            <option readOnly hidden>Bitte wählen</option>
-                            {roles.map((role, index) => {
-                                return (<option key={index} value={role.role}>{role.title}</option>)
-                            })}
-                        </select>
-                    </label>
-                </div>
-                <div className='form-row'>
-                    <label>
-                        Benutzername
-                        <input className='light-blue' type="text" name="username" onChange={getUsername} />
-                    </label>
-                    <label>
-                        Passwort
-                        <input className='light-blue' type="password" name="password" onChange={getPassword} />
-                    </label>
+                        </label> : ""}
                 </div>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Anlegen" />
