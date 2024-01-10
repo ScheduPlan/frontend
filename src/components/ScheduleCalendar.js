@@ -16,6 +16,11 @@ export default function CalendarComponent(props) {
     const [activeOrder, setActiveOrder] = useState({});
     const [events, setEvents] = useState([]);
 
+    const minTime = new Date();
+    minTime.setHours(6, 0, 0);
+    const maxTime = new Date();
+    maxTime.setHours(18, 30, 0);
+
     const DnDCalendar = withDragAndDrop(Calendar);
 
     //define the formats
@@ -31,7 +36,7 @@ export default function CalendarComponent(props) {
 
 
     //sets default values for the calendar
-    const { components, max, views } = useMemo(
+    const { components, views } = useMemo(
         () => ({
             views: [Views.WEEK, Views.DAY, Views.AGENDA],
         }),
@@ -149,6 +154,82 @@ export default function CalendarComponent(props) {
         }
     ), [events]);
 
+    async function validateEvent(start, end) {
+        if (start.getHours() > minTime.getHours()) {
+            if (end.getHours() < maxTime.getHours()) {
+                console.log("Termin zu lang: etweder Dauer kürzen oder Termin teilen");//"Termin teilen" legt neues Event zur Order an, dass am Folgetag zur erstmgl. Zeit beginnt
+                Swal.fire({
+                    title: "Länge des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
+                    icon: "question",
+                    iconColor: "#0d7bebAB",
+                    input: "number",
+                    inputAttributes: {
+                        step: "0.5",
+                        min: "1",
+                        max: activeOrder.plannedDuration,
+                        required: true
+                    },
+                    inputLabel: "geschätzter Aufwand",
+                    inputPlaceholder: activeOrder.plannedDuration,
+                    confirmButtonText: "Ändern",
+                    confirmButtonColor: "var(--primary)",
+
+                    showDenyButton: true,
+                    denyButtonText: "Termin teilen",
+                    denyButtonColor: "var(--red)",
+
+                    showCancelButton: true,
+                    cancelButtonText: "Abbruch",
+                    cancelButtonColor: "var(--grey)"
+                }).then(result => {
+                    if(result.isConfirmed) {
+                        console.log("API call -> patch order (& set event)");
+                        axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id, 
+                        {
+                            plannedDuration: result.value
+                        });
+                        const newEndDate = new Date(start.getTime() + result.value)
+                        validateEvent(start, newEndDate);
+                    } else if (result.isDenied) {
+                        console.log("Termin wird geteilt");
+                    }
+                });
+            } else {
+                try {
+                    const response = await axios.post(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id + "/events",
+                        {
+                            date: start,
+                            endDate: end,
+                            type: "ASSEMBLY",
+                            orderId: activeOrder.id
+                        }, { headers: { 'Content-Type': 'application/json' } });
+
+                    //set order state confirmed to remove it from sidebar
+                    axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
+                        {
+                            state: "CONFIRMED"
+                        }, { headers: { 'Content-Type': 'application/json' } });
+
+                    setTimeout(function () {
+                        updateEvents();
+                        window.location.reload();
+                    }, 250);
+                } catch (error) {
+                    alert(error);
+                }
+            }
+        } else {
+            Swal.fire({
+                title: "Startzeit des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
+                icon: "warning",
+                iconColor: "#0d7bebAB",
+                showCancelButton: false,
+                confirmButtonColor: "var(--primary)",
+                confirmButtonText: "Ok",
+            });
+        }
+    }
+
     /**
      * creates new event from sidebar order & sets order state to "CONFIRMED" to remove it from sidebar
      * @param {*} e 
@@ -156,30 +237,7 @@ export default function CalendarComponent(props) {
     async function onDropFromOutside(e) {
         const duration = activeOrder.plannedDuration * 3600000;
         const newEndDate = new Date(e.start.getTime() + duration);
-
-        try {
-            const response = await axios.post(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id + "/events",
-                {
-                    date: e.start,
-                    endDate: newEndDate,
-                    type: "ASSEMBLY",
-                    orderId: activeOrder.id
-                }, { headers: { 'Content-Type': 'application/json' } });
-
-            //set order state confirmed to remove it from sidebar
-            axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
-                {
-                    state: "CONFIRMED"
-                }, { headers: { 'Content-Type': 'application/json' } });
-
-
-            setTimeout(function () {
-                updateEvents();
-                window.location.reload();
-            }, 250);
-        } catch (error) {
-            alert(error);
-        }
+        validateEvent(e.start, newEndDate);
     }
 
     return (
@@ -192,9 +250,10 @@ export default function CalendarComponent(props) {
                 onEventDrop={changeEventDateTime}
                 onDropFromOutside={onDropFromOutside}
                 localizer={localizer}
-                max={max}
                 showMultiDayTimes
                 step={30}
+                //min={minTime}
+                //max={maxTime}
                 views={views}
                 /*onSelectEvent={togglePopUp}*/
                 dayLayoutAlgorithm="no-overlap"
