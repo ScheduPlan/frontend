@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useRef, useContext } from 'react'
-import TestUser from '../UserExample'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios'
 import url from '../BackendURL'
 import { Link, useNavigate } from 'react-router-dom'
 import style from './ListItems.module.css'
 import PopUp from '../components/PopUp'
 import Path from '../icons/Paths'
-import Swal from 'sweetalert2'
 import AuthContext from '../AuthProvider'
 import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem'
 
@@ -14,9 +12,6 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
-
-  // Ref für die Kindkomponente erstellen
-  const childRef = useRef(null);
 
   const { items: ItemComponent } = props;
   const [itemObjects, setItemObjects] = useState([]);
@@ -73,7 +68,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
             return (
               <div className={style.item} key={index} id={item.id} onClick={() => togglePopUp(item)}>
                 <div className={style.item_content}>
-                  <ItemComponent ref={childRef} object={item} onClick={() => togglePopUp(item)} />
+                  <ItemComponent object={item} onClick={() => togglePopUp(item)} />
                 </div>
                 <div className={style.item_icons}>
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id) }} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
