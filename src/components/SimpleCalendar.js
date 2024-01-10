@@ -1,30 +1,19 @@
-import React, { useMemo, useState, useContext, useCallback, useEffect, useRef } from 'react';
-import { Calendar, Views, DateLocalizer, momentLocalizer } from 'react-big-calendar';
+import React, { useMemo, useState, useContext, useCallback, useEffect } from 'react';
+import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/de';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import style from './ScheduleCalendar.module.css';
-import AuthContext from '../AuthProvider';
-import PopUp from './PopUp';
-import url from '../BackendURL';
-import axios from 'axios';
-import Swal from 'sweetalert2';
 
 export default function CalendarComponent(props) {
 
-    const { auth, user } = useContext(AuthContext);
-    const [appointment, setAppointment] = useState([]);
-    const [orders, setOrders] = useState([]);
-    const [newEvent, setNewEvent] = useState({});
-
+    const [events, setEvents] = useState([]);
     const [isPopUpOpen, setPopUpOpen] = useState(false);
 
-    function togglePopUp(appointment) {
+    function togglePopUp() {
         if (isPopUpOpen) {
             setPopUpOpen(false);
         } else {
-            setAppointment(appointment);
             setPopUpOpen(true);
         }
     }
@@ -47,7 +36,29 @@ export default function CalendarComponent(props) {
             views: [Views.WEEK, Views.DAY, Views.AGENDA],
         }),
         []
-    )
+    );
+
+    useEffect(() => {
+        getEvents();
+    }, [props.events]);
+
+    /**
+     * get all events from API & puts it in correct form for the calendar
+     */
+    function getEvents() {
+        let allEvents = [];
+        props.events.forEach(event => {
+            let elem = {
+                id: event.id,
+                title: event.order?.commissionNumber,
+                start: new Date(event.startDate),
+                end: new Date(event.endDate),
+                event: event
+            }
+            allEvents = [...allEvents, elem];
+        });
+        setEvents(allEvents);
+    }
 
     //style of different appointments
     const eventPropGetter = useCallback((event, start, end, isSelected) => (
@@ -79,15 +90,14 @@ export default function CalendarComponent(props) {
                 }
             })
         }
-    ), [props.appointments]);
+    ), [events]);
 
     return (
         <div className={style.calendar_wrapper} >
             <Calendar
                 defaultView="week"
                 components={components}
-                events={/*appointments*/ props.appointments}
-                /*backgroundEvents={timeslots}*/
+                events={events}
                 /*eventPropGetter={eventPropGetter}*/
                 localizer={localizer}
                 max={max}
@@ -97,15 +107,12 @@ export default function CalendarComponent(props) {
                 onSelectEvent={togglePopUp}
                 dayLayoutAlgorithm="no-overlap"
                 tooltipAccessor={{}}
-                /*onSelectSlot={onSelectSlot}*/
-                selectable
                 culture='de'
                 style={style}
                 length={6}
                 resizable={false}
                 messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag" }}
             />
-            <PopUp trigger={isPopUpOpen} close={togglePopUp} type="dateDetail" appointment={appointment} />
         </div>
     )
 }

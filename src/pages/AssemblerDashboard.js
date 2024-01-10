@@ -1,52 +1,24 @@
 import React, { useState, useEffect, useContext } from 'react';
 import CalendarComponent from '../components/SimpleCalendar';
 import AuthContext from '../AuthProvider';
+import axios from 'axios';
+import url from '../BackendURL';
 
 export default function AssemblerDashboard() {
-  const {user} = useContext(AuthContext);
-  const [appointments, setAppointments] = useState([]);
-
-  const appoint = [
-    {
-      start: new Date(2023, 11, 23, 8, 0),
-      end: new Date(2023, 11, 23, 13, 0),
-      category: "Montage"
-    },
-    {
-      start: new Date(2023, 10, 2, 9, 0),
-      end: new Date(2023, 10, 2, 10, 30),
-      category: "Reklamation"
-    }
-  ]
+  const { user } = useContext(AuthContext);
+  const [events, setEvents] = useState([]);
 
   //get all appointments
   useEffect(() => {
-    let appointments = [];
-    appoint.forEach((appointment) => {
-      let elem = {
-        title: appointment.category,
-        start: new Date(appointment.start),
-        end: new Date(appointment.end),
-        appointment: appointment.category,
-      };
-      appointments = [...appointments, elem];
+    axios.get(url + "/events").then(res => {
+      setEvents(res.data.filter(events => events.order.team.id == user.team?.id));
     });
-    //setAppointments(appointments);
-
-    //get all events
-    /*axios.get(url + "/events")
-            .then(response => {
-                const itemData = response.data;
-                setOrders(itemData);
-                console.log("Orders", itemData);
-            });*/
-
-  }, [appoint]);
+  }, []);
 
   return (
     <div className='content-container'>
-      <h1>{user.user.role} Kalender</h1>
-      <CalendarComponent appointments={appoint} />
+      <h1>{user.user?.role} Kalender</h1>
+      <CalendarComponent events={events} />
     </div>
   )
 }
