@@ -19,7 +19,7 @@ export default function CalendarComponent(props) {
     const minTime = new Date();
     minTime.setHours(6, 0, 0);
     const maxTime = new Date();
-    maxTime.setHours(18, 30, 0);
+    maxTime.setHours(18, 0, 0);
 
     const DnDCalendar = withDragAndDrop(Calendar);
 
@@ -156,7 +156,7 @@ export default function CalendarComponent(props) {
 
     async function validateEvent(start, end) {
         if (start.getHours() > minTime.getHours()) {
-            if (end.getHours() < maxTime.getHours()) {
+            if (end.getHours() > maxTime.getHours()) {
                 console.log("Termin zu lang: etweder Dauer kürzen oder Termin teilen");//"Termin teilen" legt neues Event zur Order an, dass am Folgetag zur erstmgl. Zeit beginnt
                 Swal.fire({
                     title: "Länge des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
