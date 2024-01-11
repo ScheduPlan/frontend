@@ -40,13 +40,13 @@ export default function Header() {
     return (
         <div className={style.header_wrapper}>
             <div className={style.header_content}>
-                <button className='btn icon'>
-                    <svg onClick={() => { navigate('/' + user.user.role.toLowerCase()) }} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
+                <button className='btn icon' onClick={() => { navigate('/' + user.user.role.toLowerCase()) }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
                         <path d={Path("home")} />
                     </svg>
                 </button>
-                <button className='btn icon'>
-                    <svg ref={menueButton} onClick={toggleMenue} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
+                <button className='btn icon' onClick={toggleMenue}>
+                    <svg ref={menueButton} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
                         <path d={Path(menueIcon)} />
                     </svg>
                 </button>
