@@ -8,6 +8,7 @@ import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem';
 import Team from './Team';
 import Customer from './Customer';
 import Order from './Order';
+import Event from './Event';
 
 export default function PopUp(props) {
     const navigate = useNavigate();
@@ -46,6 +47,10 @@ export default function PopUp(props) {
             case "/orders":
                 return (
                     <Order extended object={item} />
+                )
+            case "/events":
+                return (
+                    <Event extended object={item} />
                 )
             default:
                 break;

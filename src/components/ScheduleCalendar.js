@@ -12,9 +12,14 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export default function CalendarComponent(props) {
+    const { user } = useContext(AuthContext);
 
     const [activeOrder, setActiveOrder] = useState({});
     const [events, setEvents] = useState([]);
+
+    const [pathToItem, setPathToItem] = useState("");
+    const [pathToEdit, setPathToEdit] = useState("");
+    const [isPopUpOpen, setPopUpOpen] = useState(false);
 
     const minTime = new Date();
     minTime.setHours(6, 0, 0);
@@ -34,7 +39,6 @@ export default function CalendarComponent(props) {
         localizer.format(start, 'dddd, DD.MM.', culture) + ' - ' + localizer.format(end, 'dddd, DD.MM.', culture));
     localizer.formats.agendaDateFormat = 'DD.MM.';
 
-
     //sets default values for the calendar
     const { components, views } = useMemo(
         () => ({
@@ -50,6 +54,23 @@ export default function CalendarComponent(props) {
     useEffect(() => {
         setActiveOrder(props.activeOrder);
     }, [props.activeOrder]);
+
+    /**
+   * toggles pop up & sets path to items and path to the edit forms
+   * @param {*} item 
+   */
+    function togglePopUp(item) { // To Do: Id in Funktion mitgeben -> Wozu?
+        if (isPopUpOpen) {
+            setPopUpOpen(false);
+        } else {
+            setPathToItem(url + "/customers/" + item.event.order.customer.id + "/orders/" + item.event.order.id + "/events/" + item.event.id);
+            setPathToEdit('/' + user.user.role.toLowerCase() + "/orders/" + item.event.order.id);
+
+            setTimeout(() => {
+                setPopUpOpen(true);
+            }, 250);
+        }
+    }
 
     /**
      * get all events from API & puts it in correct form for the calendar
@@ -154,6 +175,11 @@ export default function CalendarComponent(props) {
         }
     ), [events]);
 
+    /**
+     * validates if event you want to create, is in between the custom min & max time
+     * @param {*} start 
+     * @param {*} end 
+     */
     async function validateEvent(start, end) {
         if (start.getHours() > minTime.getHours()) {
             if (end.getHours() > maxTime.getHours()) {
@@ -182,12 +208,12 @@ export default function CalendarComponent(props) {
                     cancelButtonText: "Abbruch",
                     cancelButtonColor: "var(--grey)"
                 }).then(result => {
-                    if(result.isConfirmed) {
+                    if (result.isConfirmed) {
                         console.log("API call -> patch order (& set event)");
-                        axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id, 
-                        {
-                            plannedDuration: result.value
-                        });
+                        axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
+                            {
+                                plannedDuration: result.value
+                            });
                         const newEndDate = new Date(start.getTime() + result.value)
                         validateEvent(start, newEndDate);
                     } else if (result.isDenied) {
@@ -246,6 +272,7 @@ export default function CalendarComponent(props) {
                 defaultView="week"
                 components={components}
                 events={events}
+                onSelectEvent={togglePopUp}
                 eventPropGetter={eventPropGetter}
                 onEventDrop={changeEventDateTime}
                 onDropFromOutside={onDropFromOutside}
@@ -263,8 +290,9 @@ export default function CalendarComponent(props) {
                 style={style}
                 length={6}
                 resizable={false}
-                messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag" }}
+                messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag", noEventsInRange: "Es gibt keine Termine für diesen Tag." }}
             />
+            <PopUp trigger={isPopUpOpen} close={togglePopUp} path={"/events"} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
         </div>
     )
 }
