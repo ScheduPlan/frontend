@@ -8,7 +8,7 @@ import Layout from './components/Layout';
 // import pages
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import ChangePassword from './pages/ChangePassword';
+import ChangePassword from './forms/FormChangePassword';
 import Error404 from './pages/Error404';
 import Schedule from './pages/Schedule';
 import ListItems from './pages/ListItems';
