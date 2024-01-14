@@ -156,7 +156,7 @@ export default function FormPatchEmployee() {
                     {userRole == "FITTER" ?
                         <label>
                             Team
-                            <select className='light-blue' name="team" onChange={getTeamId}>
+                            <select className='light-blue' name="team" onChange={getTeamId} >
                                 <option readOnly hidden>
                                     {employee.team != null ?
                                         employee.team?.description?.name :

@@ -91,7 +91,7 @@ export default function FormCreateTeam() {
                 axios.patch(url + "/employees/" + emp.id, {
                     teamId: teamId
                 });
-            })
+            });
 
             Swal.fire({
                 position: 'top-end',

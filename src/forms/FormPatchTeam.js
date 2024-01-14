@@ -12,8 +12,8 @@ export default function FormPatchTeam() {
     const navigate = useNavigate();
     const [team, setTeam] = useState({});
 
-    const [teamName, setTeamName] = useState("");
-    const [teamDesc, setTeamDesc] = useState("");
+    const [teamName, setTeamName] = useState();
+    const [teamDesc, setTeamDesc] = useState();
 
     const [allEmployees, setAllEmployees] = useState([]);
     const [availableEmployees, setAvailableEmployees] = useState([]);
@@ -27,6 +27,9 @@ export default function FormPatchTeam() {
         updateAvailableEmployees();
     }, [allEmployees, pickedEmployees]);
 
+    /**
+     * gets current team members & adds it to the pickedEmployees
+     */
     useEffect(() => {
         axios.get(url + '/teams/' + id)
             .then(res => {
@@ -34,7 +37,13 @@ export default function FormPatchTeam() {
             });
         axios.get(url + '/teams/' + id + '/members')
             .then(res => {
-                setPickedEmployees(res.data);
+                res.data.map(option => {
+                    const selectedOption = {
+                        id: option.id,
+                        value: option.firstName + " " + option.lastName
+                    };
+                    setPickedEmployees((prevEmployees) => [...prevEmployees, selectedOption]);
+                });
             });
     }, [id]);
 
@@ -44,7 +53,7 @@ export default function FormPatchTeam() {
     function getAllEmployees() {
         axios.get(url + '/employees')
             .then(response => {
-                setAllEmployees(response.data.filter(data => (data.firstName != "Administrator") && (data.team?.id == null)));
+                setAllEmployees(response.data.filter(data => (data.firstName != "Administrator") && ((data.team?.id == null) || (data.team?.id == ""))));
             });
     }
 
@@ -56,6 +65,8 @@ export default function FormPatchTeam() {
             allEmployees.filter(obj =>
                 !pickedEmployees.some(pickedObj => pickedObj.id === obj.id))
         )
+        console.log("allEmployees", allEmployees);
+        console.log("availableEmployees", availableEmployees);
     }
 
     const getTeamName = (e) => {
@@ -75,6 +86,7 @@ export default function FormPatchTeam() {
             id: e.target.selectedOptions[0].id,
             value: e.target.value
         };
+        console.log("selectOpt", selectedOption);
         setPickedEmployees((prevEmployees) => [...prevEmployees, selectedOption]);
     }
 
@@ -83,21 +95,31 @@ export default function FormPatchTeam() {
      * @param {*} e 
      */
     function removeEmployee(e) {
+        axios.patch(url + "/employees/" + e.target.id, {
+            teamId: ""
+        });
+
         const selectedOption = pickedEmployees.find(elem => elem.id === e.target.id);
         setPickedEmployees(pickedEmployees.filter(obj => obj != selectedOption));
         updateAvailableEmployees();
+        console.log("removeEmployee", selectedOption);
     }
 
     async function submitForm(event) {
         event.preventDefault();
         try {
-            const response = await axios.post(url + '/teams',
+            const response = await axios.patch(url + '/teams/' + team.id,
                 {
                     name: (teamName != null) ? teamName : team.description.name,
                     description: (teamDesc != null) ? teamDesc : team.description.description,
-                    members: (pickedEmployees != null) ? pickedEmployees : team.members
                 },
                 { headers: { 'Content-Type': 'application/json' } });
+
+            pickedEmployees.forEach(emp => {
+                axios.patch(url + "/employees/" + emp.id, {
+                    teamId: team.id
+                });
+            })
 
             Swal.fire({
                 position: 'top-end',
@@ -135,7 +157,7 @@ export default function FormPatchTeam() {
                         Mitarbeiter
                         <select className='light-blue' name="customer" onChange={getPickedEmployees}>
                             <option readOnly hidden>Bitte wählen</option>
-                            {availableEmployees.map((emp) => {
+                            {availableEmployees.filter(emp => emp.user?.role == "FITTER").map((emp) => {
                                 return (
                                     <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
                                 )
@@ -144,9 +166,9 @@ export default function FormPatchTeam() {
                     </label>
                     <div className='pickedItem-wrapper'>
                         {(pickedEmployees != [] ?
-                            pickedEmployees.map((emp) => {
+                            pickedEmployees.map((emp, index) => {
                                 return (
-                                    <div key={emp.id} className='pickedItem'>
+                                    <div key={index} className='pickedItem'>
                                         <p>{emp.value}</p>
                                         <svg onClick={removeEmployee} id={emp.id} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
                                             <path d={Path("close")} />
