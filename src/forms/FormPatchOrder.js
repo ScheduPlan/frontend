@@ -28,8 +28,8 @@ export default function FormPatchOrder() {
         axios.get(url + '/orders')
             .then(res => {
                 setOrder(res.data.find(data => data.id == id));
+                setCustomerID(order.customer.id);
             });
-        setCustomerID(order.customer?.id);
     }, [id]);
 
     useEffect(() => {
@@ -69,14 +69,6 @@ export default function FormPatchOrder() {
                 setProductList(res.data);
             }
         );
-    }
-
-    const getCustomerID = (e) => {
-        setCustomerID(e.target.value);
-    }
-
-    const getNumber = (e) => {
-        setNumber(e.target.value);
     }
 
     const getProductID = (e) => {
