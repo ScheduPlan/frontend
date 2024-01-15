@@ -60,7 +60,9 @@ export default function FormCreateCustomer() {
                     person: {
                         firstName: firstname,
                         lastName: lastname
-                    }
+                    },
+                    email: email,
+                    phoneNumber: phone
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 

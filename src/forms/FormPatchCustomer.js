@@ -23,11 +23,11 @@ export default function FormPatchCustomer() {
 
   useEffect(() => {
     axios.get(url + '/customers/' + id)
-        .then(res => {
-            setCustomer(res.data);
-            setAddress(res.data.addresses?.at(0));
-        });
-}, [id]);
+      .then(res => {
+        setCustomer(res.data);
+        setAddress(res.data.addresses.at(0));
+      });
+  }, [id]);
 
   const getCompany = (e) => {
     setCompany(e.target.value);
@@ -71,11 +71,13 @@ export default function FormPatchCustomer() {
           person: {
             firstName: (firstname != null) ? firstname : customer.firstName,
             lastName: (lastname != null) ? lastname : customer.lastName
-          }
+          },
+          email: email,
+          phoneNumber: phone
         },
         { headers: { 'Content-Type': 'application/json' } });
 
-      const response2 = await axios.patch(url + '/customers/' + id + '/addresses/' + customer.address.at(0).id,
+      const response2 = await axios.patch(url + '/customers/' + id + '/addresses/' + customer.addresses.at(0).id,
         {
           country: (addressElement.country != null) ? addressElement.country : address.country,
           street: (addressElement.street != null) ? addressElement.street : address.street,
@@ -133,11 +135,11 @@ export default function FormPatchCustomer() {
         <div className='form-row'>
           <label>
             E-Mail-Adresse
-            <input className='light-blue' type="email" name="email" onChange={getEmail} />
+            <input placeholder={customer.email} className='light-blue' type="email" name="email" onChange={getEmail} />
           </label>
           <label>
             Telefonnummer
-            <input className='light-blue' type="text" name="phone" onChange={getPhone} />
+            <input placeholder={customer.phoneNumber} className='light-blue' type="text" name="phone" onChange={getPhone} />
           </label>
         </div>
         <FormPatchAddress placeholder={address} addressElement={(elem) => { getAddressElement(elem) }} />
