@@ -14,6 +14,8 @@ export default function Sidebar(props) {
     const [orders, setOrders] = useState([]);
     const [isOpen, setOpen] = useState(true);
 
+    const [sortOption, setSortOption] = useState();
+
     const [itemObjects, setItemObjects] = useState([]);
     const [pathToItem, setPathToItem] = useState("");
     const [pathToEdit, setPathToEdit] = useState("");
@@ -82,6 +84,19 @@ export default function Sidebar(props) {
         }
     }
 
+    /**
+     * sorts order list for the choosen option
+     * @param {*} e 
+     */
+    const getSortOption = (e) => {
+        setSortOption(e.target.value);
+        if (e.target.value != null && e.target.value != "none") {
+            setOrders(sortItems(orders, e.target.value));
+        } else {
+            setOrders(sortItems(orders, "commissionNumber"));
+        }
+    }
+
     function setOrderData(e) {
         props.activeOrder(e);
     }
@@ -90,17 +105,30 @@ export default function Sidebar(props) {
         <div className={style.sidebar + (!isOpen ? " " + style.sidebar_closed : " ")}>
             <h2>Aufträge</h2>
             <div className={style.btn_close} onClick={toggleSidebar}>{'<'}</div>
+
+            <div className={style.filter_row}>
+                <span>sortieren</span>
+                <select name="sortOptions" className={style.filter} onChange={getSortOption}>
+                    <option value="none" readOnly>Bitte wählen</option>
+                    <option value="number">Auftr.-Nr.</option>
+                    <option value="commissionNumber">Kom.-Nr.</option>
+                    <option value="company">Kunde</option>
+                    <option value="plannedDuration">geschätzter Aufwand</option>
+                </select>
+            </div>
+            <div className={style.filter_row}>
+                <span>filtern</span>
+                <select name="filterOptions" className={style.filter}>
+                    <option value="none" readOnly>Bitte wählen</option>
+                    <option value="number">Auftr.-Nr.</option>
+                    <option value="commissionNumber">Kom.-Nr.</option>
+                    <option value="company">Kunde</option>
+                    <option value="plannedDuration">geschätzter Aufwand</option>
+                </select>
+            </div>
             <button className={'btn secondary ' + style.btn_showAll} onClick={getAllOrders}>alle anzeigen</button>
+
             <div className={style.appointment_box_wrapper}>
-                {orders.map(order => {
-                    <div key={order.id} className={style.appointment_box}>
-                        <p className={style.title}>Komm.-Nr. {order.commissionNumber}</p>
-                        <div className={style.appointment_detail}>
-                            <p><b>Kategorie:</b> {order.customer.company}</p>
-                            <p><b>Zeitaufwand:</b> {order.weight}</p>
-                        </div>
-                    </div>
-                })}
                 {orders.map((order) => (
                     <div key={order.id} className={style.appointment_box} id={order.id} onClick={() => togglePopUp(order)} draggable onDragStart={() => { setOrderData(order) }}>
                         <p className={style.title}>Auftr.-Nr.: {order.number}</p>

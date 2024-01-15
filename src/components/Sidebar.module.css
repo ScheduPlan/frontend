@@ -44,7 +44,7 @@
 .sidebar .btn_showAll {
     background-color: #fff;
     border-radius: 9px;
-    margin: 4px auto 20px 0;
+    margin: 4px auto 30px 0;
     color: black;
     mix-blend-mode: screen;
     opacity: 0.75;
@@ -56,14 +56,15 @@
     background-color: #fff;
 }
 
-.sidebar .btn_close:hover, .sidebar .btn_showAll:hover {
+.sidebar .btn_close:hover,
+.sidebar .btn_showAll:hover {
     cursor: pointer;
     opacity: 1;
 }
 
 .appointment_box_wrapper {
     width: 106%;
-    height: calc(100% - 42px);
+    height: calc(100% - 140px);
     background: transparent;
     color: var(--primary);
     overflow: scroll;
@@ -129,4 +130,33 @@
     .sidebar {
         display: block;
     }
+}
+
+
+/* Filter */
+
+.filter_row {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin: 7px 0 7px 5px;
+}
+
+.filter_row span {
+    font-family: 'Poppins';
+    font-weight: 500;
+}
+
+select.filter {
+    background-color: #fff;
+    border-radius: 9px;
+    color: #333;
+    transition: 0.4s ease;
+    padding: 2px 10px;
+    cursor: pointer;
+    font-family: 'Poppins';
+    border: none;
+    opacity: 0.75;
+    font-weight: 500;
 }
