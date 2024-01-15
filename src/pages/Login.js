@@ -32,8 +32,9 @@ export default function Login() {
     }
 
     async function submitForm(event) {
+        event.preventDefault();
+        console.log("HIER");
         try {
-            event.preventDefault();
             const response = await axios.post(url + '/auth/login',
                 {
                     username: username,
