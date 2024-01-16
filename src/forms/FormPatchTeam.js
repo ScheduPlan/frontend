@@ -99,10 +99,8 @@ export default function FormPatchTeam() {
             teamId: ""
         });
 
-        const selectedOption = pickedEmployees.find(elem => elem.id === e.target.id);
-        setPickedEmployees(pickedEmployees.filter(obj => obj != selectedOption));
+        setPickedEmployees(pickedEmployees.filter(obj => obj.id != e.target.id));
         updateAvailableEmployees();
-        console.log("removeEmployee", selectedOption);
     }
 
     async function submitForm(event) {

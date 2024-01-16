@@ -93,7 +93,7 @@ export default function CalendarComponent(props) {
     ), [events]);
 
     return (
-        <div className={style.calendar_wrapper} >
+        <div className={style.calendar_wrapper + " " + style.simple} >
             <Calendar
                 defaultView="week"
                 components={components}
@@ -111,7 +111,7 @@ export default function CalendarComponent(props) {
                 style={style}
                 length={6}
                 resizable={false}
-                messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag" }}
+                messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag", noEventsInRange: "Es gibt keine Termine für diesen Tag." }}
             />
         </div>
     )
