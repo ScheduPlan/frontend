@@ -261,9 +261,11 @@ export default function CalendarComponent(props) {
      * @param {*} e 
      */
     async function onDropFromOutside(e) {
-        const duration = activeOrder.plannedDuration * 3600000;
-        const newEndDate = new Date(e.start.getTime() + duration);
-        validateEvent(e.start, newEndDate);
+        if (!props.allOrdersDisplayed) {
+            const duration = activeOrder.plannedDuration * 3600000;
+            const newEndDate = new Date(e.start.getTime() + duration);
+            validateEvent(e.start, newEndDate);
+        }
     }
 
     return (

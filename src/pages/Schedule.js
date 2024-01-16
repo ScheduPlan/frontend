@@ -12,6 +12,7 @@ export default function Schedule() {
   const [orders, setOrders] = useState([]);
 
   const [activeOrder, setActiveOrder] = useState({});
+  const [showAllOrders, setShowAllOrders] = useState(false);
 
   const [activeTeamId, setActiveTeamId] = useState("");
   const [activeEvents, setActiveEvents] = useState([]);
@@ -25,6 +26,10 @@ export default function Schedule() {
   useEffect(() => {
     getActiveEvents();
   }, [activeTeamId]);
+
+  useEffect(() => {
+    console.log(showAllOrders);
+  }, [showAllOrders]);
 
   /**
    * gets all teams from API, sorts them & sets the setActiveTeamId as the first element
@@ -65,13 +70,13 @@ export default function Schedule() {
         <h1>Planungsassistent</h1>
       </div>
       <div className='content-wrapper'>
-        <Sidebar activeTeamId={activeTeamId} activeOrder={(e) => setActiveOrder(e)} />
+        <Sidebar activeTeamId={activeTeamId} activeOrder={(e) => setActiveOrder(e)} allOrdersDisplayed={showAllOrders} setAllOrdersDisplayed={(e) => setShowAllOrders(e)} />
 
         <div className={style.calendar_wrapper}>
           <div className={style.tab_bar}>
             {teams.map(team => {
               return (
-                <button key={team.id} className={"btn tab " + ((activeTeamId == team.id) ? "active" : "")} id={team.id} onClick={() => setActiveTeamId(team.id)}>{team.description.name}</button>
+                <button key={team.id} className={"btn tab " + (((activeTeamId == team.id) && !showAllOrders) ? "active" : "")} id={team.id} onClick={() => {setActiveTeamId(team.id); setShowAllOrders(false)}}>{team.description.name}</button>
               )
             })}
           </div>
@@ -79,7 +84,7 @@ export default function Schedule() {
           {teams.map(team => {
             return (
               <div key={team.id} id={"team " + team.id} className={style.tab_container}>
-                <Calendar events={activeEvents} getEvents={getEvents} activeOrder={activeOrder} />
+                <Calendar events={activeEvents} getEvents={getEvents} activeOrder={activeOrder} allOrdersDisplayed={showAllOrders} />
               </div>)
           })}
         </div>

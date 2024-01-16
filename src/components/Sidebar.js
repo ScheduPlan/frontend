@@ -5,6 +5,7 @@ import url from '../BackendURL';
 import sortItems from '../utility/sortItems';
 import PopUp from './PopUp';
 import AuthContext from '../AuthProvider';
+import Swal from 'sweetalert2';
 
 export default function Sidebar(props) {
 
@@ -15,6 +16,7 @@ export default function Sidebar(props) {
     const [isOpen, setOpen] = useState(true);
 
     const [sortOption, setSortOption] = useState();
+    const [filterOption, setFilterOption] = useState();
 
     const [itemObjects, setItemObjects] = useState([]);
     const [pathToItem, setPathToItem] = useState("");
@@ -68,7 +70,7 @@ export default function Sidebar(props) {
     }
 
     /**
-     * gets all orders that are not already planned (in calendar)
+     * gets all orders that are not already planned
      */
     function getAllOrders() {
         axios.get(url + "/orders").then(res => {
@@ -90,15 +92,43 @@ export default function Sidebar(props) {
      */
     const getSortOption = (e) => {
         setSortOption(e.target.value);
-        if (e.target.value != null && e.target.value != "none") {
-            setOrders(sortItems(orders, e.target.value));
-        } else {
-            setOrders(sortItems(orders, "commissionNumber"));
+
+        switch (e.target.value) {
+            case null:
+                setOrders(sortItems(orders, "commissionNumber"));
+                break;
+            case "none":
+                setOrders(sortItems(orders, "commissionNumber"));
+                break;
+            case "company":
+                setOrders(sortItems(orders, "customer", "company"));
+                break;
+            case "team":
+                setOrders(sortItems(orders, "team", "description", "name"));
+            default: setOrders(sortItems(orders, e.target.value));
+                break;
         }
     }
 
-    function setOrderData(e) {
-        props.activeOrder(e);
+    /**
+     * allows to drag and drop an order into a calendar if a team calendar is picked
+     * returns error alert if not
+     */
+    function validateCurrentTeam(order) {
+        if(!props.allOrdersDisplayed) {
+            props.activeOrder(order);
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: 'Termin anlegen nicht möglich!',
+                text: "Bitte, wählen Sie zuerst ein Team aus.",
+                showConfirmButton: true,
+                confirmButtonColor: "var(--primary)",
+                confirmButtonText: "Ok",
+                timer: 5000,
+            });
+        }
     }
 
     return (
@@ -114,6 +144,9 @@ export default function Sidebar(props) {
                     <option value="commissionNumber">Kom.-Nr.</option>
                     <option value="company">Kunde</option>
                     <option value="plannedDuration">geschätzter Aufwand</option>
+                    <option value="weight">Gewicht</option>
+                    {props.allOrdersDisplayed ?
+                        <option value="team">Team</option> : ""}
                 </select>
             </div>
             <div className={style.filter_row}>
@@ -126,11 +159,11 @@ export default function Sidebar(props) {
                     <option value="plannedDuration">geschätzter Aufwand</option>
                 </select>
             </div>
-            <button className={'btn secondary ' + style.btn_showAll} onClick={getAllOrders}>alle anzeigen</button>
+            <button className={'btn secondary ' + style.btn_showAll} onClick={() => {getAllOrders(); props.setAllOrdersDisplayed(true);}}>alle anzeigen</button>
 
             <div className={style.appointment_box_wrapper}>
                 {orders.map((order) => (
-                    <div key={order.id} className={style.appointment_box} id={order.id} onClick={() => togglePopUp(order)} draggable onDragStart={() => { setOrderData(order) }}>
+                    <div key={order.id} className={style.appointment_box} id={order.id} onClick={() => togglePopUp(order)} draggable onDragStart={() => {validateCurrentTeam(order)}}>
                         <p className={style.title}>Auftr.-Nr.: {order.number}</p>
                         <div className={style.appointment_detail}>
                             <p><b>Kom.-Nr.:</b> {order.commissionNumber}</p>
@@ -143,6 +176,5 @@ export default function Sidebar(props) {
             </div>
             <PopUp trigger={isPopUpOpen} close={togglePopUp} path={path} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
         </div>
-
     )
 }
