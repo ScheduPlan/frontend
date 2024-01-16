@@ -64,7 +64,7 @@ export default function CalendarComponent(props) {
             setPopUpOpen(false);
         } else {
             setPathToItem(url + "/customers/" + item.event.order.customer.id + "/orders/" + item.event.order.id + "/events/" + item.event.id);
-            setPathToEdit('/' + user.user.role.toLowerCase() + "/orders/" + item.event.order.id);
+            setPathToEdit('/' + user.user.role.toLowerCase() + "/events/" + item.event.id);
 
             setTimeout(() => {
                 setPopUpOpen(true);
@@ -284,9 +284,7 @@ export default function CalendarComponent(props) {
                 //min={minTime}
                 //max={maxTime}
                 views={views}
-                /*onSelectEvent={togglePopUp}*/
                 dayLayoutAlgorithm="no-overlap"
-                /*onSelectSlot={onSelectSlot}*/
                 selectable
                 culture='de'
                 style={style}

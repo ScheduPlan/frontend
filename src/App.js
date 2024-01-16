@@ -27,6 +27,7 @@ import FormPatchEmployee from './forms/FormPatchEmployee';
 import FormPatchCustomer from './forms/FormPatchCustomer';
 import FormPatchOrder from './forms/FormPatchOrder';
 import Event from './components/Event';
+import FormPatchEvent from './forms/FormPatchEvent';
 
 export default function App() {
 
@@ -86,8 +87,7 @@ export default function App() {
             <Route path='/manager/orders/new' element={<FormCreateOrder />} />
             <Route path='/manager/orders/:id' element={<FormPatchOrder />} />
             <Route path='/manager/events' element={<ListItems items={Event} path="/events" h1="Alle Termine" />} />
-            {/*<Route path='/manager/events/new' element={<FormCreateOrder />} />
-            <Route path='/manager/events/:id' element={<FormPatchOrder />} />*/}
+            <Route path='/manager/events/:id' element={<FormPatchEvent />} />
             
 
 
