@@ -58,7 +58,7 @@ export default function FormPatchTeam() {
     }
 
     /**
-     * filters the available employees that there are nor picked ones
+     * filters the available employees that there are not picked ones
      */
     function updateAvailableEmployees() {
         setAvailableEmployees(

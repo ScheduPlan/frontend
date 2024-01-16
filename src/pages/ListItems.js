@@ -62,6 +62,27 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
     }
   }
 
+  /**
+   * switch case to delete a certain item
+   * @param {*} item 
+   */
+  function deleteFct(item) {
+    switch (props.path) {
+      case "/orders":
+        deleteOrderWithEvents(props.pathToItem);
+        break;
+      case "/events":
+        axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
+          {
+            state: "PLANNED"
+          }, { headers: { 'Content-Type': 'application/json' } });
+          deleteItem(props.pathToItem);
+      default:
+        deleteItem(url + props.path + "/" + item.id);
+        break;
+    }
+  }
+
   return (
     <>
       <div className='content-container'>
@@ -83,7 +104,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id) }} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("edit")} />
                   </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { (props.path == "/orders") ? deleteOrderWithEvents(props.pathToItem) : deleteItem(url + props.path + "/" + item.id) }} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
+                  <svg xmlns="http://www.w3.org/2000/svg" onClick={() => deleteFct(item)} id={item.id} className='btn-icon red' width="24" height="24" viewBox="0 -960 960 960">
                     <path d={Path("delete")} />
                   </svg>
                 </div>

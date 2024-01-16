@@ -4,6 +4,7 @@ import Path from '../icons/Paths';
 import axios from 'axios';
 import Employee from './Employee';
 import { useNavigate } from 'react-router-dom';
+import url from '../BackendURL';
 import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem';
 import Team from './Team';
 import Customer from './Customer';
@@ -57,6 +58,27 @@ export default function PopUp(props) {
         }
     }
 
+    /**
+   * switch case to delete a certain item
+   * @param {*} item 
+   */
+    function deleteFct() {
+        switch (props.path) {
+          case "/orders":
+            deleteOrderWithEvents(props.pathToItem);
+            break;
+          case "/events":
+            axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
+              {
+                state: "PLANNED"
+              }, { headers: { 'Content-Type': 'application/json' } });
+              deleteItem(props.pathToItem);
+          default:
+            deleteItem(props.pathToItem);
+            break;
+        }
+      }
+
     return (props.trigger ?
         <div className={style.popup_wrapper}>
             <div className={style.popup_content_wrapper}>
@@ -68,7 +90,7 @@ export default function PopUp(props) {
                 </div>
                 <div className='btn-wrapper'>
                     {props.pathToEdit != null ? <button onClick={() => { navigate(props.pathToEdit) }} className='btn secondary'>Bearbeiten</button> : ""}
-                    {props.pathToItem != null ? <button onClick={() => { (props.path == "/orders") ? deleteOrderWithEvents(props.pathToItem) : deleteItem(props.pathToItem) }} className='btn red'>Löschen</button> : ""}
+                    {props.pathToItem != null ? <button onClick={deleteFct} className='btn red'>Löschen</button> : ""}
                 </div>
             </div>
         </div> : ""
