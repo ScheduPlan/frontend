@@ -14,7 +14,7 @@ export default function FormPatchEvent() {
     const [event, setEvent] = useState({});
 
     const [type, setType] = useState();
-    
+
     const [fitters, setFitters] = useState([]); //allEmployees
     const [availableHelpers, setAvailableHelpers] = useState([]); //availableEmployees
     const [pickedHelpers, setPickedHelpers] = useState([]); //pickedEmployees
@@ -22,8 +22,11 @@ export default function FormPatchEvent() {
     useEffect(() => {
         axios.get(url + '/events')
             .then(res => {
-                setEvent(res.data.find(data => data.id == id));
-                setPickedHelpers((prevHelpers) => [...prevHelpers, event.helpers]);
+                const e = res.data.find(data => data.id == id)
+                setEvent(e);
+                if (e.helpers != []) {
+                    setPickedHelpers(e.helpers);
+                }
             });
     }, [id]);
 
@@ -33,7 +36,8 @@ export default function FormPatchEvent() {
      */
     useEffect(() => {
         axios.get(url + '/employees').then(res => {
-            setFitters(res.data.filter(data => (data.role == "FITTER") && (data.team.id != event.order.team.id)));
+            console.log(res.data);
+            setFitters(res.data.filter(data => (data.user.role == "FITTER") /*&& (data.team.id != event.order.team.id)*/));
         });
     }, []);
 
@@ -51,10 +55,6 @@ export default function FormPatchEvent() {
         );
     }
 
-    const getType = (e) => {
-        setType(e.target.value);
-    }
-
     /**
      * gets the selected helper and adds it to the picked helpers
      * @param {*} e 
@@ -64,7 +64,6 @@ export default function FormPatchEvent() {
             id: e.target.selectedOptions[0].id,
             value: e.target.value
         };
-        console.log("selectOpt", e);
         setPickedHelpers((prevHelpers) => [...prevHelpers, selectedOption]);
     }
 
@@ -73,21 +72,22 @@ export default function FormPatchEvent() {
      * @param {*} e 
      */
     function removeHelper(e) {
-        console.log(e);
-
-        const selectedOption = pickedHelpers.find(elem => elem.id === e.target.id);
-        setPickedHelpers(pickedHelpers.filter(obj => obj != selectedOption));
+        setPickedHelpers(pickedHelpers.filter(helper => helper.id != e.target.id));
         updateAvailableHelpers();
-        console.log("removeEmployee", selectedOption);
     }
 
-    async function submitForm(event) {
-        event.preventDefault();
+    const getType = (e) => {
+        setType(e.target.value);
+    }
+
+    async function submitForm(e) {
+        e.preventDefault();
+        const helpers = pickedHelpers.map(helper => helper.id);
         try {
-            const response = await axios.patch(url + '/customers/' + event.order.customer.id + '/orders/' + event.order.id + '/events' + event.id,
+            const response = await axios.patch(url + '/customers/' + event.order.customer.id + '/orders/' + event.order.id + '/events/' + event.id,
                 {
                     type: type,
-                    helpers: pickedHelpers
+                    helpers: helpers
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -119,20 +119,21 @@ export default function FormPatchEvent() {
                         Helfer
                         <select className='light-blue' name="customer" onChange={getPickedHelpers}>
                             <option readOnly hidden>Bitte wählen</option>
-                            {availableHelpers.map((emp) => {
+                            {availableHelpers.map(helper => {
+                                console.log(helper);
                                 return (
-                                    <option onClick={updateAvailableHelpers} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
+                                    <option onClick={updateAvailableHelpers} key={helper.id} id={helper.id} value={helper.firstName + " " + helper.lastName}>{helper.firstName} {helper.lastName}</option>
                                 )
                             })}
                         </select>
                     </label>
                     <div className='pickedItem-wrapper'>
-                        {(pickedHelpers != [] ?
+                        {(pickedHelpers != [] && pickedHelpers != undefined ?
                             pickedHelpers.map((emp, index) => {
                                 return (
                                     <div key={index} className='pickedItem'>
-                                        <p>Test</p>
-                                        <svg onClick={removeHelper} id={index} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
+                                        <p>{emp.value}</p>
+                                        <svg onClick={removeHelper} id={emp.id} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
                                             <path d={Path("close")} />
                                         </svg>
                                     </div>

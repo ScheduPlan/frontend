@@ -16,6 +16,16 @@ export default function Event(props) {
                     <p><b>Komm.nr.: </b>{props.object.order.commissionNumber}</p>
                     <p><b>Kunde: </b>{props.object.order.customer.customerNumber} {props.object.order.customer.company}</p>
                     <p><b>Status: </b>{props.object.order.state}</p>
+                    {props.object.helpers.length > 0 ?
+                        <p><b>Helfer: </b>{props.object.helpers.map((helper, index) => {
+                            return (
+                              ((props.object.helpers.length > 1) && (props.object.helpers.length - 1 > index)) ?
+                              "Test" + helper.firstName + " " + helper.lastName + ", "
+                              :
+                              helper.firstName + " " + helper.lastName
+                            )
+                          })}</p>
+                        : ""}
                 </div>
             </> :
             <>
