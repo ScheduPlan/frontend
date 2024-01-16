@@ -27,23 +27,22 @@ export default function ChangePassword() {
       try {
         await axios.post(url + '/auth/reset',
           {
-            password: password,
-            userId: user.id
+            password: password
           },
           { headers: { 'Content-Type': 'application/json' } });
 
         Swal.fire({
-          position: 'top-end',
+          position: 'top',
           icon: 'info',
           title: 'Passwort geändert!',
           text: 'Sie werden automatisch abgemeldet. Bitte, melden Sie sich mit Ihrem neuen Passwort an.',
           showConfirmButton: false,
-          timer: 2000
+          timer: 3000
         });
 
         setTimeout(function () {
           logout();
-        }, 2500);
+        }, 3500);
 
       } catch (error) {
         alert(error);
