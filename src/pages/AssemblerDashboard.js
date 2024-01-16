@@ -17,7 +17,7 @@ export default function AssemblerDashboard() {
 
   return (
     <div className='content-container'>
-      <h1>{user.user?.role} Kalender</h1>
+      <h1>Terminkalender</h1>
       <CalendarComponent events={events} />
     </div>
   )
