@@ -29,6 +29,11 @@ const roles = [
                 component: <Schedule />
             },
             {
+                path: "events",
+                title: "Termine anzeigen",
+                component: <ListItems items="events" h1="Alle Termine" />
+            },
+            {
                 path: "orders",
                 title: "Aufträge anzeigen",
                 component: <ListItems items="orders" h1="Alle Aufträge" />

@@ -3,7 +3,7 @@ import popupStyle from './PopUp.module.css';
 import moment from 'moment';
 
 export default function Event(props) {
-    const day = moment(props.object.startDate).format("ddd DD.MM."); 
+    const day = moment(props.object.startDate).format("ddd DD.MM.");
     const start = moment(props.object.startDate).format("HH:mm");
     const end = moment(props.object.endDate).format("HH:mm");
 
@@ -19,6 +19,9 @@ export default function Event(props) {
                 </div>
             </> :
             <>
+                <div>
+                    {props.object.order.number} - {props.object.order.customer.customerNumber} {props.object.order.customer.company}
+                </div>
             </>
     )
 }

@@ -41,12 +41,19 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
     if (isPopUpOpen || item.target?.nodeName == "svg") {
       setPopUpOpen(false);
     } else {
-      if (props.path == "/orders") {
-        const customerId = itemObjects.find(elem => elem.id == item.id).customer.id;
-        setPathToItem(url + "/customers/" + customerId + props.path + "/" + item.id);
-      } else {
-        setPathToItem(url + props.path + "/" + item.id);
+
+      switch (props.path) {
+        case "/orders":
+          setPathToItem(url + "/customers/" + item.customer.id + "/orders/" + item.id);
+          break;
+        case "/events":
+          setPathToItem(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id + "/events/" + item.id);
+          break;
+        default:
+          setPathToItem(url + props.path + "/" + item.id);
+          break;
       }
+
       setPathToEdit('/' + user.user.role.toLowerCase() + props.path + "/" + item.id);
 
       setTimeout(() => {
@@ -60,7 +67,9 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
       <div className='content-container'>
         <div className='container-header-wrapper'>
           <h1>{props.h1}</h1>
-          <Link className='btn primary' to={'/' + user.user?.role.toLowerCase() + props.path + '/new'}>Neu +</Link>
+          {(props.path != "/events") ?
+            <Link className='btn primary' to={'/' + user.user?.role.toLowerCase() + props.path + '/new'}>Neu +</Link>
+            : ""}
         </div>
 
         <div className={style.item_wrapper}>
