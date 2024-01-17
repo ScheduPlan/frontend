@@ -133,7 +133,9 @@ export default function FormPatchOrder() {
 
     return (
         <div className='content-container'>
-            <h1>Auftrag <b>{order.number}</b> bearbeiten</h1>
+            <div className='topbar-header-wrapper'>
+                <h1>Auftrag <b>{order.number}</b> bearbeiten</h1>
+            </div>
             <form onSubmit={submitForm}>
                 <h3>Kunde: {order.customer?.customerNumber} {order.customer?.company}</h3>
                 <div className='form-row'>

@@ -60,7 +60,9 @@ export default function ChangePassword() {
 
   return (
     <div className='content-container'>
-      <h1>Passwort ändern</h1>
+      <div className='topbar-header-wrapper'>
+        <h1>Passwort ändern</h1>
+      </div>
       <form onSubmit={submitForm}>
         <label>
           E-Mail-Adresse:

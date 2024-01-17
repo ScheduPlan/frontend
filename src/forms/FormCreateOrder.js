@@ -133,7 +133,9 @@ export default function FormCreateOrder() {
 
     return (
         <div className='content-container'>
-            <h1>Neuen Auftrag anlegen</h1>
+            <div className='topbar-header-wrapper'>
+                <h1>Neuen Auftrag anlegen</h1>
+            </div>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>

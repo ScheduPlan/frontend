@@ -78,32 +78,35 @@ export default function FormPatchEmployee() {
         try {
             const response = await axios.patch(url + '/employees/' + id,
                 {
-                    employeeNumber: (employeeNumber != null) ? employeeNumber : employee.employeeNumber,
-                    teamId: (teamId != null) ? teamId : employee.teamId,
+                    employeeNumber: employeeNumber,
+                    teamId: teamId,
                     person: {
-                        firstName: (firstName != null) ? firstName : employee.firstName,
-                        lastName: (lastName != null) ? lastName : employee.lastName
+                        firstName: firstName,
+                        lastName: lastName
                     },
                     user: {
-                        email: (email != null) ? email : employee.user.email,
-                        username: (username != null) ? username : employee.user.username,
-                        role: (userRole != null) ? userRole : employee.user.role
+                        email: email,
+                        username: username,
+                        role: userRole
                     }
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
+
             Swal.fire({
-                position: 'top-end',
+                position: 'center',
                 icon: 'success',
-                title: 'Änderungen gespeichert!',
-                showConfirmButton: false,
+                title: 'Änderungen wurden gespeichert!',
+                showConfirmButton: true,
+                confirmButtonColor: 'var(--success)',
                 timer: 2000
+            }).then(result => {
+                result.isConfirmed ?
+                    navigate("..", { relative: "path" })
+                    : setTimeout(function () {
+                        navigate("..", { relative: "path" });
+                    }, 2500);
             });
-
-            setTimeout(function () {
-                navigate("..", { relative: "path" });
-            }, 2500);
-
         } catch (error) {
             alert(error);
         }
@@ -111,7 +114,9 @@ export default function FormPatchEmployee() {
 
     return (
         <div className='content-container'>
-            <h1>Mitarbeiter bearbeiten</h1>
+            <div className='topbar-header-wrapper'>
+                <h1>Mitarbeiter bearbeiten</h1>
+            </div>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>

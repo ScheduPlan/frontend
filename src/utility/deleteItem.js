@@ -5,14 +5,14 @@ import axios from "axios";
    * deletes element from list & fire swal pop-up
    * @param {*} event 
    */
-export default function deleteItem(path) {    
+export default function deleteItem(path) {
     Swal.fire({
-        title: "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
-        icon: "warning",
-        iconColor: "#A50000AB",
+        title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
+        icon: 'warning',
+        iconColor: 'var(--warning)',
         showCancelButton: true,
-        confirmButtonColor: "var(--primary)",
-        cancelButtonColor: "var(--red)",
+        confirmButtonColor: "var(--success)",
+        cancelButtonColor: "var(--error)",
         cancelButtonText: "Nein",
         confirmButtonText: "Ja",
     }).then((result) => {
@@ -24,11 +24,11 @@ export default function deleteItem(path) {
                 icon: "success",
                 showConfirmButton: false,
                 timer: 2000
-            });
+            })
 
-            setTimeout(function () {
+            /*setTimeout(function () {
                 window.location.reload();
-            }, 2500);
+            }, 2500);*/
         }
     });
 }

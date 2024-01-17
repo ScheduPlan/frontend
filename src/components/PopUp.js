@@ -77,6 +77,8 @@ export default function PopUp(props) {
             deleteItem(props.pathToItem);
             break;
         }
+        props.close();
+        props.updateItemObjects();
       }
 
     return (props.trigger ?

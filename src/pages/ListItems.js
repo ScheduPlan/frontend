@@ -7,6 +7,7 @@ import PopUp from '../components/PopUp'
 import Path from '../icons/Paths'
 import AuthContext from '../AuthProvider'
 import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem'
+import { render } from '@testing-library/react'
 
 export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
@@ -21,15 +22,29 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
 
   useEffect(() => {
     getItemObjects();
-  }, [user, props.path]);
+  }, []);
+
+  useEffect(() => {
+  }, [itemObjects]);
 
   /**
-   * get all Items from database for the list
+   * gets all Items from database for the list
    */
   function getItemObjects() {
     axios.get(url + props.path)
-      .then(response => {
-        setItemObjects(response.data);
+      .then(res => {
+        setItemObjects(res.data);
+      });
+  }
+
+  /**
+   * updates itemObjects
+   */
+  function updateItemObjects() {
+    axios.get(url + props.path)
+      .then(res => {
+        setItemObjects(res.data);
+        //setItemObjects([...itemObjects, res.data]);
       });
   }
 
@@ -38,7 +53,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
    * @param {*} item 
    */
   function togglePopUp(item) { // To Do: Id in Funktion mitgeben -> Wozu?
-    if (isPopUpOpen || item.target?.nodeName == "svg") {
+    if (isPopUpOpen) {
       setPopUpOpen(false);
     } else {
 
@@ -53,12 +68,8 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
           setPathToItem(url + props.path + "/" + item.id);
           break;
       }
-
       setPathToEdit('/' + user.user.role.toLowerCase() + props.path + "/" + item.id);
-
-      setTimeout(() => {
-        setPopUpOpen(true);
-      }, 250);
+      setPopUpOpen(true);
     }
   }
 
@@ -81,6 +92,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
         deleteItem(url + props.path + "/" + item.id);
         break;
     }
+    updateItemObjects();
   }
 
   return (
@@ -94,11 +106,11 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
         </div>
 
         <div className={style.item_wrapper}>
-          {itemObjects.map((item, index) => {
+          {itemObjects.filter(item => item.firstName != "Administrator" && item.id != user.id).map((item, index) => {
             return (
-              <div className={style.item} key={index} id={item.id} onClick={() => togglePopUp(item)}>
-                <div className={style.item_content}>
-                  <ItemComponent object={item} onClick={() => togglePopUp(item)} />
+              <div className={style.item} key={index} id={item.id}>
+                <div className={style.item_content} onClick={() => togglePopUp(item)}>
+                  <ItemComponent object={item} />
                 </div>
                 <div className={style.item_icons}>
                   <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { navigate('/' + user.user.role.toLowerCase() + props.path + "/" + item.id) }} id={item.id} className='btn-icon blue' width="24" height="24" viewBox="0 -960 960 960">
@@ -113,7 +125,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
           })}
         </div>
       </div>
-      <PopUp trigger={isPopUpOpen} close={togglePopUp} path={props.path} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
+      <PopUp trigger={isPopUpOpen} close={togglePopUp} path={props.path} pathToItem={pathToItem} pathToEdit={pathToEdit} updateItemObjects={getItemObjects}/> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
     </>
   )
 }

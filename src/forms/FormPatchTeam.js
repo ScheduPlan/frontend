@@ -117,20 +117,22 @@ export default function FormPatchTeam() {
                 axios.patch(url + "/employees/" + emp.id, {
                     teamId: team.id
                 });
-            })
-
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Änderungen gespeichert!',
-                showConfirmButton: false,
-                timer: 2000
             });
-
-            setTimeout(function () {
-                navigate("..", { relative: "path" });
-            }, 2500);
-
+            
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Änderungen wurden gespeichert',
+                showConfirmButton: true,
+                confirmButtonColor: 'var(--success)',
+                timer: 2000,
+            }).then(result => {
+                result.isConfirmed ?
+                    navigate("..", { relative: "path" })
+                    : setTimeout(function () {
+                        navigate("..", { relative: "path" });
+                    }, 250);
+            });
         } catch (error) {
             console.log(error);
         }
@@ -138,7 +140,9 @@ export default function FormPatchTeam() {
 
     return (
         <div className='content-container'>
-            <h1>Team bearbeiten</h1>
+            <div className='topbar-header-wrapper'>
+                <h1>Team bearbeiten</h1>
+            </div>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>

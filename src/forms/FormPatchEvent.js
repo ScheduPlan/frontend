@@ -110,7 +110,9 @@ export default function FormPatchEvent() {
 
     return (
         <div className='content-container'>
-            <h1>Termin bearbeiten</h1>
+            <div className='topbar-header-wrapper'>
+                <h1>Termin bearbeiten</h1>
+            </div>
             <form onSubmit={submitForm}>
                 <h3>Auftr. Nr.: {event.order?.number}</h3>
                 <p>Kunde: {event.order?.customer?.customerNumber} {event.order?.customer?.company}</p>

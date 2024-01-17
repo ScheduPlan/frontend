@@ -91,17 +91,19 @@ export default function FormCreateEmployee() {
                 { headers: { 'Content-Type': 'application/json' } });
 
             Swal.fire({
-                position: 'top-end',
+                position: 'center',
                 icon: 'success',
                 title: 'Neuer Mitarbeiter angelegt!',
-                showConfirmButton: false,
+                showConfirmButton: true,
+                confirmButtonColor: 'var(--success)',
                 timer: 2000
+            }).then(result => {
+                result.isConfirmed ?
+                    navigate("..", { relative: "path" })
+                    : setTimeout(function () {
+                        navigate("..", { relative: "path" });
+                    }, 2500);
             });
-
-            setTimeout(function () {
-                navigate("..", { relative: "path" });
-            }, 2500);
-
         } catch (error) {
             alert(error);
         }
@@ -109,43 +111,45 @@ export default function FormCreateEmployee() {
 
     return (
         <div className='content-container'>
-            <h1>Neuen Mitarbeiter anlegen</h1>
+            <div className='topbar-header-wrapper'>
+                <h1>Neuen Mitarbeiter anlegen</h1>
+            </div>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>
                         Vorname
-                        <input className='light-blue' type="text" name="firstname" onChange={getFirstname} />
+                        <input className='light-blue' type="text" name="firstname" onChange={getFirstname} required />
                     </label>
                     <label>
                         Nachname
-                        <input className='light-blue' type="text" name="lastname" onChange={getLastname} />
+                        <input className='light-blue' type="text" name="lastname" onChange={getLastname} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Personalnummer
-                        <input className='light-blue' type="number" name="employeeNumber" min="1" onChange={getEmployeeNumber} />
+                        <input className='light-blue' type="number" name="employeeNumber" minLength={6} maxLength={6} min={1} onChange={getEmployeeNumber} required />
                     </label>
                     <label>
                         E-Mail-Adresse
-                        <input className='light-blue' type="email" name="email" onChange={getEmail} />
+                        <input className='light-blue' type="email" name="email" onChange={getEmail} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Benutzername
-                        <input className='light-blue' type="text" name="username" onChange={getUsername} />
+                        <input className='light-blue' type="text" name="username" onChange={getUsername} required />
                     </label>
                     <label>
                         Passwort
-                        <input className='light-blue' type="password" name="password" onChange={getPassword} />
+                        <input className='light-blue' type="password" name="password" onChange={getPassword} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Benutzerrolle
                         <select className='light-blue' name="userRole" onChange={getUserRole} required>
-                            <option readOnly hidden>Bitte wählen</option>
+                            <option value={null} readOnly hidden>Bitte wählen</option>
                             {roles.map((role, index) => {
                                 return (<option key={index} value={role.role}>{role.title}</option>)
                             })}

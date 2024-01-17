@@ -109,7 +109,9 @@ export default function FormPatchCustomer() {
 
   return (
     <div className='content-container'>
-      <h1>Kunden bearbeiten</h1>
+      <div className='topbar-header-wrapper'>
+        <h1>Kunden bearbeiten</h1>
+      </div>
       <form onSubmit={submitForm}>
         <div className='form-row'>
           <label>

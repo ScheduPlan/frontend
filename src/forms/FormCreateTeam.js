@@ -94,17 +94,19 @@ export default function FormCreateTeam() {
             });
 
             Swal.fire({
-                position: 'top-end',
+                position: 'center',
                 icon: 'success',
                 title: 'Neues Team angelegt!',
-                showConfirmButton: false,
+                showConfirmButton: true,
+                confirmButtonColor: 'var(--success)',
                 timer: 2000
+            }).then(result => {
+                result.isConfirmed ?
+                    navigate("..", { relative: "path" })
+                    : setTimeout(function () {
+                        navigate("..", { relative: "path" });
+                    }, 2500);
             });
-
-            setTimeout(function () {
-                navigate("..", { relative: "path" });
-            }, 2500);
-
         } catch (error) {
             console.log(error);
         }
@@ -112,7 +114,9 @@ export default function FormCreateTeam() {
 
     return (
         <div className='content-container'>
-            <h1>Neues Team anlegen</h1>
+            <div className='topbar-header-wrapper'>
+                <h1>Neues Team anlegen</h1>
+            </div>
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>
