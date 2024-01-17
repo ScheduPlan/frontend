@@ -20,7 +20,7 @@ export default function Employee(props) {
         </div>
         <div className={popupStyle.popup_details}>
           <p><b>Personalnummer: </b>{props.object.employeeNumber}</p>
-          {(props.object.user.role == "FITTER") ?
+          {(props.object.user?.role == "FITTER") ?
             (
               (props.object.team != null) ?
                 <p>

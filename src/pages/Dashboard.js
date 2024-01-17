@@ -19,7 +19,9 @@ export default function Dashboard() {
             content = (
                 <div className='fancy-background'>
                     <div className='content-container'>
-                        <h1>Dashboard</h1>
+                        <div className='topbar-header-wrapper'>
+                            <h1>Dashboard</h1>
+                        </div>
                         <div className='btn-wrapper'>
                             {roles.find((r) => r.role === user.user.role.toLowerCase()).links?.map((link, index) => (
                                 <Link key={index} to={link.path} className="btn primary" replace>{link.title}</Link> //hier machts immer zwei Mal die Rolle
