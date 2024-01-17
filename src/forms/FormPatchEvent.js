@@ -116,6 +116,17 @@ export default function FormPatchEvent() {
                 <p>Kunde: {event.order?.customer?.customerNumber} {event.order?.customer?.company}</p>
                 <div className='form-row'>
                     <label>
+                        Terminart
+                        <select className='light-blue' name="datetype" onChange={getType}> {/*To Do: alle mgl typen ziehen und hier ausgeben */}
+                            <option readOnly hidden>Bitte auswählen</option>
+                            <option value="ASSEMBLY">Montage</option>
+                            <option>Reklamation</option>
+                            <option>Lieferung</option>
+                        </select>
+                    </label>
+                </div>
+                <div className='form-row'>
+                    <label>
                         Helfer
                         <select className='light-blue' name="customer" onChange={getPickedHelpers}>
                             <option readOnly hidden>Bitte wählen</option>
