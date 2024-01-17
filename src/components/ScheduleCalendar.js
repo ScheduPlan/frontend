@@ -104,7 +104,7 @@ export default function CalendarComponent(props) {
     async function changeEventDateTime(e) {
         console.log("event", e.event.event.order.customer);
         Swal.fire({
-            title: "Sind Sie sicher, dass Sie das Element verschieben möchten?",
+            title: "Sind Sie sicher, dass Sie den Termin ändern möchten?",
             icon: "warning",
             iconColor: "#A50000AB",
             showCancelButton: true,
@@ -277,7 +277,9 @@ export default function CalendarComponent(props) {
                 onSelectEvent={togglePopUp}
                 eventPropGetter={eventPropGetter}
                 onEventDrop={changeEventDateTime}
+                onEventResize={changeEventDateTime} // TO Do: fixen
                 onDropFromOutside={onDropFromOutside}
+                //showAllEvents ------> To Do: Was macht das?
                 localizer={localizer}
                 showMultiDayTimes
                 step={30}
@@ -289,7 +291,6 @@ export default function CalendarComponent(props) {
                 culture='de'
                 style={style}
                 length={6}
-                resizable={false}
                 messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag", noEventsInRange: "Es gibt keine Termine für diesen Tag." }}
             />
             <PopUp trigger={isPopUpOpen} close={togglePopUp} path={"/events"} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
