@@ -28,7 +28,7 @@ export default function FormPatchOrder() {
         axios.get(url + '/orders')
             .then(res => {
                 setOrder(res.data.find(data => data.id == id));
-                setCustomerID(order.customer.id);
+                setCustomerID(order.customer?.id);
             });
     }, [id]);
 
