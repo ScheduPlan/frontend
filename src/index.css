@@ -51,6 +51,7 @@ body {
 .content-container {
   padding: 1rem 2rem 0.5rem;
   max-width: 1200px;
+  max-height: calc(100% - 66px);
   margin: 0 auto;
   overflow: scroll;
 }
@@ -89,12 +90,12 @@ body {
     position: absolute;
     display: flex;
     flex-flow: row nowrap;
-    padding: 0.75rem 6rem;
+    padding: 0.75rem 1rem;
     justify-content: space-between;
     align-items: flex-start;
-    max-width: 1200px;
+    max-width: 1052px;
     margin: 0 auto;
-    width: 100%;
+    width: calc(100% - 4rem - 84px);
     top: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -244,4 +245,3 @@ svg.green:hover {
 .light-blue {
   background-color: #93b4df40;
 }
-
