@@ -7,9 +7,9 @@ import PopUp from '../components/PopUp'
 import Path from '../icons/Paths'
 import AuthContext from '../AuthProvider'
 import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem'
-import { render } from '@testing-library/react'
+import Swal from 'sweetalert2'
 
-export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
+export default function ListItems(props) {
 
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -25,6 +25,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   }, []);
 
   useEffect(() => {
+    //setContent();
   }, [itemObjects]);
 
   /**
@@ -40,11 +41,11 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
   /**
    * updates itemObjects
    */
-  function updateItemObjects() {
-    axios.get(url + props.path)
+  async function updateItemObjects() {
+    await axios.get(url + props.path)
       .then(res => {
-        setItemObjects(res.data);
-        //setItemObjects([...itemObjects, res.data]);
+        //setItemObjects(res.data);
+        setItemObjects([...res.data]);
       });
   }
 
@@ -56,7 +57,6 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
     if (isPopUpOpen) {
       setPopUpOpen(false);
     } else {
-
       switch (props.path) {
         case "/orders":
           setPathToItem(url + "/customers/" + item.customer.id + "/orders/" + item.id);
@@ -77,22 +77,42 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
    * switch case to delete a certain item
    * @param {*} item 
    */
-  function deleteFct(item) {
+  async function deleteFct(item) {
     switch (props.path) {
       case "/orders":
         deleteOrderWithEvents(props.pathToItem);
         break;
       case "/events":
-        axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
+        await axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
           {
             state: "PLANNED"
           }, { headers: { 'Content-Type': 'application/json' } });
-          deleteItem(props.pathToItem);
+        deleteItem(props.pathToItem);
       default:
-        deleteItem(url + props.path + "/" + item.id);
+        Swal.fire({
+          title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
+          icon: 'warning',
+          iconColor: 'var(--warning)',
+          showCancelButton: true,
+          confirmButtonColor: "var(--success)",
+          cancelButtonColor: "var(--error)",
+          cancelButtonText: "Nein",
+          confirmButtonText: "Ja",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.delete(url + props.path + "/" + item.id);
+
+            Swal.fire({
+              title: "Element gelöscht!",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 2000
+            }).then(() => updateItemObjects());
+          }
+        });
         break;
     }
-    updateItemObjects();
+
   }
 
   return (
@@ -125,7 +145,7 @@ export default function ListItems(props) { //Kunden, Mitarbeiter, Aufträge?
           })}
         </div>
       </div>
-      <PopUp trigger={isPopUpOpen} close={togglePopUp} path={props.path} pathToItem={pathToItem} pathToEdit={pathToEdit} updateItemObjects={getItemObjects}/> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
+      <PopUp trigger={isPopUpOpen} close={togglePopUp} path={props.path} pathToItem={pathToItem} pathToEdit={pathToEdit} updateItemObjects={getItemObjects} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
     </>
   )
 }
