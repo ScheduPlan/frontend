@@ -7,6 +7,7 @@ import axios from "axios";
    */
 export default function deleteItem(path) {
     Swal.fire({
+        position: 'top',
         title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
         icon: 'warning',
         iconColor: 'var(--warning)',
@@ -20,9 +21,11 @@ export default function deleteItem(path) {
             axios.delete(path);
 
             Swal.fire({
+                position: 'top',
                 title: "Element gelöscht!",
                 icon: "success",
-                showConfirmButton: false,
+                confirmButtonText: 'Ok',
+                confirmButtonColor: 'var(--success)',
                 timer: 2000
             })
 
@@ -35,12 +38,13 @@ export default function deleteItem(path) {
 
 export function deleteOrderWithEvents(path) {
     Swal.fire({
+        position: 'top',
         title: "Sind Sie sicher, dass Sie dieses Element inkl. aller zugehöriger Termine löschen möchten?",
-        icon: "warning",
-        iconColor: "#A50000AB",
+        icon: 'warning',
+        iconColor: 'var(--warning)',
         showCancelButton: true,
-        confirmButtonColor: "var(--primary)",
-        cancelButtonColor: "var(--red)",
+        confirmButtonColor: "var(--success)",
+        cancelButtonColor: "var(--error)",
         cancelButtonText: "Nein",
         confirmButtonText: "Ja",
     }).then((result) => {
@@ -51,9 +55,11 @@ export function deleteOrderWithEvents(path) {
             });
 
             Swal.fire({
+                position: 'top',
                 title: "Element gelöscht!",
                 icon: "success",
-                showConfirmButton: false,
+                confirmButtonText: 'Ok',
+                confirmButtonColor: 'var(--success)',
                 timer: 2000
             });
 

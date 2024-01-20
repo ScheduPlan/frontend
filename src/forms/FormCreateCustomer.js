@@ -80,10 +80,11 @@ export default function FormCreateCustomer() {
                 { headers: { 'Content-Type': 'application/json' } });
 
             Swal.fire({
-                position: 'top-end',
+                position: 'top',
                 icon: 'success',
                 title: 'Neuer Kunde angelegt!',
-                showConfirmButton: false,
+                confirmButtonText: 'Ok',
+                confirmButtonColor: 'var(--success)',
                 timer: 2000,
             });
 

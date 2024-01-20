@@ -91,16 +91,15 @@ export default function FormPatchCustomer() {
         { headers: { 'Content-Type': 'application/json' } });
 
       Swal.fire({
-        position: 'top-end',
+        position: 'top',
         icon: 'success',
         title: 'Änderungen gespeichert!',
-        showConfirmButton: false,
+        confirmButtonText: 'Ok',
+        confirmButtonColor: 'var(--success)',
         timer: 2000,
-      });
-
-      setTimeout(function () {
+      }).then(() => {
         navigate("..", { relative: "path" });
-      }, 2500);
+      });
 
     } catch (error) {
       alert(error);

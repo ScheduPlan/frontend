@@ -115,10 +115,11 @@ export default function FormCreateOrder() {
                 { headers: { 'Content-Type': 'application/json' } });
 
             Swal.fire({
-                position: 'top-end',
+                position: 'top',
                 icon: 'success',
                 title: 'Neuen Auftrag angelegt!',
-                showConfirmButton: false,
+                confirmButtonText: 'Ok',
+                confirmButtonColor: 'var(--success)',
                 timer: 2000
             });
 

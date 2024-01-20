@@ -91,10 +91,11 @@ export default function FormCreateEmployee() {
                 { headers: { 'Content-Type': 'application/json' } });
 
             Swal.fire({
-                position: 'center',
+                position: 'top',
                 icon: 'success',
                 title: 'Neuer Mitarbeiter angelegt!',
                 showConfirmButton: true,
+                confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
             }).then(result => {

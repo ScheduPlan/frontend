@@ -119,12 +119,11 @@ export default function Sidebar(props) {
             props.activeOrder(order);
         } else {
             Swal.fire({
-                position: 'center',
-                icon: 'warning',
+                position: 'top',
+                icon: 'info',
                 title: 'Termin anlegen nicht möglich!',
                 text: "Bitte, wählen Sie zuerst ein Team aus.",
-                showConfirmButton: true,
-                confirmButtonColor: "var(--primary)",
+                confirmButtonColor: "var(--info)",
                 confirmButtonText: "Ok",
                 timer: 5000,
             });

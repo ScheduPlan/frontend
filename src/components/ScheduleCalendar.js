@@ -104,12 +104,13 @@ export default function CalendarComponent(props) {
     async function changeEventDateTime(e) {
         console.log("event", e.event.event.order.customer);
         Swal.fire({
+            position: 'top',
             title: "Sind Sie sicher, dass Sie den Termin ändern möchten?",
             icon: "warning",
-            iconColor: "#A50000AB",
+            iconColor: "var(--warning)",
             showCancelButton: true,
-            confirmButtonColor: "var(--primary)",
-            cancelButtonColor: "var(--red)",
+            confirmButtonColor: "var(--success)",
+            cancelButtonColor: "var(--error)",
             cancelButtonText: "Nein",
             confirmButtonText: "Ja",
         }).then((result) => {
@@ -121,15 +122,15 @@ export default function CalendarComponent(props) {
                     }, { headers: { 'Content-Type': 'application/json' } });
 
                 Swal.fire({
+                    position: 'top',
                     title: "Element verschoben!",
                     icon: "success",
-                    showConfirmButton: false,
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: "var(--success)",
                     timer: 2000
-                });
-
-                setTimeout(function () {
+                }).then(() => {
                     window.location.reload(); //To Do: hier kein reload, das is scheiße, man muss im gleichen Team Kalender bleiben
-                }, 2500);
+                });
             }
         });
 
@@ -185,9 +186,10 @@ export default function CalendarComponent(props) {
             if (end.getHours() > maxTime.getHours()) {
                 console.log("Termin zu lang: etweder Dauer kürzen oder Termin teilen");//"Termin teilen" legt neues Event zur Order an, dass am Folgetag zur erstmgl. Zeit beginnt
                 Swal.fire({
+                    position: 'top',
                     title: "Länge des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
                     icon: "question",
-                    iconColor: "#0d7bebAB",
+                    iconColor: "var(--question)",
                     input: "number",
                     inputAttributes: {
                         step: "0.5",
@@ -198,15 +200,15 @@ export default function CalendarComponent(props) {
                     inputLabel: "geschätzter Aufwand",
                     inputPlaceholder: activeOrder.plannedDuration,
                     confirmButtonText: "Ändern",
-                    confirmButtonColor: "var(--primary)",
+                    confirmButtonColor: "var(--info)",
 
                     showDenyButton: true,
                     denyButtonText: "Termin teilen",
-                    denyButtonColor: "var(--red)",
+                    denyButtonColor: "var(--error)",
 
                     showCancelButton: true,
                     cancelButtonText: "Abbruch",
-                    cancelButtonColor: "var(--grey)"
+                    cancelButtonColor: "var(--grey-light)"
                 }).then(result => {
                     if (result.isConfirmed) {
                         console.log("API call -> patch order (& set event)");
@@ -231,26 +233,21 @@ export default function CalendarComponent(props) {
                         }, { headers: { 'Content-Type': 'application/json' } });
 
                     //set order state confirmed to remove it from sidebar
-                    axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
+                    await axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
                         {
                             state: "CONFIRMED"
-                        }, { headers: { 'Content-Type': 'application/json' } });
-
-                    setTimeout(function () {
-                        updateEvents();
-                        window.location.reload();
-                    }, 250);
+                        }, { headers: { 'Content-Type': 'application/json' } }).then(() =>  updateEvents());
                 } catch (error) {
                     alert(error);
                 }
             }
         } else {
             Swal.fire({
+                position: 'top',
                 title: "Startzeit des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
                 icon: "warning",
-                iconColor: "#0d7bebAB",
-                showCancelButton: false,
-                confirmButtonColor: "var(--primary)",
+                iconColor: "var(--warning)",
+                confirmButtonColor: "var(--success)",
                 confirmButtonText: "Ok",
             });
         }

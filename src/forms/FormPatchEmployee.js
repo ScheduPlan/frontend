@@ -94,10 +94,10 @@ export default function FormPatchEmployee() {
 
 
             Swal.fire({
-                position: 'center',
+                position: 'top',
                 icon: 'success',
                 title: 'Änderungen wurden gespeichert!',
-                showConfirmButton: true,
+                confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
             }).then(result => {

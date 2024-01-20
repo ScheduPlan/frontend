@@ -92,10 +92,11 @@ export default function FormPatchEvent() {
                 { headers: { 'Content-Type': 'application/json' } });
 
             Swal.fire({
-                position: 'top-end',
+                position: 'top',
                 icon: 'success',
                 title: 'Änderungen gespeichert!',
-                showConfirmButton: false,
+                confirmButtonText: 'Ok',
+                confirmButtonColor: 'var(--success)',
                 timer: 2000
             });
 

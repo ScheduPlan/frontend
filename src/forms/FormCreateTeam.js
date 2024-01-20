@@ -94,10 +94,10 @@ export default function FormCreateTeam() {
             });
 
             Swal.fire({
-                position: 'center',
+                position: 'top',
                 icon: 'success',
                 title: 'Neues Team angelegt!',
-                showConfirmButton: true,
+                confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
             }).then(result => {

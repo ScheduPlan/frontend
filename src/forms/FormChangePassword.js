@@ -49,10 +49,11 @@ export default function ChangePassword() {
       }
     } else {
       Swal.fire({
-        position: 'center',
+        position: 'top',
         icon: 'warning',
         title: 'Passwörter stimmen nicht überein!',
-        showConfirmButton: false,
+        confirmButtonText: 'Ok',
+        confirmButtonColor: 'var(--warning)',
         timer: 3000
       });
     }
