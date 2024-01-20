@@ -144,11 +144,6 @@ export default function FormPatchCustomer() {
           </label>
         </div>
         <FormPatchAddress placeholder={address} addressElement={(elem) => { getAddressElement(elem) }} />
-        <label>
-          Lieferaddresse abweichend
-          <input className='btn primary' type='checkbox' value="" />
-        </label>
-
         <div className='btn-wrapper'>
           <input className="btn primary" type="submit" value="Anlegen" />
           <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />

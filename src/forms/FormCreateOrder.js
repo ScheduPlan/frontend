@@ -121,12 +121,9 @@ export default function FormCreateOrder() {
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
-            });
-
-            setTimeout(function () {
+            }).then(() => {
                 navigate("..", { relative: "path" });
-            }, 2500);
-
+            });
         } catch (error) {
             console.log(error);
         }

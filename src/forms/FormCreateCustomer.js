@@ -86,12 +86,9 @@ export default function FormCreateCustomer() {
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000,
-            });
-
-            setTimeout(function () {
+            }).then(() => {
                 navigate("..", { relative: "path" });
-            }, 2500);
-
+            });
         } catch (error) {
             alert(error);
         }
@@ -135,11 +132,6 @@ export default function FormCreateCustomer() {
                     </label>
                 </div>
                 <FormCreateAddress addressElement={(elem) => { getAddressElement(elem) }} />
-                <label>
-                    Lieferaddresse abweichend
-                    <input className='btn primary' type='checkbox' value="" />
-                </label>
-
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Anlegen" />
                     <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
