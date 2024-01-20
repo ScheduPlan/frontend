@@ -170,7 +170,7 @@ export default function FormCreateOrder() {
                     </label>
                     <label>
                         Kommisionsnummer
-                        <input className='light-blue' type="number" name="commissionNumber" min="1" onChange={getCommissionNumber} required />
+                        <input className='light-blue' type="text" name="commissionNumber" onChange={getCommissionNumber} required />
                     </label>
                 </div>
 

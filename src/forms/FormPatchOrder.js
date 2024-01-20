@@ -151,7 +151,7 @@ export default function FormPatchOrder() {
                     </label>
                     <label>
                         Kommisionsnummer
-                        <input placeholder={order.commissionNumber} className='light-blue' type="number" name="commissionNumber" min="1" onChange={getCommissionNumber} />
+                        <input placeholder={order.commissionNumber} className='light-blue' type="text" name="commissionNumber" onChange={getCommissionNumber} />
                     </label>
                 </div>
 
