@@ -10,6 +10,7 @@ import Team from './Team';
 import Customer from './Customer';
 import Order from './Order';
 import Event from './Event';
+import Swal from 'sweetalert2';
 
 export default function PopUp(props) {
     const navigate = useNavigate();
@@ -74,7 +75,31 @@ export default function PopUp(props) {
               }, { headers: { 'Content-Type': 'application/json' } });
               deleteItem(props.pathToItem);
           default:
-            deleteItem(props.pathToItem);
+            //deleteItem(props.pathToItem);
+            Swal.fire({
+                position: 'top',
+                title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
+                icon: 'warning',
+                iconColor: 'var(--warning)',
+                showCancelButton: true,
+                confirmButtonColor: "var(--success)",
+                cancelButtonColor: "var(--error)",
+                cancelButtonText: "Nein",
+                confirmButtonText: "Ja",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios.delete(props.pathToItem);
+      
+                  Swal.fire({
+                    position: 'top',
+                    title: "Element gelöscht!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: "var(--success)",
+                    timer: 2000
+                  }).then(() => props.updateItemObjects());
+                }
+              });
             break;
         }
         props.close();

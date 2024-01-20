@@ -90,6 +90,7 @@ export default function ListItems(props) {
         deleteItem(props.pathToItem);
       default:
         Swal.fire({
+          position: 'top',
           title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
           icon: 'warning',
           iconColor: 'var(--warning)',
@@ -103,9 +104,11 @@ export default function ListItems(props) {
             axios.delete(url + props.path + "/" + item.id);
 
             Swal.fire({
+              position: 'top',
               title: "Element gelöscht!",
               icon: "success",
-              showConfirmButton: false,
+              confirmButtonText: "Ok",
+              confirmButtonColor: "var(--success)",
               timer: 2000
             }).then(() => updateItemObjects());
           }
