@@ -66,7 +66,7 @@ export default function Schedule() {
 
   return (
     <>
-      <div className='content-container'>
+      <div className='topbar-header-wrapper'>
         <h1>Planungsassistent</h1>
       </div>
       <div className='content-wrapper'>
@@ -76,7 +76,7 @@ export default function Schedule() {
           <div className={style.tab_bar}>
             {teams.map(team => {
               return (
-                <button key={team.id} className={"btn tab " + (((activeTeamId == team.id) && !showAllOrders) ? "active" : "")} id={team.id} onClick={() => {setActiveTeamId(team.id); setShowAllOrders(false)}}>{team.description.name}</button>
+                <button key={team.id} className={"btn tab " + (((activeTeamId == team.id) && !showAllOrders) ? "active" : "")} id={team.id} onClick={() => { setActiveTeamId(team.id); setShowAllOrders(false) }}>{team.description.name}</button>
               )
             })}
           </div>

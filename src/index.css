@@ -46,6 +46,7 @@ body {
 
 .content-wrapper {
   display: flex;
+  margin-top: 1.5rem;
 }
 
 .content-container {
