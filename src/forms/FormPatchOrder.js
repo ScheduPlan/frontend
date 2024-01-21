@@ -10,44 +10,25 @@ export default function FormPatchOrder() {
     const navigate = useNavigate();
     const [order, setOrder] = useState({});
 
-    const [customerList, setCustomerList] = useState([]);
-    const [productList, setProductList] = useState([]);
     const [teamList, setTeamList] = useState([]);
 
-    const [customerID, setCustomerID] = useState();
     const [number, setNumber] = useState();
-    const [productID, setProductID] = useState();
     const [commissionNumber, setCommissionNumber] = useState();
     const [weight, setWeight] = useState();
     const [date, setDate] = useState();
-    const [timeperiod, setTimeperiod] = useState();
-    const [datetype, setDatetype] = useState();
     const [teamID, setTeamID] = useState();
+    const [description, setDescription] = useState();
 
     useEffect(() => {
         axios.get(url + '/orders')
             .then(res => {
                 setOrder(res.data.find(data => data.id == id));
-                setCustomerID(order.customer?.id);
             });
     }, [id]);
 
     useEffect(() => {
-        getCustomerList();
         getTeamList();
-        //getProductList();
     }, []);
-
-    /**
-     * gets all customers from database
-     */
-    function getCustomerList() {
-        axios.get(url + '/customers').then(
-            res => {
-                setCustomerList(res.data);
-            }
-        );
-    }
 
     /**
      * gets all teams from database
@@ -58,21 +39,6 @@ export default function FormPatchOrder() {
                 setTeamList(res.data);
             }
         );
-    }
-
-    /**
-     * gets all products from database
-     */
-    function getProductList() {
-        axios.get(url + '/products').then(
-            res => {
-                setProductList(res.data);
-            }
-        );
-    }
-
-    const getProductID = (e) => {
-        setProductID(e.target.value);
     }
 
     const getCommissionNumber = (e) => {
@@ -87,30 +53,24 @@ export default function FormPatchOrder() {
         setDate(e.target.value);
     }
 
-    const getTimeperiod = (e) => {
-        setTimeperiod(e.target.value);
-    }
-
-    const getDatetype = (e) => {
-        setDatetype(e.target.value);
-    }
-
     const getTeamID = (e) => {
         setTeamID(e.target.value);
+    }
+
+    const getDescription = (e) => {
+        setDescription(e.target.value);
     }
 
     async function submitForm(event) {
         event.preventDefault();
         try {
-            const response = await axios.patch(url + '/customers/' + customerID + '/orders/' + order.id,
+            const response = await axios.patch(url + '/customers/' + order.customer.id + '/orders/' + order.id,
                 {
-                    number: (number != null) ? number : order.number,
-                    commissionNumber: (commissionNumber != null) ? commissionNumber : order.commissionNumber,
-                    weight: (weight != null) ? weight : order.weight,
-                    state: "PLANNED",
-                    //products: productID,
-                    teamId: (teamID != null) ? teamID : order.teamID,
-                    plannedDuration: (timeperiod != null) ? timeperiod : order.timeperiod
+                    number: number,
+                    description: description,
+                    commissionNumber: commissionNumber,
+                    weight: weight,
+                    teamId: teamID,
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -121,11 +81,9 @@ export default function FormPatchOrder() {
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
-            });
-
-            setTimeout(function () {
+            }).then(() => {
                 navigate("..", { relative: "path" });
-            }, 2500);
+            });
 
         } catch (error) {
             alert(error);
@@ -141,22 +99,9 @@ export default function FormPatchOrder() {
                 <h3>Kunde: {order.customer?.customerNumber} {order.customer?.company}</h3>
                 <div className='form-row'>
                     <label>
-                        Produkt
-                        {/*<select className='light-blue' name="product" onChange={getProductID} required> //To Do Produkte
-                            <option readOnly hidden>Bitte wählen</option>
-                            {productList.map((prod, index) => {
-                                return (<option key={index} value={prod.id}>{prod.productNumber} {prod.name}</option>)
-                            })}
-                        </select>*/}
-                        <input className='light-blue' type="text" name="product" onChange={getProductID} />
-                    </label>
-                    <label>
                         Kommisionsnummer
                         <input placeholder={order.commissionNumber} className='light-blue' type="text" name="commissionNumber" onChange={getCommissionNumber} />
                     </label>
-                </div>
-
-                <div className='form-row'>
                     <label>
                         Gewicht
                         <input placeholder={order.weight} className='light-blue' type="number" min="1" step="0.05" name="weight" onChange={getWeight} />
@@ -167,22 +112,6 @@ export default function FormPatchOrder() {
                     <label>
                         freigegebener Termin
                         <input className='light-blue' type="date" name="date" onChange={getDate} />
-                    </label>
-                    <label>
-                        geplante Termindauer
-                        <input placeholder={order.plannedDuration} className='light-blue' type="number" min="1" step="0.5" name="timeperiod" onChange={getTimeperiod} />
-                    </label>
-                </div>
-
-                <div className='form-row'>
-                    <label>
-                        Terminart
-                        <select className='light-blue' name="datetype" onChange={getDatetype}> {/*To Do: alle mgl typen ziehen und hier ausgeben */}
-                            <option readOnly hidden>Bitte auswählen</option>
-                            <option>Montage</option>
-                            <option>Reklamation</option>
-                            <option>Lieferung</option>
-                        </select>
                     </label>
                     <label>
                         Team
@@ -200,6 +129,13 @@ export default function FormPatchOrder() {
                                 return (<option key={index} value={team.id}>{team.description.name}</option>)
                             })}
                         </select>
+                    </label>
+                </div>
+
+                <div className='form-row'>
+                    <label>
+                        Beschreibung
+                        <input className='light-blue' type="text" name="description" onChange={getDescription} />
                     </label>
                 </div>
                 <div className='btn-wrapper'>

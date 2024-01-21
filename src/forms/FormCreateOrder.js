@@ -85,7 +85,7 @@ export default function FormCreateOrder() {
             const response = await axios.post(url + '/customers/' + customerID + '/orders',
                 {
                     number: number,
-                    description: "",
+                    description: description,
                     commissionNumber: commissionNumber,
                     weight: weight,
                     state: "PLANNED",
