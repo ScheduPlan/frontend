@@ -9,27 +9,24 @@ export default function FormCreateOrder() {
     const navigate = useNavigate();
 
     const [customerList, setCustomerList] = useState([]);
-    const [productList, setProductList] = useState([]);
     const [teamList, setTeamList] = useState([]);
 
     const [customerID, setCustomerID] = useState("");
     const [number, setNumber] = useState("");
-    const [productID, setProductID] = useState("");
     const [commissionNumber, setCommissionNumber] = useState("");
     const [weight, setWeight] = useState("");
-    const [date, setDate] = useState("");
+    const [date, setDate] = useState(""); //To Do
     const [timeperiod, setTimeperiod] = useState("");
-    const [datetype, setDatetype] = useState("");
     const [teamID, setTeamID] = useState();
+    const [description, setDescription] = useState();
 
     useEffect(() => {
         getCustomerList();
         getTeamList();
-        //getProductList();
     }, []);
 
     /**
-     * gets all customers from database
+     * gets all customers from API
      */
     function getCustomerList() {
         axios.get(url + '/customers').then(
@@ -38,7 +35,6 @@ export default function FormCreateOrder() {
             }
         );
     }
-
 
     /**
      * gets all teams from database
@@ -51,27 +47,12 @@ export default function FormCreateOrder() {
         );
     }
 
-    /**
-     * gets all products from database
-     */
-    function getProductList() {
-        axios.get(url + '/products').then(
-            res => {
-                setProductList(res.data);
-            }
-        );
-    }
-
     const getCustomerID = (e) => {
         setCustomerID(e.target.value);
     }
 
     const getNumber = (e) => {
         setNumber(e.target.value);
-    }
-
-    const getProductID = (e) => {
-        setProductID(e.target.value);
     }
 
     const getCommissionNumber = (e) => {
@@ -90,12 +71,12 @@ export default function FormCreateOrder() {
         setTimeperiod(e.target.value);
     }
 
-    const getDatetype = (e) => {
-        setDatetype(e.target.value);
-    }
-
     const getTeamID = (e) => {
         setTeamID(e.target.value);
+    }
+
+    const getDescription = (e) => {
+        setDescription(e.target.value);
     }
 
     async function submitForm(event) {
@@ -108,7 +89,6 @@ export default function FormCreateOrder() {
                     commissionNumber: commissionNumber,
                     weight: weight,
                     state: "PLANNED",
-                    //products: productID,
                     teamId: teamID,
                     plannedDuration: timeperiod
                 },
@@ -151,28 +131,15 @@ export default function FormCreateOrder() {
                     </label>
                     <label>
                         Auftragsnummer
-                        <input className='light-blue' type="number" name="number" min="1" onChange={getNumber} required />
+                        <input className='light-blue' type="number" name="number" min="10000" onChange={getNumber} required />
                     </label>
                 </div>
 
                 <div className='form-row'>
-                    <label>
-                        Produkt
-                        {/*<select className='light-blue' name="product" onChange={getProductID} required> //To Do Produkte
-                            <option readOnly hidden>Bitte wählen</option>
-                            {productList.map((prod, index) => {
-                                return (<option key={index} value={prod.id}>{prod.productNumber} {prod.name}</option>)
-                            })}
-                        </select>*/}
-                        <input className='light-blue' type="text" name="product" onChange={getProductID} required />
-                    </label>
                     <label>
                         Kommisionsnummer
                         <input className='light-blue' type="text" name="commissionNumber" onChange={getCommissionNumber} required />
                     </label>
-                </div>
-
-                <div className='form-row'>
                     <label>
                         Gewicht
                         <input className='light-blue' type="number" min="1" step="0.05" name="weight" onChange={getWeight} required />
@@ -192,15 +159,6 @@ export default function FormCreateOrder() {
 
                 <div className='form-row'>
                     <label>
-                        Terminart
-                        <select className='light-blue' name="datetype" onChange={getDatetype} required> {/*To Do: alle mgl typen ziehen und hier ausgeben */}
-                            <option readOnly hidden>Bitte auswählen</option>
-                            <option>Montage</option>
-                            <option>Reklamation</option>
-                            <option>Lieferung</option>
-                        </select>
-                    </label>
-                    <label>
                         Team
                         <select className='light-blue' name="team" onChange={getTeamID} required>
                             <option readOnly hidden>Bitte wählen</option>
@@ -212,6 +170,10 @@ export default function FormCreateOrder() {
                                 return (<option key={index} value={team.id}>{team.description.name}</option>)
                             })}
                         </select>
+                    </label>
+                    <label>
+                        Beschreibung
+                        <input className='light-blue' type="text" name="description" onChange={getDescription} />
                     </label>
                 </div>
                 <div className='btn-wrapper'>
