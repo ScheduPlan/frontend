@@ -103,7 +103,7 @@ export default function FormPatchEvent() {
             });
 
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     }
 

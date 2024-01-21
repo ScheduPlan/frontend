@@ -104,7 +104,7 @@ export default function FormCreateTeam() {
                 navigate("..", { relative: "path" });
             });
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     }
 

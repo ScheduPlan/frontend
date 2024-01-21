@@ -101,7 +101,6 @@ export default function Sidebar(props) {
     }
 
     const getSearchInput = (e) => {
-        console.log(e.target.value);
         setSearchInput(e.target.value);
     }
 

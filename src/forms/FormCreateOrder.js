@@ -105,7 +105,7 @@ export default function FormCreateOrder() {
                 navigate("..", { relative: "path" });
             });
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     }
 

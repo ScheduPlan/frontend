@@ -102,7 +102,6 @@ export default function Schedule(props) {
    * rerenders sidebar
    */
   function setSidebar() {
-    console.log("orders", activeOrders);
     return (
       <Sidebar path={props.path} orders={activeOrders} getOrders={getAllOrders} activeOrder={(e) => setActiveOrder(e)} allOrdersDisplayed={showAllOrders} setAllOrdersDisplayed={(e) => setShowAllOrders(e)} />
     );

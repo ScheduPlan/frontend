@@ -99,7 +99,6 @@ export default function CalendarComponent(props) {
      * @param {*} e 
      */
     async function changeEventDateTime(e) {
-        console.log("event", e.event.event.order.customer);
         Swal.fire({
             position: 'top',
             title: "Sind Sie sicher, dass Sie den Termin ändern möchten?",
@@ -181,7 +180,6 @@ export default function CalendarComponent(props) {
     async function validateEvent(start, end) {
         if (start.getHours() > minTime.getHours() && start > new Date()) {
             if (end.getHours() > maxTime.getHours()) {
-                console.log("Termin zu lang: etweder Dauer kürzen oder Termin teilen");//"Termin teilen" legt neues Event zur Order an, dass am Folgetag zur erstmgl. Zeit beginnt
                 Swal.fire({
                     position: 'top',
                     title: "Länge des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
@@ -208,7 +206,6 @@ export default function CalendarComponent(props) {
                     cancelButtonColor: "var(--grey-light)"
                 }).then(result => {
                     if (result.isConfirmed) {
-                        console.log("API call -> patch order (& set event)");
                         axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
                             {
                                 plannedDuration: result.value
@@ -216,7 +213,7 @@ export default function CalendarComponent(props) {
                         const newEndDate = new Date(start.getTime() + result.value)
                         validateEvent(start, newEndDate);
                     } else if (result.isDenied) {
-                        console.log("Termin wird geteilt");
+                        console.log("Termin wird geteilt"); //To Do
                     }
                 });
             } else {

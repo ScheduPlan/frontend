@@ -128,7 +128,7 @@ export default function FormPatchOrder() {
             }, 2500);
 
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     }
 
