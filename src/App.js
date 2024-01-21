@@ -79,7 +79,7 @@ export default function App() {
             <Route path='/administrator/teams/:id' element={<FormPatchTeam />} />
 
             <Route path='/manager' element={<Dashboard />} />
-            <Route path='/manager/schedule' element={<Schedule />} />
+            <Route path='/manager/schedule' element={<Schedule path="/orders"/>} />
             <Route path='/manager/customers' element={<ListItems items={Customer} path="/customers" h1="Alle Kunden" />} />
             <Route path='/manager/customers/new' element={<FormCreateCustomer />} />
             <Route path='/manager/customers/:id' element={<FormPatchCustomer />} />
