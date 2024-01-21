@@ -119,7 +119,7 @@ export default function FormPatchCustomer() {
           </label>
           <label>
             Kundennummer
-            <input placeholder={customer.customerNumber} className='light-blue' type="number" name="customerNumber" min="1" onChange={getCustomerNumber} />
+            <input placeholder={customer.customerNumber} className='light-blue' type="number" name="customerNumber" min={100000} onChange={getCustomerNumber} />
           </label>
         </div>
         <h3>Ansprechpartner</h3>

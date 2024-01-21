@@ -127,7 +127,7 @@ export default function FormPatchEmployee() {
                 <div className='form-row'>
                     <label>
                         Personalnummer
-                        <input placeholder={employee.employeeNumber} className='light-blue' type="number" name="employeeNumber" onChange={getEmployeeNumber} />
+                        <input placeholder={employee.employeeNumber} className='light-blue' type="number" name="employeeNumber" min={100000} onChange={getEmployeeNumber} />
                     </label>
                     <label>
                         E-Mail-Adresse
