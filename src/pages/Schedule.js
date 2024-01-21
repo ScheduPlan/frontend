@@ -6,7 +6,7 @@ import url from '../BackendURL'
 import style from './Schedule.module.css'
 import sortItems from '../utility/sortItems'
 
-export default function Schedule() {
+export default function Schedule(props) {
   const [teams, setTeams] = useState([]);
   const [events, setEvents] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -16,25 +16,31 @@ export default function Schedule() {
 
   const [activeTeamId, setActiveTeamId] = useState("");
   const [activeEvents, setActiveEvents] = useState([]);
+  const [activeOrders, setActiveOrders] = useState([]);
 
   useEffect(() => {
-    getTeams();
-    getEvents();
-    getOrders();
+    getAllTeams();
+    getAllEvents();
+    getAllOrders();
   }, []);
 
   useEffect(() => {
     getActiveEvents();
-  }, [activeTeamId]);
+  }, [events, activeTeamId]);
 
   useEffect(() => {
-    console.log(showAllOrders);
-  }, [showAllOrders]);
+    getActiveOrders();
+  }, [orders, activeTeamId]);
+
+  useEffect(() => {
+    setCalendar();
+    setSidebar();
+  }, [activeEvents, activeOrders, activeTeamId]);
 
   /**
    * gets all teams from API, sorts them & sets the setActiveTeamId as the first element
    */
-  function getTeams() {
+  function getAllTeams() {
     axios.get(url + "/teams").then(res => {
       const t = sortItems(res.data, "description", "name");
       setTeams(t);
@@ -45,15 +51,18 @@ export default function Schedule() {
   /**
    * gets all events from API
    */
-  function getEvents() {
+  function getAllEvents() {
     axios.get(url + "/events").then(res => {
       setEvents(res.data);
     });
   }
 
-  function getOrders() {
+  /**
+   * gets all orders from API
+   */
+  function getAllOrders() {
     axios.get(url + "/orders").then(res => {
-      setOrders(res.data);
+      setOrders(sortItems(res.data.filter(order => order.state == "PLANNED"), "commissionNumber"));
     });
   }
 
@@ -64,29 +73,67 @@ export default function Schedule() {
     setActiveEvents(events.filter(event => (event.order?.team?.id == activeTeamId)));
   }
 
+  /**
+   * filters all events for currently active team
+   */
+  function getActiveOrders() {
+    showAllOrders ?
+    setActiveOrders(orders)
+    : setActiveOrders(orders.filter(order => (order.team?.id == activeTeamId)))
+  }
+
+  /**
+   * HELP!!! --> works?!
+   * @returns 
+   */
+  function setCalendar() {
+    return (
+      teams.map(team => {
+        return (
+          <div key={team.id} id={"team " + team.id} className={style.tab_container}>
+            <Calendar events={activeEvents} getEvents={getAllEvents} getOrders={getAllOrders} activeOrder={activeOrder} allOrdersDisplayed={showAllOrders} />
+          </div>
+        )
+      })
+    )
+  }
+
+  /**
+   * rerenders sidebar
+   */
+  function setSidebar() {
+    console.log("orders", activeOrders);
+    return (
+      <Sidebar path={props.path} orders={activeOrders} getOrders={getAllOrders} activeOrder={(e) => setActiveOrder(e)} allOrdersDisplayed={showAllOrders} setAllOrdersDisplayed={(e) => setShowAllOrders(e)} />
+    );
+  }
+
   return (
     <>
       <div className='topbar-header-wrapper'>
         <h1>Planungsassistent</h1>
       </div>
       <div className='content-wrapper'>
-        <Sidebar activeTeamId={activeTeamId} activeOrder={(e) => setActiveOrder(e)} allOrdersDisplayed={showAllOrders} setAllOrdersDisplayed={(e) => setShowAllOrders(e)} />
-
+        {setSidebar()}
         <div className={style.calendar_wrapper}>
           <div className={style.tab_bar}>
             {teams.map(team => {
               return (
-                <button key={team.id} className={"btn tab " + (((activeTeamId == team.id) && !showAllOrders) ? "active" : "")} id={team.id} onClick={() => { setActiveTeamId(team.id); setShowAllOrders(false) }}>{team.description.name}</button>
+                <button key={team.id}
+                  className={"btn tab " + (((activeTeamId == team.id) && !showAllOrders) ? "active" : "")}
+                  id={team.id}
+                  onClick={() => {
+                    setActiveTeamId(team.id);
+                    setShowAllOrders(false)
+                  }}>
+                  {team.description.name}
+                </button>
               )
             })}
           </div>
-
-          {teams.map(team => {
-            return (
-              <div key={team.id} id={"team " + team.id} className={style.tab_container}>
-                <Calendar events={activeEvents} getEvents={getEvents} activeOrder={activeOrder} allOrdersDisplayed={showAllOrders} />
-              </div>)
-          })}
+          <>
+            {setCalendar()}
+          </>
         </div>
       </div>
     </>

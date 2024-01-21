@@ -64,7 +64,7 @@
 
 .appointment_box_wrapper {
     width: 106%;
-    height: calc(100% - 140px);
+    height: calc(100% - 166px);
     background: transparent;
     color: var(--primary);
     overflow: scroll;

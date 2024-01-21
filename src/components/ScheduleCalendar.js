@@ -59,16 +59,13 @@ export default function CalendarComponent(props) {
    * toggles pop up & sets path to items and path to the edit forms
    * @param {*} item 
    */
-    function togglePopUp(item) { // To Do: Id in Funktion mitgeben -> Wozu?
+    function togglePopUp(item) {
         if (isPopUpOpen) {
             setPopUpOpen(false);
         } else {
             setPathToItem(url + "/customers/" + item.event.order.customer.id + "/orders/" + item.event.order.id + "/events/" + item.event.id);
             setPathToEdit('/' + user.user.role.toLowerCase() + "/events/" + item.event.id);
-
-            setTimeout(() => {
-                setPopUpOpen(true);
-            }, 250);
+            setPopUpOpen(true);
         }
     }
 
@@ -129,7 +126,7 @@ export default function CalendarComponent(props) {
                     confirmButtonColor: "var(--success)",
                     timer: 2000
                 }).then(() => {
-                    window.location.reload(); //To Do: hier kein reload, das is scheiße, man muss im gleichen Team Kalender bleiben
+                    updateEvents();
                 });
             }
         });
@@ -182,7 +179,7 @@ export default function CalendarComponent(props) {
      * @param {*} end 
      */
     async function validateEvent(start, end) {
-        if (start.getHours() > minTime.getHours()) {
+        if (start.getHours() > minTime.getHours() && start > new Date()) {
             if (end.getHours() > maxTime.getHours()) {
                 console.log("Termin zu lang: etweder Dauer kürzen oder Termin teilen");//"Termin teilen" legt neues Event zur Order an, dass am Folgetag zur erstmgl. Zeit beginnt
                 Swal.fire({
@@ -236,7 +233,8 @@ export default function CalendarComponent(props) {
                     await axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
                         {
                             state: "CONFIRMED"
-                        }, { headers: { 'Content-Type': 'application/json' } }).then(() =>  updateEvents());
+                        }, { headers: { 'Content-Type': 'application/json' } }).then(() => updateEvents());
+                    props.getOrders();
                 } catch (error) {
                     alert(error);
                 }
@@ -270,13 +268,13 @@ export default function CalendarComponent(props) {
             <DnDCalendar
                 defaultView="week"
                 components={components}
-                events={events}
+                events={events} //fct. die events returnt?
                 onSelectEvent={togglePopUp}
                 eventPropGetter={eventPropGetter}
                 onEventDrop={changeEventDateTime}
                 onEventResize={changeEventDateTime} // TO Do: fixen
                 onDropFromOutside={onDropFromOutside}
-                //showAllEvents ------> To Do: Was macht das?
+                //showAllEvents ------> To Do: Was macht das? 
                 localizer={localizer}
                 showMultiDayTimes
                 step={30}

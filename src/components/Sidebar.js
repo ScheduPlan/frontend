@@ -10,7 +10,6 @@ import Swal from 'sweetalert2';
 export default function Sidebar(props) {
 
     const { user } = useContext(AuthContext);
-    const path = "/orders";
 
     const [orders, setOrders] = useState([]);
     const [isOpen, setOpen] = useState(true);
@@ -19,45 +18,17 @@ export default function Sidebar(props) {
     const [filterOption, setFilterOption] = useState();
     const [searchInput, setSearchInput] = useState("");
 
-    const [itemObjects, setItemObjects] = useState([]);
     const [pathToItem, setPathToItem] = useState("");
     const [pathToEdit, setPathToEdit] = useState("");
     const [isPopUpOpen, setPopUpOpen] = useState(false);
 
     useEffect(() => {
-        getAllOrders();
-    }, []);
-
-    useEffect(() => {
-        getItemObjects();
-    }, [user, path]);
+        setOrders(props.orders);
+    }, [props.orders]);
 
     useEffect(() => {
         getSearchOutput();
     }, [searchInput]);
-
-    /**
-     * get all Items from database for the list
-     */
-    function getItemObjects() {
-        axios.get(url + path)
-            .then(response => {
-                setItemObjects(response.data);
-            });
-    }
-
-    /**
-     * gets all orders from API for the selected team
-     */
-    useEffect(() => {
-        if (props.activeTeamId != null && props.activeTeamId != "") {
-            axios.get(url + "/orders").then(res => {
-                setOrders(sortItems(res.data.filter(order => (order.team.id == props.activeTeamId) && (order.state == "PLANNED")), "commissionNumber"));
-            });
-        } else {
-            getAllOrders();
-        }
-    }, [props.activeTeamId]);
 
     /**
    * toggles pop up & sets path to items and path to the edit forms
@@ -67,24 +38,12 @@ export default function Sidebar(props) {
         if (isPopUpOpen) {
             setPopUpOpen(false);
         } else {
-            const customerId = itemObjects.find(elem => elem.id == item.id).customer.id;
-            setPathToItem(url + "/customers/" + customerId + path + "/" + item.id);
+            const customerId = orders.find(elem => elem.id == item.id).customer.id;
+            setPathToItem(url + "/customers/" + customerId + props.path + "/" + item.id);
 
-            setPathToEdit('/' + user.user.role.toLowerCase() + path + "/" + item.id);
-
-            setTimeout(() => {
-                setPopUpOpen(true);
-            }, 250);
+            setPathToEdit('/' + user.user.role.toLowerCase() + props.path + "/" + item.id);
+            setPopUpOpen(true);
         }
-    }
-
-    /**
-     * gets all orders that are not already planned
-     */
-    function getAllOrders() {
-        axios.get(url + "/orders").then(res => {
-            setOrders(sortItems(res.data.filter(order => order.state == "PLANNED"), "commissionNumber"));
-        });
     }
 
     function toggleSidebar(e) {
@@ -155,11 +114,11 @@ export default function Sidebar(props) {
         //console.log(filterData);
 
         var entries = [];
-        itemObjects.forEach(item => {
+        orders.forEach(item => {
             Object.keys(item).map((subject, i) => {
                 entries = [...entries, item[subject]];
                 entries.map(entry => {
-                    if(!isNaN(+entry)) {
+                    if (!isNaN(+entry)) {
                         var temp = entry + "";
                         entry = temp;
                     }
@@ -225,7 +184,7 @@ export default function Sidebar(props) {
                 <input className={style.filter} placeholder='suchen...' type="text" name="searchInput" onChange={getSearchInput} />
             </div>
 
-            <button className={'btn secondary ' + style.btn_showAll} onClick={() => { getAllOrders(); props.setAllOrdersDisplayed(true); }}>alle anzeigen</button>
+            <button className={'btn secondary ' + style.btn_showAll} onClick={() => { props.getOrders(); props.setAllOrdersDisplayed(true); }}>alle anzeigen</button>
 
             <div className={style.appointment_box_wrapper}>
                 {orders.map((order) => (
@@ -240,7 +199,7 @@ export default function Sidebar(props) {
                     </div>
                 ))}
             </div>
-            <PopUp trigger={isPopUpOpen} close={togglePopUp} path={path} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
+            <PopUp trigger={isPopUpOpen} close={togglePopUp} path={props.path} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
         </div>
     )
 }
