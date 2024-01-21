@@ -38,12 +38,9 @@ export default function ChangePassword() {
           text: 'Sie werden automatisch abgemeldet. Bitte, melden Sie sich mit Ihrem neuen Passwort an.',
           showConfirmButton: false,
           timer: 3000
-        });
-
-        setTimeout(function () {
+        }).then(() => {
           logout();
-        }, 3500);
-
+        });
       } catch (error) {
         alert(error);
       }

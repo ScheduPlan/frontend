@@ -100,12 +100,8 @@ export default function FormPatchEmployee() {
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
-            }).then(result => {
-                result.isConfirmed ?
-                    navigate("..", { relative: "path" })
-                    : setTimeout(function () {
-                        navigate("..", { relative: "path" });
-                    }, 2500);
+            }).then(() => {
+                navigate("..", { relative: "path" });
             });
         } catch (error) {
             alert(error);

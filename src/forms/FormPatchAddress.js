@@ -8,7 +8,7 @@ export default function FormPatchAddress(props) {
     const [city, setCity] = useState();
     const [country, setCountry] = useState();
     const [addressSuffix, setAddressSuffix] = useState();
-    const [addressType, setAddressType] = useState("DELIVERY");
+    const [addressType, setAddressType] = useState("ASSEMBLY");
 
     const [addressElement, setAddressElement] = useState({
         country: (country != null) ? country : props.placeholder.country,

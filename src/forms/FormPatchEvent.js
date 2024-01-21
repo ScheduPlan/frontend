@@ -98,11 +98,9 @@ export default function FormPatchEvent() {
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
+            }).then(() => {
+                navigate(-1);
             });
-
-            setTimeout(function () {
-                navigate("/manager/schedule");
-            }, 2500);
 
         } catch (error) {
             console.log(error);

@@ -98,12 +98,8 @@ export default function FormCreateEmployee() {
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
-            }).then(result => {
-                result.isConfirmed ?
-                    navigate("..", { relative: "path" })
-                    : setTimeout(function () {
-                        navigate("..", { relative: "path" });
-                    }, 2500);
+            }).then(() => {
+                navigate("..", { relative: "path" })
             });
         } catch (error) {
             alert(error);
@@ -129,7 +125,7 @@ export default function FormCreateEmployee() {
                 <div className='form-row'>
                     <label>
                         Personalnummer
-                        <input className='light-blue' type="number" name="employeeNumber" minLength={6} maxLength={6} min={1} onChange={getEmployeeNumber} required />
+                        <input className='light-blue' type="number" name="employeeNumber" min={100000} onChange={getEmployeeNumber} required />
                     </label>
                     <label>
                         E-Mail-Adresse
@@ -166,7 +162,7 @@ export default function FormCreateEmployee() {
                                     if (a.description.name > b.description.name) { return 1; }
                                     return 0;
                                 }).map((team, index) => {
-                                    return (<option key={index} value={team.id}>{team.description.name}</option>)
+                                    return (<option key={index} value={team.id} required>{team.description.name}</option>)
                                 })}
                             </select>
                         </label> : ""}
