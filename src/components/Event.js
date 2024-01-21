@@ -1,11 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import popupStyle from './PopUp.module.css';
 import moment from 'moment';
+import axios from 'axios';
+import url from '../BackendURL';
 
 export default function Event(props) {
     const day = moment(props.object.startDate).format("ddd DD.MM.");
     const start = moment(props.object.startDate).format("HH:mm");
     const end = moment(props.object.endDate).format("HH:mm");
+
+    const [isCustomerConfirmed, setCustomerConfirmed] = useState(props.object?.order?.state != "CUSTOMER_CONFIRMED");
+
+    function toggleCustomerConfirmation() {
+        if (isCustomerConfirmed) {
+            axios.patch(url + "/customers/" + props.object.order.customer.id + "/orders/" + props.object.order.id,
+                {
+                    state: "CONFIRMED"
+                }, { headers: { 'Content-Type': 'application/json' } });
+            setCustomerConfirmed(false);
+        } else {
+            axios.patch(url + "/customers/" + props.object.order.customer.id + "/orders/" + props.object.order.id,
+                {
+                    state: "CUSTOMER_CONFIRMED"
+                }, { headers: { 'Content-Type': 'application/json' } });
+            setCustomerConfirmed(true);
+        }
+    }
 
     return (
         props.extended ?
@@ -19,13 +39,21 @@ export default function Event(props) {
                     {props.object.helpers?.length > 0 ?
                         <p><b>Helfer: </b>{props.object.helpers.map((helper, index) => {
                             return (
-                              ((props.object.helpers?.length > 1) && (props.object.helpers?.length - 1 > index)) ?
-                              "Test" + helper.firstName + " " + helper.lastName + ", "
-                              :
-                              helper.firstName + " " + helper.lastName
+                                ((props.object.helpers?.length > 1) && (props.object.helpers?.length - 1 > index)) ?
+                                    "Test" + helper.firstName + " " + helper.lastName + ", "
+                                    :
+                                    helper.firstName + " " + helper.lastName
                             )
-                          })}</p>
+                        })}</p>
                         : ""}
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={isCustomerConfirmed}
+                            onChange={toggleCustomerConfirmation}
+                        />
+                        vom Kunden bestätigt
+                    </label>
                 </div>
             </> :
             <>
