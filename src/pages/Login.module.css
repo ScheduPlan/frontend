@@ -28,6 +28,10 @@
     color: var(--grey-dark);
 }
 
+.login_wrapper input:not([type="submit"]) {
+    background-color: #fff !important;
+}
+
 .login_wrapper input[type="submit"] {
     margin: 25px 0 0;
 }

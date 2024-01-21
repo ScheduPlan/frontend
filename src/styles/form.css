@@ -39,6 +39,7 @@ form select {
     font-size: 1rem;
     margin-top: 5px;
     color: var(--grey-dark);
+    background-color: #93b4df40;
     transition: 0.2s ease;
     border: none;
     border-radius: 10px;
@@ -56,9 +57,9 @@ form input:focus-visible {
     box-shadow: inset 0px -1px 4px 0px #0000004a;
 }
 
-input[required=false],
-select[required=false] {
-    background-color: var(--grey-superlight);
+form input:not(.btn, [required]),
+form select[required=false] {
+    background-color: var(--grey-superlight) !important;
 }
 
 /* for form elements that can add certain items to a list */

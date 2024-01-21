@@ -238,11 +238,3 @@ svg.green:hover {
   flex-flow: row wrap;
   gap: 0.8rem;
 }
-
-/* Form style */
-
-
-
-.light-blue {
-  background-color: #93b4df40;
-}

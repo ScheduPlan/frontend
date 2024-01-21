@@ -146,6 +146,7 @@
 .filter_row span {
     font-family: 'Poppins';
     font-weight: 500;
+    margin-right: 10px;
 }
 
 select.filter {
@@ -159,4 +160,5 @@ select.filter {
     border: none;
     opacity: 0.75;
     font-weight: 500;
+    flex: 1 0 auto;
 }
