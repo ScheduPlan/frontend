@@ -5,6 +5,7 @@ import axios from 'axios';
 import url from "../BackendURL";
 import '../index.css';
 import style from './Login.module.css';
+import Swal from 'sweetalert2';
 
 
 export default function Login() {
@@ -33,7 +34,6 @@ export default function Login() {
 
     async function submitForm(event) {
         event.preventDefault();
-        console.log("HIER");
         try {
             const response = await axios.post(url + '/auth/login',
                 {
@@ -52,7 +52,16 @@ export default function Login() {
 
             sessionStorage.setItem("auth", JSON.stringify(obj));
         } catch (error) {
-            alert(error);
+            if (error.response.status == 403) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'warning',
+                    title: 'Ihre Zugansdaten sind nicht korrekt!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--warning)',
+                    timer: 2000
+                  });
+            }
         }
     }
 
