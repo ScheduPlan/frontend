@@ -63,9 +63,9 @@ export function deleteOrderWithEvents(path) {
                 timer: 2000
             });
 
-            setTimeout(function () {
+            /*setTimeout(function () {
                 window.location.reload();
-            }, 2500);
+            }, 2500);*/
         }
     });
 }

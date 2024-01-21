@@ -149,7 +149,7 @@
     margin-right: 10px;
 }
 
-select.filter {
+select.filter, input.filter {
     background-color: #fff;
     border-radius: 9px;
     color: #333;
@@ -161,4 +161,9 @@ select.filter {
     opacity: 0.75;
     font-weight: 500;
     flex: 1 0 auto;
+    width: 24px;
+}
+
+input.filter {
+    cursor: text;
 }

@@ -17,6 +17,7 @@ export default function Sidebar(props) {
 
     const [sortOption, setSortOption] = useState();
     const [filterOption, setFilterOption] = useState();
+    const [searchInput, setSearchInput] = useState("");
 
     const [itemObjects, setItemObjects] = useState([]);
     const [pathToItem, setPathToItem] = useState("");
@@ -24,8 +25,16 @@ export default function Sidebar(props) {
     const [isPopUpOpen, setPopUpOpen] = useState(false);
 
     useEffect(() => {
+        getAllOrders();
+    }, []);
+
+    useEffect(() => {
         getItemObjects();
     }, [user, path]);
+
+    useEffect(() => {
+        getSearchOutput();
+    }, [searchInput]);
 
     /**
      * get all Items from database for the list
@@ -92,7 +101,6 @@ export default function Sidebar(props) {
      */
     const getSortOption = (e) => {
         setSortOption(e.target.value);
-
         switch (e.target.value) {
             case null:
                 setOrders(sortItems(orders, "commissionNumber"));
@@ -111,11 +119,65 @@ export default function Sidebar(props) {
     }
 
     /**
+     * filters order list for the choosen option
+     * @param {*} e 
+     */
+    const getFilterOption = (e) => {
+        setFilterOption(e.target.value);
+        switch (e.target.value) {
+            case null:
+                setOrders(sortItems(orders, "commissionNumber"));
+                break;
+            case "none":
+                setOrders(sortItems(orders, "commissionNumber"));
+                break;
+            case "company":
+                setOrders(sortItems(orders, "customer", "company"));
+                break;
+            case "team":
+                setOrders(sortItems(orders, "team", "description", "name"));
+            default: setOrders(sortItems(orders, e.target.value));
+                break;
+        }
+    }
+
+    const getSearchInput = (e) => {
+        console.log(e.target.value);
+        setSearchInput(e.target.value);
+    }
+
+    /**
+     * gets order elements for search
+     */
+    function getSearchOutput() {
+
+        //var filterData = data.filter(item => item.name.includes(search));
+        //console.log(filterData);
+
+        var entries = [];
+        itemObjects.forEach(item => {
+            Object.keys(item).map((subject, i) => {
+                entries = [...entries, item[subject]];
+                entries.map(entry => {
+                    if(!isNaN(+entry)) {
+                        var temp = entry + "";
+                        entry = temp;
+                    }
+                });
+            })
+        });
+        console.log(entries);
+        /*axios.get(url + "/orders").then(res => {
+            setOrders(sortItems(res.data.filter(order => (order.team.id == props.activeTeamId) && (order.state == "PLANNED")), "commissionNumber"));
+        });*/
+    }
+
+    /**
      * allows to drag and drop an order into a calendar if a team calendar is picked
      * returns error alert if not
      */
     function validateCurrentTeam(order) {
-        if(!props.allOrdersDisplayed) {
+        if (!props.allOrdersDisplayed) {
             props.activeOrder(order);
         } else {
             Swal.fire({
@@ -158,11 +220,16 @@ export default function Sidebar(props) {
                     <option value="plannedDuration">geschätzter Aufwand</option>
                 </select>
             </div>
-            <button className={'btn secondary ' + style.btn_showAll} onClick={() => {getAllOrders(); props.setAllOrdersDisplayed(true);}}>alle anzeigen</button>
+            <div className={style.filter_row}>
+                <span>suchen</span>
+                <input className={style.filter} placeholder='suchen...' type="text" name="searchInput" onChange={getSearchInput} />
+            </div>
+
+            <button className={'btn secondary ' + style.btn_showAll} onClick={() => { getAllOrders(); props.setAllOrdersDisplayed(true); }}>alle anzeigen</button>
 
             <div className={style.appointment_box_wrapper}>
                 {orders.map((order) => (
-                    <div key={order.id} className={style.appointment_box} id={order.id} onClick={() => togglePopUp(order)} draggable onDragStart={() => {validateCurrentTeam(order)}}>
+                    <div key={order.id} className={style.appointment_box} id={order.id} onClick={() => togglePopUp(order)} draggable onDragStart={() => { validateCurrentTeam(order) }}>
                         <p className={style.title}>Auftr.-Nr.: {order.number}</p>
                         <div className={style.appointment_detail}>
                             <p><b>Kom.-Nr.:</b> {order.commissionNumber}</p>
