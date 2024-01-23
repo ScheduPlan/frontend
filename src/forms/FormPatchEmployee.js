@@ -200,7 +200,7 @@ export default function FormPatchEmployee() {
                                 })}
                             </select>
                         </label> : ""}
-                </div>max={999999}
+                </div>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Speichern" />
                     <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem("/employees/" + employee.id) }} />

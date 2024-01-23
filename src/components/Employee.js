@@ -11,15 +11,13 @@ export default function Employee(props) {
         <div className={popupStyle.popup_details}>
           {props.object.user != null ?
             <>
+              <p><b>Personalnummer: </b>{props.object.employeeNumber}</p>
               <p><b>E-Mail: </b>{props.object.user.email}</p>
               <p><b>Benutzername: </b>{props.object.user.username}</p>
               <p><b>Benutzerrolle: </b>{roles.find(role => role.role == props.object.user.role.toLowerCase()).title}</p>
             </>
             :
             <p>"Bitte wählen"</p>}
-        </div>
-        <div className={popupStyle.popup_details}>
-          <p><b>Personalnummer: </b>{props.object.employeeNumber}</p>
           {(props.object.user?.role == "FITTER") ?
             (
               (props.object.team != null) ?

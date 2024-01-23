@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import url from '../BackendURL';
 import roles from '../ROLES';
+import sortItems from '../utility/sortItems';
 
 export default function FormCreateEmployee() {
     const navigate = useNavigate();
@@ -17,19 +18,19 @@ export default function FormCreateEmployee() {
     const [username, setUsername] = useState('');
     const [userRole, setUserRole] = useState('');
     const [password, setPassword] = useState('');
-    const [teamId, setTeamId] = useState("");
+    const [teamId, setTeamId] = useState('');
 
     useEffect(() => {
         getTeamList();
     }, []);
 
     /**
-     * gets all teams from database
+     * gets all teams from API
      */
     function getTeamList() {
         axios.get(url + '/teams').then(
             res => {
-                setTeamList(res.data);
+                setTeamList(sortItems(res.data, "description", "name"));
             }
         );
     }
@@ -72,65 +73,68 @@ export default function FormCreateEmployee() {
      */
     async function submitForm(event) {
         event.preventDefault();
-        try {
-            const response = await axios.post(url + '/auth/create',
-                {
-                    employeeNumber: employeeNumber,
-                    teamId: ((teamId != null) && (teamId != "")) ? teamId : null,
-                    person: {
-                        firstName: firstname,
-                        lastName: lastname
+        if (teamId == '' || teamId == null) {
+            try {
+                const response = await axios.post(url + '/auth/create',
+                    {
+                        employeeNumber: employeeNumber,
+                        teamId: ((teamId != null) && (teamId != "")) ? teamId : null,
+                        person: {
+                            firstName: firstname,
+                            lastName: lastname
+                        },
+                        userDefinition: {
+                            email: email,
+                            username: username,
+                            password: password,
+                            role: userRole
+                        }
                     },
-                    userDefinition: {
-                        email: email,
-                        username: username,
-                        password: password,
-                        role: userRole
-                    }
-                },
-                { headers: { 'Content-Type': 'application/json' } });
-
-            Swal.fire({
-                position: 'top',
-                icon: 'success',
-                title: 'Neuer Mitarbeiter angelegt!',
-                showConfirmButton: true,
-                confirmButtonText: 'Ok',
-                confirmButtonColor: 'var(--success)',
-                timer: 2000
-            }).then(() => {
-                navigate("..", { relative: "path" })
-            });
-        } catch (error) {
-            console.log(error.response.data.message);
-            if (error.response.data.message.includes("EMPLOYEE_NUMBER")) {
+                    { headers: { 'Content-Type': 'application/json' } });
+    
                 Swal.fire({
                     position: 'top',
-                    icon: 'error',
-                    title: 'Personalnummer ist bereits vergeben!',
+                    icon: 'success',
+                    title: 'Neuer Mitarbeiter angelegt!',
+                    showConfirmButton: true,
                     confirmButtonText: 'Ok',
-                    confirmButtonColor: 'var(--error)',
-                    timer: 2500
+                    confirmButtonColor: 'var(--success)',
+                    timer: 2000
+                }).then(() => {
+                    navigate("..", { relative: "path" });
                 });
-            } else if (error.response.data.message.includes("USERNAME")) {
-                Swal.fire({
-                    position: 'top',
-                    icon: 'error',
-                    title: 'Benutzername ist bereits vergeben!',
-                    confirmButtonText: 'Ok',
-                    confirmButtonColor: 'var(--error)',
-                    timer: 2500
-                });
-            } else if (error.response.data.message.includes("EMAIL")) {
-                Swal.fire({
-                    position: 'top',
-                    icon: 'error',
-                    title: 'E-Mail-Adresse ist bereits vergeben!',
-                    confirmButtonText: 'Ok',
-                    confirmButtonColor: 'var(--error)',
-                    timer: 2500
-                });
+            } catch (error) {
+                if (error.response.data.message.includes("EMPLOYEE_NUMBER")) {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'error',
+                        title: 'Personalnummer ist bereits vergeben!',
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: 'var(--error)',
+                        timer: 2500
+                    });
+                } else if (error.response.data.message.includes("USERNAME")) {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'error',
+                        title: 'Benutzername ist bereits vergeben!',
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: 'var(--error)',
+                        timer: 2500
+                    });
+                } else if (error.response.data.message.includes("EMAIL")) {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'error',
+                        title: 'E-Mail-Adresse ist bereits vergeben!',
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: 'var(--error)',
+                        timer: 2500
+                    });
+                }
             }
+        } else {
+            alert("Benutzerrolle muss angegeben werden");
         }
     }
 
@@ -142,39 +146,39 @@ export default function FormCreateEmployee() {
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>
-                        Vorname
+                        Vorname <span>*</span>
                         <input className='light-blue' type="text" name="firstname" onChange={getFirstname} required />
                     </label>
                     <label>
-                        Nachname
+                        Nachname <span>*</span>
                         <input className='light-blue' type="text" name="lastname" onChange={getLastname} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
-                        Personalnummer
+                        Personalnummer <span>*</span>
                         <input className='light-blue' type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} required />
                     </label>
                     <label>
-                        E-Mail-Adresse
+                        E-Mail-Adresse <span>*</span>
                         <input className='light-blue' type="email" name="email" onChange={getEmail} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
-                        Benutzername
+                        Benutzername <span>*</span>
                         <input className='light-blue' type="text" name="username" onChange={getUsername} required />
                     </label>
                     <label>
-                        Passwort
+                        Passwort <span>*</span>
                         <input className='light-blue' type="password" name="password" onChange={getPassword} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
-                        Benutzerrolle
+                        Benutzerrolle <span>*</span>
                         <select className='light-blue' name="userRole" onChange={getUserRole} required>
-                            <option value={null} readOnly hidden>Bitte wählen</option>
+                            <option value={''} readOnly hidden>Bitte wählen</option>
                             {roles.map((role, index) => {
                                 return (<option key={index} value={role.role}>{role.title}</option>)
                             })}
@@ -184,12 +188,8 @@ export default function FormCreateEmployee() {
                         <label>
                             Team
                             <select className='light-blue' name="team" onChange={getTeamId}>
-                                <option value={""}>Bitte wählen</option>
-                                {teamList.sort(function (a, b) {
-                                    if (a.description.name < b.description.name) { return -1; }
-                                    if (a.description.name > b.description.name) { return 1; }
-                                    return 0;
-                                }).map((team, index) => {
+                                <option value={''}>Bitte wählen</option>
+                                {teamList.map((team, index) => {
                                     return (<option key={index} value={team.id} required>{team.description.name}</option>)
                                 })}
                             </select>
@@ -197,7 +197,7 @@ export default function FormCreateEmployee() {
                 </div>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Anlegen" />
-                    <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
+                    <input className="btn secondary" type="button" value="Abbrechen" onClick={() => navigate("..", { relative: "path" })} />
                 </div>
             </form>
         </div>
