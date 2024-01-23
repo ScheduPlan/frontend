@@ -73,68 +73,64 @@ export default function FormCreateEmployee() {
      */
     async function submitForm(event) {
         event.preventDefault();
-        if (teamId == '' || teamId == null) {
-            try {
-                const response = await axios.post(url + '/auth/create',
-                    {
-                        employeeNumber: employeeNumber,
-                        teamId: ((teamId != null) && (teamId != "")) ? teamId : null,
-                        person: {
-                            firstName: firstname,
-                            lastName: lastname
-                        },
-                        userDefinition: {
-                            email: email,
-                            username: username,
-                            password: password,
-                            role: userRole
-                        }
+        try {
+            const response = await axios.post(url + '/auth/create',
+                {
+                    employeeNumber: employeeNumber,
+                    teamId: ((teamId != null) && (teamId != "")) ? teamId : null,
+                    person: {
+                        firstName: firstname,
+                        lastName: lastname
                     },
-                    { headers: { 'Content-Type': 'application/json' } });
-    
+                    userDefinition: {
+                        email: email,
+                        username: username,
+                        password: password,
+                        role: userRole
+                    }
+                },
+                { headers: { 'Content-Type': 'application/json' } });
+
+            Swal.fire({
+                position: 'top',
+                icon: 'success',
+                title: 'Neuer Mitarbeiter angelegt!',
+                showConfirmButton: true,
+                confirmButtonText: 'Ok',
+                confirmButtonColor: 'var(--success)',
+                timer: 2000
+            }).then(() => {
+                navigate("..", { relative: "path" });
+            });
+        } catch (error) {
+            if (error.response.data.message.includes("EMPLOYEE_NUMBER")) {
                 Swal.fire({
                     position: 'top',
-                    icon: 'success',
-                    title: 'Neuer Mitarbeiter angelegt!',
-                    showConfirmButton: true,
+                    icon: 'error',
+                    title: 'Personalnummer ist bereits vergeben!',
                     confirmButtonText: 'Ok',
-                    confirmButtonColor: 'var(--success)',
-                    timer: 2000
-                }).then(() => {
-                    navigate("..", { relative: "path" });
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
                 });
-            } catch (error) {
-                if (error.response.data.message.includes("EMPLOYEE_NUMBER")) {
-                    Swal.fire({
-                        position: 'top',
-                        icon: 'error',
-                        title: 'Personalnummer ist bereits vergeben!',
-                        confirmButtonText: 'Ok',
-                        confirmButtonColor: 'var(--error)',
-                        timer: 2500
-                    });
-                } else if (error.response.data.message.includes("USERNAME")) {
-                    Swal.fire({
-                        position: 'top',
-                        icon: 'error',
-                        title: 'Benutzername ist bereits vergeben!',
-                        confirmButtonText: 'Ok',
-                        confirmButtonColor: 'var(--error)',
-                        timer: 2500
-                    });
-                } else if (error.response.data.message.includes("EMAIL")) {
-                    Swal.fire({
-                        position: 'top',
-                        icon: 'error',
-                        title: 'E-Mail-Adresse ist bereits vergeben!',
-                        confirmButtonText: 'Ok',
-                        confirmButtonColor: 'var(--error)',
-                        timer: 2500
-                    });
-                }
+            } else if (error.response.data.message.includes("USERNAME")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Benutzername ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else if (error.response.data.message.includes("EMAIL")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'E-Mail-Adresse ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
             }
-        } else {
-            alert("Benutzerrolle muss angegeben werden");
         }
     }
 

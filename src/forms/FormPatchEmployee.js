@@ -199,7 +199,7 @@ export default function FormPatchEmployee() {
                 </div>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Speichern" />
-                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem("/employees/" + employee.id) }} />
+                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem(url + "/employees/" + employee.id,  (res) => {console.log(res); navigate("..", { relative: "path" })}) }} />
                     <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
                 </div>
             </form>
