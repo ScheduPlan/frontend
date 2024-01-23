@@ -1,4 +1,5 @@
 @import url("styles/form.css");
+@import url("styles/events.css");
 
 :root {
   --primary: #0d7beb;
@@ -10,9 +11,11 @@
   --grey-dark: #333333;
   --red: #e50000;
   --red-dark: #d10000;
-  --green: #00A542;
+  --green: #78d045;
+  --green-light: #a5dc86;
+  --green-dark: #52af20;
 
-  --success: #a5dc86;
+  --success: var(--green-light);
   --error: #f27474;
   --warning: #f8bb86;
   --info: #3fc3ee;

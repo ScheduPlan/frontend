@@ -9,21 +9,29 @@ export default function Event(props) {
     const start = moment(props.object.startDate).format("HH:mm");
     const end = moment(props.object.endDate).format("HH:mm");
 
-    const [isCustomerConfirmed, setCustomerConfirmed] = useState(props.object?.order?.state != "CUSTOMER_CONFIRMED");
+    const [isCustomerConfirmed, setCustomerConfirmed] = useState();
+
+    useEffect(() => {
+        setCustomerConfirmed(props.object?.order?.state == "CUSTOMER_CONFIRMED");
+    }, [props.object]);
 
     function toggleCustomerConfirmation() {
         if (isCustomerConfirmed) {
             axios.patch(url + "/customers/" + props.object.order.customer.id + "/orders/" + props.object.order.id,
                 {
                     state: "CONFIRMED"
-                }, { headers: { 'Content-Type': 'application/json' } });
-            setCustomerConfirmed(false);
+                }, { headers: { 'Content-Type': 'application/json' } }).then(() => {
+                    props.updateEvents();
+                    setCustomerConfirmed(false);
+                });
         } else {
             axios.patch(url + "/customers/" + props.object.order.customer.id + "/orders/" + props.object.order.id,
                 {
                     state: "CUSTOMER_CONFIRMED"
-                }, { headers: { 'Content-Type': 'application/json' } });
-            setCustomerConfirmed(true);
+                }, { headers: { 'Content-Type': 'application/json' } }).then(() => {
+                    setCustomerConfirmed(true);
+                    props.updateEvents();
+                });
         }
     }
 
@@ -35,7 +43,6 @@ export default function Event(props) {
                     <p><b>Auftr.nr.: </b>{props.object.order?.number}</p>
                     <p><b>Komm.nr.: </b>{props.object.order?.commissionNumber}</p>
                     <p><b>Kunde: </b>{props.object.order?.customer?.customerNumber} {props.object.order?.customer?.company}</p>
-                    <p><b>Status: </b>{props.object?.order?.state}</p>
                     {props.object.helpers?.length > 0 ?
                         <p><b>Helfer: </b>{props.object.helpers.map((helper, index) => {
                             return (

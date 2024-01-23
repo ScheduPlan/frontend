@@ -13,8 +13,8 @@ import Swal from 'sweetalert2';
 
 export default function CalendarComponent(props) {
     const { user } = useContext(AuthContext);
+    const { activeOrder, getOrders } = props;
 
-    const [activeOrder, setActiveOrder] = useState({});
     const [events, setEvents] = useState([]);
 
     const [pathToItem, setPathToItem] = useState("");
@@ -40,7 +40,7 @@ export default function CalendarComponent(props) {
     localizer.formats.agendaDateFormat = 'DD.MM.';
 
     //sets default values for the calendar
-    const { components, views } = useMemo(
+    const { components, views, allOrdersDisplayed } = useMemo(
         () => ({
             views: [Views.WEEK, Views.DAY, Views.AGENDA],
         }),
@@ -50,10 +50,6 @@ export default function CalendarComponent(props) {
     useEffect(() => {
         getEvents();
     }, [props.events]);
-
-    useEffect(() => {
-        setActiveOrder(props.activeOrder);
-    }, [props.activeOrder]);
 
     /**
    * toggles pop up & sets path to items and path to the edit forms
@@ -91,6 +87,7 @@ export default function CalendarComponent(props) {
      * calls function in parent component to update all events (from API)
      */
     function updateEvents() {
+        console.log("updated");
         props.getEvents();
     }
 
@@ -116,6 +113,10 @@ export default function CalendarComponent(props) {
                         date: e.start,
                         endDate: e.end,
                     }, { headers: { 'Content-Type': 'application/json' } });
+                axios.patch(url + "/customers/" + e.event.event.order.customer.id + "/orders/" + e.event.event.order.id,
+                    {
+                        state: "CONFIRMED"
+                    }, { headers: { 'Content-Type': 'application/json' } });
 
                 Swal.fire({
                     position: 'top',
@@ -136,41 +137,7 @@ export default function CalendarComponent(props) {
                 endDate: newEnd,
             }, { headers: { 'Content-Type': 'application/json' } });
         console.log("response", response);*/
-
-        updateEvents();
     }
-
-    //style of different appointments
-    const eventPropGetter = useCallback((event, start, end, isSelected) => (
-        {
-            ...(event && {
-                style: {
-                    backgroundColor: '#ccc',
-                    borderRadius: '0px',
-                    color: 'black',
-                    border: 'none',
-                    opacity: '1',
-                    display: 'block'
-                }
-            }),
-            ...(event.event?.type === "ASSEMBLY" && { //ToDo: title in timeslot z-index:1 setzen
-                style: {
-                    backgroundColor: 'var(--primary)',
-                    border: '0',
-                    opacity: '1',
-                    display: 'block'
-                }
-            }),
-            ...(event.title === "Reklamation" && { //ToDo: title in timeslot z-index:1 setzen
-                style: {
-                    backgroundColor: 'var(--primary-dark)',
-                    border: '0',
-                    opacity: '1',
-                    display: 'block'
-                }
-            })
-        }
-    ), [events]);
 
     /**
      * validates if event you want to create, is in between the custom min & max time
@@ -231,7 +198,7 @@ export default function CalendarComponent(props) {
                         {
                             state: "CONFIRMED"
                         }, { headers: { 'Content-Type': 'application/json' } }).then(() => updateEvents());
-                    props.getOrders();
+                    getOrders();
                 } catch (error) {
                     alert(error);
                 }
@@ -253,12 +220,37 @@ export default function CalendarComponent(props) {
      * @param {*} e 
      */
     async function onDropFromOutside(e) {
-        if (!props.allOrdersDisplayed) {
+        if (!allOrdersDisplayed) {
             const duration = activeOrder.plannedDuration * 3600000;
             const newEndDate = new Date(e.start.getTime() + duration);
             validateEvent(e.start, newEndDate);
         }
     }
+
+    /**
+     * styles events for different props
+     */
+    const eventPropGetter = useCallback((event, start, end, isSelected) => {
+        var className = "default";
+
+        switch (event.event.type) {
+            case "ASSEMBLY":
+                className += " assembly";
+                break;
+
+            default:
+                className = "default";
+                break;
+        }
+
+        if (event.event?.order?.state == "CUSTOMER_CONFIRMED") {
+            className += " showCustomerIcon";
+        }
+
+        return {
+            className
+        };
+    }, [events, props.events]);
 
     return (
         <div className={style.calendar_wrapper} >
@@ -285,7 +277,7 @@ export default function CalendarComponent(props) {
                 length={6}
                 messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag", noEventsInRange: "Es gibt keine Termine für diesen Tag." }}
             />
-            <PopUp trigger={isPopUpOpen} close={togglePopUp} path={"/events"} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
+            <PopUp events={events} updateEvents={updateEvents} trigger={isPopUpOpen} close={togglePopUp} path={"/events"} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
         </div>
     )
 }

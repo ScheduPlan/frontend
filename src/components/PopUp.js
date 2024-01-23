@@ -14,25 +14,30 @@ import Swal from 'sweetalert2';
 
 export default function PopUp(props) {
     const navigate = useNavigate();
+    const {events, path, pathToItem, pathToEdit, updateItemObjects,  updateEvents, close, trigger} = props
 
     const [item, setItem] = useState({});
     const [subItem, setSubItem] = useState({});
 
     useEffect(() => {
-        if (props.pathToItem != null && props.pathToItem != "") {
-            axios.get(props.pathToItem).then(res => {
+        renderContent();
+    }, [item, events]);
+
+    useEffect(() => {
+        if (pathToItem != null && pathToItem != "") {
+            axios.get(pathToItem).then(res => {
                 setItem(res.data);
             });
-            if (props.path == "/teams") {
-                axios.get(props.pathToItem + "/members").then(res => {
+            if (path == "/teams") {
+                axios.get(pathToItem + "/members").then(res => {
                     setSubItem(res.data);
                 });
             }
         }
-    }, [props.pathToItem]);
+    }, [pathToItem]);
 
     function renderContent() {
-        switch (props.path) {
+        switch (path) {
             case "/employees":
                 return (
                     <Employee extended object={item} />
@@ -52,7 +57,7 @@ export default function PopUp(props) {
                 )
             case "/events":
                 return (
-                    <Event extended object={item} />
+                    <Event extended object={item} updateEvents={updateEvents}/>
                 )
             default:
                 break;
@@ -63,19 +68,43 @@ export default function PopUp(props) {
    * switch case to delete a certain item
    * @param {*} item 
    */
-    function deleteFct() {
-        switch (props.path) {
+    async function deleteFct() {
+        switch (path) {
           case "/orders":
-            deleteOrderWithEvents(props.pathToItem);
+            deleteOrderWithEvents(pathToItem);
             break;
           case "/events":
             axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
               {
                 state: "PLANNED"
               }, { headers: { 'Content-Type': 'application/json' } });
-              deleteItem(props.pathToItem);
+              //deleteItem(pathToItem);
+              Swal.fire({
+                position: 'top',
+                title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
+                icon: 'warning',
+                iconColor: 'var(--warning)',
+                showCancelButton: true,
+                confirmButtonColor: "var(--success)",
+                cancelButtonColor: "var(--error)",
+                cancelButtonText: "Nein",
+                confirmButtonText: "Ja",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  axios.delete(pathToItem);
+      
+                  Swal.fire({
+                    position: 'top',
+                    title: "Element gelöscht!",
+                    icon: "success",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: "var(--success)",
+                    timer: 2000
+                  }).then(() => updateEvents());
+                }
+              });
           default:
-            //deleteItem(props.pathToItem);
+            //deleteItem(pathToItem);
             Swal.fire({
                 position: 'top',
                 title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
@@ -88,7 +117,7 @@ export default function PopUp(props) {
                 confirmButtonText: "Ja",
               }).then((result) => {
                 if (result.isConfirmed) {
-                  axios.delete(props.pathToItem);
+                  axios.delete(pathToItem);
       
                   Swal.fire({
                     position: 'top',
@@ -97,27 +126,26 @@ export default function PopUp(props) {
                     confirmButtonText: "Ok",
                     confirmButtonColor: "var(--success)",
                     timer: 2000
-                  }).then(() => props.updateItemObjects());
+                  }).then(() => updateItemObjects());
                 }
               });
             break;
         }
-        props.close();
-        props.updateItemObjects();
+        close();
       }
 
-    return (props.trigger ?
+    return (trigger ?
         <div className={style.popup_wrapper}>
             <div className={style.popup_content_wrapper}>
-                <svg onClick={props.close} xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 -960 960 960" fill="var(--grey-dark)">
+                <svg onClick={close} xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 -960 960 960" fill="var(--grey-dark)">
                     <path d={Path("close")} />
                 </svg>
                 <div className={style.popup_content}>
                     {renderContent()}
                 </div>
                 <div className='btn-wrapper'>
-                    {props.pathToEdit != null ? <button onClick={() => { navigate(props.pathToEdit) }} className='btn secondary'>Bearbeiten</button> : ""}
-                    {props.pathToItem != null ? <button onClick={deleteFct} className='btn red'>Löschen</button> : ""}
+                    {pathToEdit != null ? <button onClick={() => { navigate(pathToEdit) }} className='btn secondary'>Bearbeiten</button> : ""}
+                    {pathToItem != null ? <button onClick={deleteFct} className='btn red'>Löschen</button> : ""}
                 </div>
             </div>
         </div> : ""
