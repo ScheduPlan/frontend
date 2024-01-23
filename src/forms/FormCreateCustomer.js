@@ -94,7 +94,7 @@ export default function FormCreateCustomer() {
                 Swal.fire({
                     position: 'top',
                     icon: 'error',
-                    title: 'Personalnummer ist bereits vorhanden!',
+                    title: 'Kundennummer ist bereits vergeben!',
                     confirmButtonText: 'Ok',
                     confirmButtonColor: 'var(--error)',
                     timer: 2500
@@ -103,7 +103,7 @@ export default function FormCreateCustomer() {
                 Swal.fire({
                     position: 'top',
                     icon: 'error',
-                    title: 'Benutzername ist bereits vorhanden!',
+                    title: 'Benutzername ist bereits vergeben!',
                     confirmButtonText: 'Ok',
                     confirmButtonColor: 'var(--error)',
                     timer: 2500
@@ -112,7 +112,7 @@ export default function FormCreateCustomer() {
                 Swal.fire({
                     position: 'top',
                     icon: 'error',
-                    title: 'E-Mail-Adresse ist bereits vorhanden!',
+                    title: 'E-Mail-Adresse ist bereits vergeben!',
                     confirmButtonText: 'Ok',
                     confirmButtonColor: 'var(--error)',
                     timer: 2500
