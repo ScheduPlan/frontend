@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
 import url from '../BackendURL';
 import roles from '../ROLES';
 import deleteItem from '../utility/deleteItem';
+import sortItems from '../utility/sortItems';
 
 export default function FormPatchEmployee() {
     const navigate = useNavigate();
@@ -31,12 +32,12 @@ export default function FormPatchEmployee() {
     }, [id]);
 
     /**
-     * gets all teams from database
+     * gets all teams from API & sorts them
      */
     function getTeamList() {
         axios.get(url + '/teams').then(
             res => {
-                setTeamList(res.data);
+                setTeamList(sortItems(res.data, "description", "name"));
             }
         );
     }
@@ -104,7 +105,6 @@ export default function FormPatchEmployee() {
                 navigate("..", { relative: "path" });
             });
         } catch (error) {
-            console.log(error.response.data.message);
             if (error.response.data.message.includes("EMPLOYEE_NUMBER")) {
                 Swal.fire({
                     position: 'top',
@@ -191,11 +191,7 @@ export default function FormPatchEmployee() {
                                         employee.team?.description?.name :
                                         "Bitte wählen"}
                                 </option>
-                                {teamList.sort(function (a, b) {
-                                    if (a.description.name < b.description.name) { return -1; }
-                                    if (a.description.name > b.description.name) { return 1; }
-                                    return 0;
-                                }).map((team, index) => {
+                                {teamList.map((team, index) => {
                                     return (<option key={index} value={team.id}>{team.description.name}</option>)
                                 })}
                             </select>
