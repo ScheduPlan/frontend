@@ -102,7 +102,35 @@ export default function FormCreateEmployee() {
                 navigate("..", { relative: "path" })
             });
         } catch (error) {
-            alert(error);
+            console.log(error.response.data.message);
+            if (error.response.data.message.includes("EMPLOYEE_NUMBER")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Personalnummer ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else if (error.response.data.message.includes("USERNAME")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Benutzername ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else if (error.response.data.message.includes("EMAIL")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'E-Mail-Adresse ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            }
         }
     }
 
@@ -125,7 +153,7 @@ export default function FormCreateEmployee() {
                 <div className='form-row'>
                     <label>
                         Personalnummer
-                        <input className='light-blue' type="number" name="employeeNumber" min={100000} onChange={getEmployeeNumber} required />
+                        <input className='light-blue' type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} required />
                     </label>
                     <label>
                         E-Mail-Adresse

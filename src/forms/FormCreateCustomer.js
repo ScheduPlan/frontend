@@ -90,7 +90,34 @@ export default function FormCreateCustomer() {
                 navigate("..", { relative: "path" });
             });
         } catch (error) {
-            alert(error);
+            if (error.response.data.message.includes("CUSTOMER_NUMBER")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Personalnummer ist bereits vorhanden!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else if (error.response.data.message.includes("USERNAME")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Benutzername ist bereits vorhanden!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else if (error.response.data.message.includes("EMAIL")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'E-Mail-Adresse ist bereits vorhanden!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            }
         }
     }
 
@@ -107,7 +134,7 @@ export default function FormCreateCustomer() {
                     </label>
                     <label>
                         Kundennummer
-                        <input className='light-blue' type="number" name="customerNumber" min="100000" onChange={getCustomerNumber} required />
+                        <input className='light-blue' type="number" name="customerNumber" min={100000} max={999999} onChange={getCustomerNumber} required />
                     </label>
                 </div>
                 <h3>Ansprechpartner</h3>

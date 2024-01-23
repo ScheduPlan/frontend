@@ -104,7 +104,35 @@ export default function FormPatchEmployee() {
                 navigate("..", { relative: "path" });
             });
         } catch (error) {
-            alert(error);
+            console.log(error.response.data.message);
+            if (error.response.data.message.includes("EMPLOYEE_NUMBER")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Personalnummer ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else if (error.response.data.message.includes("USERNAME")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Benutzername ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else if (error.response.data.message.includes("EMAIL")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'E-Mail-Adresse ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            }
         }
     }
 
@@ -127,7 +155,7 @@ export default function FormPatchEmployee() {
                 <div className='form-row'>
                     <label>
                         Personalnummer
-                        <input placeholder={employee.employeeNumber} className='light-blue' type="number" name="employeeNumber" min={100000} onChange={getEmployeeNumber} />
+                        <input placeholder={employee.employeeNumber} className='light-blue' type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} />
                     </label>
                     <label>
                         E-Mail-Adresse
@@ -172,7 +200,7 @@ export default function FormPatchEmployee() {
                                 })}
                             </select>
                         </label> : ""}
-                </div>
+                </div>max={999999}
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Speichern" />
                     <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem("/employees/" + employee.id) }} />
