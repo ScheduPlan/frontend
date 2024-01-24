@@ -10,6 +10,10 @@
     color: var(--grey-dark);
 }
 
+.lessMarginTop {
+    top: -90px !important;
+}
+
 .popup_content_wrapper {
     width: 80%;
     height: auto;

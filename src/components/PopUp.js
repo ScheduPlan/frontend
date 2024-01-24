@@ -104,7 +104,7 @@ export default function PopUp(props) {
     }
 
     return (trigger ?
-        <div className={style.popup_wrapper}>
+        <div className={style.popup_wrapper + " " + (props.lessMarginTop ? style.lessMarginTop : "")}>
             <div className={style.popup_content_wrapper}>
                 <svg onClick={close} xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 -960 960 960" fill="var(--grey-dark)">
                     <path d={Path("close")} />
