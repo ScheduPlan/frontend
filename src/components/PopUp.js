@@ -5,7 +5,7 @@ import axios from 'axios';
 import Employee from './Employee';
 import { useNavigate } from 'react-router-dom';
 import url from '../BackendURL';
-import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem';
+import deleteItem from '../utility/deleteItem';
 import Team from './Team';
 import Customer from './Customer';
 import Order from './Order';
@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 
 export default function PopUp(props) {
     const navigate = useNavigate();
-    const {events, path, pathToItem, pathToEdit, updateItemObjects,  updateEvents, close, trigger} = props
+    const { events, path, pathToItem, pathToEdit, updateItemObjects, updateEvents, close, trigger } = props
 
     const [item, setItem] = useState({});
     const [subItem, setSubItem] = useState({});
@@ -57,7 +57,7 @@ export default function PopUp(props) {
                 )
             case "/events":
                 return (
-                    <Event extended object={item} updateEvents={updateEvents}/>
+                    <Event extended object={item} updateEvents={updateEvents} />
                 )
             default:
                 break;
@@ -70,69 +70,38 @@ export default function PopUp(props) {
    */
     async function deleteFct() {
         switch (path) {
-          case "/orders":
-            deleteOrderWithEvents(pathToItem);
-            break;
-          case "/events":
-            axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
-              {
-                state: "PLANNED"
-              }, { headers: { 'Content-Type': 'application/json' } });
-              //deleteItem(pathToItem);
-              Swal.fire({
-                position: 'top',
-                title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
-                icon: 'warning',
-                iconColor: 'var(--warning)',
-                showCancelButton: true,
-                confirmButtonColor: "var(--success)",
-                cancelButtonColor: "var(--error)",
-                cancelButtonText: "Nein",
-                confirmButtonText: "Ja",
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  axios.delete(pathToItem);
-      
-                  Swal.fire({
-                    position: 'top',
-                    title: "Element gelöscht!",
-                    icon: "success",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: "var(--success)",
-                    timer: 2000
-                  }).then(() => updateEvents());
-                }
-              });
-          default:
-            //deleteItem(pathToItem);
-            Swal.fire({
-                position: 'top',
-                title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
-                icon: 'warning',
-                iconColor: 'var(--warning)',
-                showCancelButton: true,
-                confirmButtonColor: "var(--success)",
-                cancelButtonColor: "var(--error)",
-                cancelButtonText: "Nein",
-                confirmButtonText: "Ja",
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  axios.delete(pathToItem);
-      
-                  Swal.fire({
-                    position: 'top',
-                    title: "Element gelöscht!",
-                    icon: "success",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: "var(--success)",
-                    timer: 2000
-                  }).then(() => updateItemObjects());
-                }
-              });
-            break;
+            case "/events":
+                axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
+                    {
+                        state: "PLANNED"
+                    }, { headers: { 'Content-Type': 'application/json' } });
+
+                deleteItem(pathToItem, updateItemObjects, (error) => {
+                    Swal.fire({
+                        position: 'top',
+                        title: error,
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "var(--error)",
+                        timer: 2000
+                    })
+                });
+
+            default:
+                deleteItem(pathToItem, updateItemObjects, (error) => {
+                    Swal.fire({
+                        position: 'top',
+                        title: error,
+                        icon: "error",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "var(--error)",
+                        timer: 2000
+                    })
+                });
+                break;
         }
         close();
-      }
+    }
 
     return (trigger ?
         <div className={style.popup_wrapper}>

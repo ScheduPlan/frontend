@@ -6,7 +6,7 @@ import style from './ListItems.module.css'
 import PopUp from '../components/PopUp'
 import Path from '../icons/Paths'
 import AuthContext from '../AuthProvider'
-import deleteItem, { deleteOrderWithEvents } from '../utility/deleteItem'
+import deleteItem from '../utility/deleteItem'
 import Swal from 'sweetalert2'
 
 export default function ListItems(props) {
@@ -80,42 +80,47 @@ export default function ListItems(props) {
   async function deleteFct(item) {
     switch (props.path) {
       case "/orders":
-        deleteOrderWithEvents(props.pathToItem);
+        deleteItem(url + "/customers/" + item.customer.id + "/orders/" + item.id, updateItemObjects, (error) => {
+          Swal.fire({
+            position: 'top',
+            title: error,
+            icon: "error",
+            confirmButtonText: "Ok",
+            confirmButtonColor: "var(--error)",
+            timer: 2000
+          })
+        });
         break;
       case "/events":
-        await axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
+        axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
           {
             state: "PLANNED"
           }, { headers: { 'Content-Type': 'application/json' } });
-        deleteItem(props.pathToItem);
-      default:
-        Swal.fire({
-          position: 'top',
-          title: 'Sind Sie sicher, dass Sie dieses Element löschen möchten?',
-          icon: 'warning',
-          iconColor: 'var(--warning)',
-          showCancelButton: true,
-          confirmButtonColor: "var(--success)",
-          cancelButtonColor: "var(--error)",
-          cancelButtonText: "Nein",
-          confirmButtonText: "Ja",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            axios.delete(url + props.path + "/" + item.id);
 
-            Swal.fire({
-              position: 'top',
-              title: "Element gelöscht!",
-              icon: "success",
-              confirmButtonText: "Ok",
-              confirmButtonColor: "var(--success)",
-              timer: 2000
-            }).then(() => updateItemObjects());
-          }
+        deleteItem(props.pathToItem, updateItemObjects, (error) => {
+          Swal.fire({
+            position: 'top',
+            title: error,
+            icon: "error",
+            confirmButtonText: "Ok",
+            confirmButtonColor: "var(--error)",
+            timer: 2000
+          })
+        });
+
+      default:
+        deleteItem(url + props.path + "/" + item.id, updateItemObjects, (error) => {
+          Swal.fire({
+            position: 'top',
+            title: error,
+            icon: "error",
+            confirmButtonText: "Ok",
+            confirmButtonColor: "var(--error)",
+            timer: 2000
+          })
         });
         break;
     }
-
   }
 
   return (
