@@ -5,6 +5,7 @@ import url from '../BackendURL';
 import axios from 'axios';
 import FormCreateAddress from './FormCreateAddress';
 import FormPatchAddress from './FormPatchAddress';
+import deleteItem from '../utility/deleteItem';
 
 export default function FormPatchCustomer() {
   const { id } = useParams();
@@ -66,11 +67,11 @@ export default function FormPatchCustomer() {
     try {
       const response = await axios.patch(url + '/customers/' + id,
         {
-          customerNumber: (customerNumber != null) ? customerNumber : customer.customerNumber,
-          company: (company != null) ? company : customer.company,
+          customerNumber: customerNumber,
+          company: company,
           person: {
-            firstName: (firstname != null) ? firstname : customer.firstName,
-            lastName: (lastname != null) ? lastname : customer.lastName
+            firstName: firstname,
+            lastName: lastname
           },
           email: email,
           phoneNumber: phone
@@ -79,14 +80,13 @@ export default function FormPatchCustomer() {
 
       const response2 = await axios.patch(url + '/customers/' + id + '/addresses/' + customer.addresses.at(0).id,
         {
-          country: (addressElement.country != null) ? addressElement.country : address.country,
-          street: (addressElement.street != null) ? addressElement.street : address.street,
-          streetNumber: (addressElement.streetNumber != null) ? addressElement.streetNumber : address.streetNumber,
-          city: (addressElement.city != null) ? addressElement.city : address.city,
-          zip: (addressElement.zip != null) ? addressElement.zip : address.zip,
-          //description: "string",
-          addressSuffix: (addressElement.addressSuffix != null) ? addressElement.addressSuffix : address.addressSuffix,
-          addressType: (addressElement.addressType != null) ? addressElement.addressType : address.addressType,
+          country: addressElement.country,
+          street: addressElement.street,
+          streetNumber: addressElement.streetNumber,
+          city: addressElement.city,
+          zip: addressElement.zip,
+          addressSuffix: addressElement.addressSuffix,
+          addressType: addressElement.addressType,
         },
         { headers: { 'Content-Type': 'application/json' } });
 
@@ -145,7 +145,8 @@ export default function FormPatchCustomer() {
         </div>
         <FormPatchAddress placeholder={address} addressElement={(elem) => { getAddressElement(elem) }} />
         <div className='btn-wrapper'>
-          <input className="btn primary" type="submit" value="Anlegen" />
+          <input className="btn primary" type="submit" value="Speichern" />
+          <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem(url + "/customers/" + customer.id, (res) => { console.log(res); navigate("..", { relative: "path" }) }) }} />
           <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
         </div>
       </form>

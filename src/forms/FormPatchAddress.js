@@ -8,7 +8,7 @@ export default function FormPatchAddress(props) {
     const [city, setCity] = useState();
     const [country, setCountry] = useState();
     const [addressSuffix, setAddressSuffix] = useState();
-    const [addressType, setAddressType] = useState("ASSEMBLY");
+    const [addressType, setAddressType] = useState();
 
     const [addressElement, setAddressElement] = useState({
         country: (country != null) ? country : props.placeholder.country,
@@ -69,7 +69,7 @@ export default function FormPatchAddress(props) {
             <div className='form-row'>
                 <label>
                     Postleitzahl
-                    <input placeholder={props.placeholder.zip} className='light-blue' type="text" name="zip" onChange={getZip} />
+                    <input placeholder={props.placeholder.zip} className='light-blue' type="text" name="zip" minLength={5} maxLength={5} onChange={getZip} />
                 </label>
                 <label>
                     Stadt

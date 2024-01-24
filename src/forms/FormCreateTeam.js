@@ -116,7 +116,7 @@ export default function FormCreateTeam() {
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>
-                        Name des Teams
+                        Name des Teams <span>*</span>
                         <input className='light-blue' type="text" name="team" onChange={getTeamName} required />
                     </label>
                     <label>
@@ -127,7 +127,7 @@ export default function FormCreateTeam() {
                 <div className='form-row'>
                     <label>
                         Mitarbeiter
-                        <select className='light-blue' name="customer" onChange={getPickedEmployees} required>
+                        <select className='light-blue' name="customer" onChange={getPickedEmployees}>
                             <option readOnly hidden>Bitte wählen</option>
                             {availableEmployees.filter(emp => emp.user?.role == "FITTER").map((emp) => {
                                 return (

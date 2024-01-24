@@ -15,6 +15,7 @@ export default function FormCreateCustomer() {
     const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
+    const [description, setDescription] = useState("");
 
     const [addressElement, setAddressElement] = useState({});
 
@@ -45,6 +46,10 @@ export default function FormCreateCustomer() {
     function getAddressElement(e) {
         setAddressElement(e);
     }
+    
+    function getDescription(e) {
+        setDescription(e);
+    }
 
     /**
      * creates a new customer
@@ -57,6 +62,7 @@ export default function FormCreateCustomer() {
                 {
                     customerNumber: customerNumber,
                     company: company,
+                    description: description,
                     person: {
                         firstName: firstname,
                         lastName: lastname
@@ -73,7 +79,6 @@ export default function FormCreateCustomer() {
                     streetNumber: addressElement.streetNumber,
                     city: addressElement.city,
                     zip: addressElement.zip,
-                    //description: "string",
                     addressSuffix: addressElement.addressSuffix,
                     addressType: addressElement.addressType
                 },
@@ -129,36 +134,40 @@ export default function FormCreateCustomer() {
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>
-                        Firmenname
+                        Firmenname <span>*</span>
                         <input className='light-blue' type="text" name="company" onChange={getCompany} required />
                     </label>
                     <label>
-                        Kundennummer
+                        Kundennummer <span>*</span>
                         <input className='light-blue' type="number" name="customerNumber" min={100000} max={999999} onChange={getCustomerNumber} required />
                     </label>
                 </div>
                 <h3>Ansprechpartner</h3>
                 <div className='form-row'>
                     <label>
-                        Vorname
+                        Vorname <span>*</span>
                         <input className='light-blue' type="text" name="firstname" onChange={getFirstname} required />
                     </label>
                     <label>
-                        Nachname
+                        Nachname <span>*</span>
                         <input className='light-blue' type="text" name="lastname" onChange={getLastname} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         E-Mail-Adresse
-                        <input className='light-blue' type="email" name="email" onChange={getEmail} required />
+                        <input className='light-blue' type="email" name="email" onChange={getEmail} />
                     </label>
                     <label>
                         Telefonnummer
-                        <input className='light-blue' type="text" name="phone" onChange={getPhone} required />
+                        <input className='light-blue' type="text" name="phone" onChange={getPhone} />
                     </label>
                 </div>
                 <FormCreateAddress addressElement={(elem) => { getAddressElement(elem) }} />
+                <h3>Bemerkung</h3>
+                <label>
+                    <input className='light-blue' type="text" name="description" onChange={getDescription} />
+                </label>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Anlegen" />
                     <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />

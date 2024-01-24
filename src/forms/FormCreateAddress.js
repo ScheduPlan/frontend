@@ -16,7 +16,6 @@ export default function FormCreateAddress(props) {
         streetNumber: streetNumber,
         city: city,
         zip: zip,
-        //description: "string",
         addressSuffix: addressSuffix,
         addressType: addressType
     });
@@ -58,27 +57,27 @@ export default function FormCreateAddress(props) {
             <h3>Adresse</h3>
             <div className='form-row'>
                 <label>
-                    Straße
+                    Straße <span>*</span>
                     <input className='light-blue' type="text" name="street" onChange={getStreet} required />
                 </label>
                 <label>
-                    Hausnummer
+                    Hausnummer <span>*</span>
                     <input className='light-blue' type="number" name="streetNumber" min="1" onChange={getStreetNumber} required />
                 </label>
             </div>
             <div className='form-row'>
                 <label>
-                    Postleitzahl
-                    <input className='light-blue' type="text" name="zip" onChange={getZip} required />
+                    Postleitzahl <span>*</span>
+                    <input className='light-blue' type="text" name="zip" minLength={5} maxLength={5} onChange={getZip} required />
                 </label>
                 <label>
-                    Stadt
+                    Stadt <span>*</span>
                     <input className='light-blue' type="text" name="city" onChange={getCity} required />
                 </label>
             </div>
             <div className='form-row'>
                 <label>
-                    Land
+                    Land <span>*</span>
                     <input className='light-blue' type="text" name="country" onChange={getCountry} required />
                 </label>
                 <label>
