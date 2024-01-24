@@ -10,6 +10,7 @@ export default function FormPatchTeam() {
 
     const { id } = useParams();
     const navigate = useNavigate();
+
     const [team, setTeam] = useState({});
 
     const [teamName, setTeamName] = useState();
@@ -21,52 +22,42 @@ export default function FormPatchTeam() {
 
     useEffect(() => {
         getAllEmployees();
+        getTeam();
+        getMembers();
     }, []);
 
     useEffect(() => {
         updateAvailableEmployees();
-    }, [allEmployees, pickedEmployees]);
+    }, [pickedEmployees]);
 
     /**
-     * gets current team members & adds it to the pickedEmployees
-     */
-    useEffect(() => {
-        axios.get(url + '/teams/' + id)
-            .then(res => {
-                setTeam(res.data);
-            });
-        axios.get(url + '/teams/' + id + '/members')
-            .then(res => {
-                res.data.map(option => {
-                    const selectedOption = {
-                        id: option.id,
-                        value: option.firstName + " " + option.lastName
-                    };
-                    setPickedEmployees((prevEmployees) => [...prevEmployees, selectedOption]);
-                });
-            });
-    }, [id]);
-
-    /**
-     * gets all employees from database
-     */
+    * gets all employees with role FITTER from API
+    */
     function getAllEmployees() {
         axios.get(url + '/employees')
-            .then(response => {
-                setAllEmployees(response.data.filter(data => (data.firstName != "Administrator") && ((data.team?.id == null) || (data.team?.id == ""))));
+            .then(res => {
+                setAllEmployees(res.data.filter(data => data.user?.role == "FITTER" && !data.team?.id));
             });
     }
 
     /**
-     * filters the available employees that there are not picked ones
+     * gets team via ID from API
      */
-    function updateAvailableEmployees() {
-        setAvailableEmployees(
-            allEmployees.filter(obj =>
-                !pickedEmployees.some(pickedObj => pickedObj.id === obj.id))
-        )
-        console.log("allEmployees", allEmployees);
-        console.log("availableEmployees", availableEmployees);
+    function getTeam() {
+        axios.get(url + '/teams/' + id)
+            .then(res => {
+                setTeam(res.data);
+            });
+    }
+
+    /**
+     * gets members of the team from API
+     */
+    function getMembers() {
+        axios.get(url + '/teams/' + id + '/members')
+            .then(res => {
+                setPickedEmployees(res.data);
+            });
     }
 
     const getTeamName = (e) => {
@@ -78,16 +69,27 @@ export default function FormPatchTeam() {
     }
 
     /**
+     * filters the available employees that there are not picked ones
+     */
+    function updateAvailableEmployees() {
+        setAvailableEmployees(
+            allEmployees.filter(obj =>
+                !pickedEmployees.some(pickedObj => pickedObj.id === obj.id))
+        );
+    }
+
+    /**
      * gets the selected employee and adds it to the picked employees
      * @param {*} e 
      */
     const getPickedEmployees = (e) => {
+        const picked = allEmployees.find(emp => emp.id == e.target.selectedOptions[0].id);
         const selectedOption = {
-            id: e.target.selectedOptions[0].id,
-            value: e.target.value
+            id: picked.id,
+            firstName: picked.firstName,
+            lastName: picked.lastName
         };
-        console.log("selectOpt", selectedOption);
-        setPickedEmployees((prevEmployees) => [...prevEmployees, selectedOption]);
+        setPickedEmployees([...pickedEmployees, selectedOption]);
     }
 
     /**
@@ -95,12 +97,23 @@ export default function FormPatchTeam() {
      * @param {*} e 
      */
     function removeEmployee(e) {
-        axios.patch(url + "/employees/" + e.target.id, {
-            teamId: ""
+        let emp = allEmployees.find(elem => elem.id == e.target.id);
+        axios.put(url + "/employees/" + e.target.id, {
+            employeeNumber: emp.employeeNumber,
+            teamId: null,
+            person: {
+                firstName: emp.firstName,
+                lastName: emp.lastName
+            },
+            userDefinition: {
+                email: emp.user.email,
+                username: emp.user.username,
+                password: emp.user.password,
+                role: emp.user.role
+            }
         });
 
         setPickedEmployees(pickedEmployees.filter(obj => obj.id != e.target.id));
-        updateAvailableEmployees();
     }
 
     async function submitForm(event) {
@@ -108,8 +121,8 @@ export default function FormPatchTeam() {
         try {
             const response = await axios.patch(url + '/teams/' + team.id,
                 {
-                    name: (teamName != null) ? teamName : team.description.name,
-                    description: (teamDesc != null) ? teamDesc : team.description.description,
+                    name: teamName,
+                    description: teamDesc,
                 },
                 { headers: { 'Content-Type': 'application/json' } });
 
@@ -118,7 +131,7 @@ export default function FormPatchTeam() {
                     teamId: team.id
                 });
             });
-            
+
             Swal.fire({
                 position: 'top',
                 icon: 'success',
@@ -126,15 +139,9 @@ export default function FormPatchTeam() {
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000,
-            }).then(result => {
-                result.isConfirmed ?
-                    navigate("..", { relative: "path" })
-                    : setTimeout(function () {
-                        navigate("..", { relative: "path" });
-                    }, 250);
-            });
+            }).then(navigate("..", { relative: "path" }));
         } catch (error) {
-            console.log(error);
+            alert(error);
         }
     }
 
@@ -159,9 +166,9 @@ export default function FormPatchTeam() {
                         Mitarbeiter
                         <select className='light-blue' name="customer" onChange={getPickedEmployees}>
                             <option readOnly hidden>Bitte wählen</option>
-                            {availableEmployees.filter(emp => emp.user?.role == "FITTER").map((emp) => {
+                            {availableEmployees.map((emp) => {
                                 return (
-                                    <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
+                                    <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp}>{emp.firstName} {emp.lastName}</option>
                                 )
                             })}
                         </select>
@@ -171,7 +178,7 @@ export default function FormPatchTeam() {
                             pickedEmployees.map((emp, index) => {
                                 return (
                                     <div key={index} className='pickedItem'>
-                                        <p>{emp.value}</p>
+                                        <p>{emp.firstName} {emp.lastName}</p>
                                         <svg onClick={removeEmployee} id={emp.id} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
                                             <path d={Path("close")} />
                                         </svg>
@@ -182,7 +189,7 @@ export default function FormPatchTeam() {
                 </div>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Speichern" />
-                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem("/teams/" + team.id) }} />
+                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem(url + "/teams/" + team.id, (res) => { console.log(res); navigate("..", { relative: "path" }) }) }} />
                     <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
                 </div>
             </form>

@@ -7,14 +7,14 @@ export default function Team(props) {
       <>
         <h2>Team {props.object.description?.name}</h2>
         {(props.object.description?.description != "") ?
-          <p>{props.object.description?.description}</p> : ""}
+          <p><b>Beschreibung: </b>{props.object.description?.description}</p> : ""}
         <div className={popupStyle.popup_details}>
           <p><b>Mitglieder: </b>{(props.subItem.length > 0) ? props.subItem.map((emp, index) => {
             return (
               ((props.subItem.length > 1) && (props.subItem.length - 1 > index)) ?
-              emp.firstName + " " + emp.lastName + ", "
-              :
-              emp.firstName + " " + emp.lastName
+                emp.firstName + " " + emp.lastName + ", "
+                :
+                emp.firstName + " " + emp.lastName
             )
           }) : " -- aktuell keine Mitglieder zugewiesen --"}</p>
         </div>

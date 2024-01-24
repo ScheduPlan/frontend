@@ -57,9 +57,10 @@ form input:focus-visible {
     box-shadow: inset 0px -1px 4px 0px #0000004a;
 }
 
-form input:not(.btn, [required]),
-form select[required=false] {
-    background-color: var(--grey-superlight) !important;
+form label:has(> select[required]) > span,
+form label:has(> input[required]) > span {
+    width: fit-content;
+    display: contents;
 }
 
 /* for form elements that can add certain items to a list */
