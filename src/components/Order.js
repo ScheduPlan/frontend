@@ -8,7 +8,6 @@ export default function Order(props) {
     setOrder(props.object);
   }, [props.object]);
 
-  console.log(props.object);
   return (
     props.extended ?
       <>
