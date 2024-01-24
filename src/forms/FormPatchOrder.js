@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import url from '../BackendURL';
 import { useNavigate, useParams } from 'react-router-dom';
+import deleteItem from '../utility/deleteItem';
 
 export default function FormPatchOrder() {
 
@@ -100,22 +101,22 @@ export default function FormPatchOrder() {
                 <div className='form-row'>
                     <label>
                         Kommisionsnummer
-                        <input placeholder={order.commissionNumber} className='light-blue' type="text" name="commissionNumber" onChange={getCommissionNumber} />
+                        <input placeholder={order.commissionNumber} type="text" name="commissionNumber" onChange={getCommissionNumber} />
                     </label>
                     <label>
                         Gewicht
-                        <input placeholder={order.weight} className='light-blue' type="number" min="1" step="0.05" name="weight" onChange={getWeight} />
+                        <input placeholder={order.weight} type="number" min="1" step="0.05" name="weight" onChange={getWeight} />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
                         freigegebener Termin
-                        <input className='light-blue' type="date" name="date" onChange={getDate} />
+                        <input type="date" name="date" onChange={getDate} />
                     </label>
                     <label>
                         Team
-                        <select className='light-blue' name="team" onChange={getTeamID}>
+                        <select name="team" onChange={getTeamID}>
                             <option readOnly hidden>
                                 {order.team != null ?
                                     order.team?.description?.name :
@@ -131,15 +132,13 @@ export default function FormPatchOrder() {
                         </select>
                     </label>
                 </div>
-
-                <div className='form-row'>
-                    <label>
-                        Beschreibung
-                        <input className='light-blue' type="text" name="description" onChange={getDescription} />
-                    </label>
-                </div>
+                <label>
+                    Beschreibung
+                    <input type="text" name="description" onChange={getDescription} />
+                </label>
                 <div className='btn-wrapper'>
-                    <input className="btn primary" type="submit" value="Anlegen" />
+                    <input className="btn primary" type="submit" value="Speichern" />
+                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem(url + "/customers/" + order.customer.id + "/orders/" + order.id, (res) => { console.log(res); navigate("..", { relative: "path" }) }) }} />
                     <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
                 </div>
             </form>

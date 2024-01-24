@@ -154,17 +154,17 @@ export default function FormPatchTeam() {
                 <div className='form-row'>
                     <label>
                         Name des Teams
-                        <input placeholder={team.description?.name} className='light-blue' type="text" name="team" onChange={getTeamName} />
+                        <input placeholder={team.description?.name}  type="text" name="team" onChange={getTeamName} />
                     </label>
                     <label>
                         Beschreibung
-                        <input placeholder={team.description?.description} className='light-blue' type="text" name="description" onChange={getTeamDesc} />
+                        <input placeholder={team.description?.description}  type="text" name="description" onChange={getTeamDesc} />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Mitarbeiter
-                        <select className='light-blue' name="customer" onChange={getPickedEmployees}>
+                        <select  name="customer" onChange={getPickedEmployees}>
                             <option readOnly hidden>Bitte wählen</option>
                             {availableEmployees.map((emp) => {
                                 return (

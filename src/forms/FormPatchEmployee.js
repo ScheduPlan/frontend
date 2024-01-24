@@ -145,31 +145,31 @@ export default function FormPatchEmployee() {
                 <div className='form-row'>
                     <label>
                         Vorname
-                        <input placeholder={employee.firstName} className='light-blue' type="text" name="firstName" onChange={getFirstName} />
+                        <input placeholder={employee.firstName}  type="text" name="firstName" onChange={getFirstName} />
                     </label>
                     <label>
                         Nachname
-                        <input placeholder={employee.lastName} className='light-blue' type="text" name="lastName" onChange={getLastName} />
+                        <input placeholder={employee.lastName}  type="text" name="lastName" onChange={getLastName} />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Personalnummer
-                        <input placeholder={employee.employeeNumber} className='light-blue' type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} />
+                        <input placeholder={employee.employeeNumber}  type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} />
                     </label>
                     <label>
                         E-Mail-Adresse
-                        <input placeholder={employee.user?.email} className='light-blue' type="email" name="email" onChange={getEmail} />
+                        <input placeholder={employee.user?.email}  type="email" name="email" onChange={getEmail} />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Benutzername
-                        <input placeholder={employee.user?.username} className='light-blue' type="text" name="username" onChange={getUsername} />
+                        <input placeholder={employee.user?.username}  type="text" name="username" onChange={getUsername} />
                     </label>
                     <label>
                         Benutzerrolle
-                        <select className='light-blue' name="userRole" onChange={getUserRole} >
+                        <select  name="userRole" onChange={getUserRole} >
                             <option readOnly hidden>
                                 {employee.user != null ?
                                     roles.find(role => role.role == employee.user.role.toLowerCase()).title :
@@ -185,7 +185,7 @@ export default function FormPatchEmployee() {
                     {userRole == "FITTER" ?
                         <label>
                             Team
-                            <select className='light-blue' name="team" onChange={getTeamId} >
+                            <select  name="team" onChange={getTeamId} >
                                 <option readOnly hidden>
                                     {employee.team != null ?
                                         employee.team?.description?.name :

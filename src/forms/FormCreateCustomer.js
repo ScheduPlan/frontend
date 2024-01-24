@@ -135,38 +135,38 @@ export default function FormCreateCustomer() {
                 <div className='form-row'>
                     <label>
                         Firmenname <span>*</span>
-                        <input className='light-blue' type="text" name="company" onChange={getCompany} required />
+                        <input  type="text" name="company" onChange={getCompany} required />
                     </label>
                     <label>
                         Kundennummer <span>*</span>
-                        <input className='light-blue' type="number" name="customerNumber" min={100000} max={999999} onChange={getCustomerNumber} required />
+                        <input  type="number" name="customerNumber" min={100000} max={999999} onChange={getCustomerNumber} required />
                     </label>
                 </div>
                 <h3>Ansprechpartner</h3>
                 <div className='form-row'>
                     <label>
                         Vorname <span>*</span>
-                        <input className='light-blue' type="text" name="firstname" onChange={getFirstname} required />
+                        <input  type="text" name="firstname" onChange={getFirstname} required />
                     </label>
                     <label>
                         Nachname <span>*</span>
-                        <input className='light-blue' type="text" name="lastname" onChange={getLastname} required />
+                        <input  type="text" name="lastname" onChange={getLastname} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         E-Mail-Adresse
-                        <input className='light-blue' type="email" name="email" onChange={getEmail} />
+                        <input  type="email" name="email" onChange={getEmail} />
                     </label>
                     <label>
                         Telefonnummer
-                        <input className='light-blue' type="text" name="phone" onChange={getPhone} />
+                        <input  type="text" name="phone" onChange={getPhone} />
                     </label>
                 </div>
                 <FormCreateAddress addressElement={(elem) => { getAddressElement(elem) }} />
                 <h3>Bemerkung</h3>
                 <label>
-                    <input className='light-blue' type="text" name="description" onChange={getDescription} />
+                    <input  type="text" name="description" onChange={getDescription} />
                 </label>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Anlegen" />

@@ -58,31 +58,31 @@ export default function FormCreateAddress(props) {
             <div className='form-row'>
                 <label>
                     Straße <span>*</span>
-                    <input className='light-blue' type="text" name="street" onChange={getStreet} required />
+                    <input  type="text" name="street" onChange={getStreet} required />
                 </label>
                 <label>
                     Hausnummer <span>*</span>
-                    <input className='light-blue' type="number" name="streetNumber" min="1" onChange={getStreetNumber} required />
+                    <input  type="number" name="streetNumber" min="1" onChange={getStreetNumber} required />
                 </label>
             </div>
             <div className='form-row'>
                 <label>
                     Postleitzahl <span>*</span>
-                    <input className='light-blue' type="text" name="zip" minLength={5} maxLength={5} onChange={getZip} required />
+                    <input  type="text" name="zip" minLength={5} maxLength={5} onChange={getZip} required />
                 </label>
                 <label>
                     Stadt <span>*</span>
-                    <input className='light-blue' type="text" name="city" onChange={getCity} required />
+                    <input  type="text" name="city" onChange={getCity} required />
                 </label>
             </div>
             <div className='form-row'>
                 <label>
                     Land <span>*</span>
-                    <input className='light-blue' type="text" name="country" onChange={getCountry} required />
+                    <input  type="text" name="country" onChange={getCountry} required />
                 </label>
                 <label>
                     Addresszusatz
-                    <input className='light-blue' type="text" name="addressSuffix" onChange={getAddressSuffix} />
+                    <input  type="text" name="addressSuffix" onChange={getAddressSuffix} />
                 </label>
             </div>
         </div>

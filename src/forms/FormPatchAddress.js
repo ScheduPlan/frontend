@@ -11,14 +11,13 @@ export default function FormPatchAddress(props) {
     const [addressType, setAddressType] = useState();
 
     const [addressElement, setAddressElement] = useState({
-        country: (country != null) ? country : props.placeholder.country,
-        street: (street != null) ? street : props.placeholder.street,
-        streetNumber: (streetNumber != null) ? streetNumber : props.placeholder.streetNumber,
-        city: (city != null) ? city : props.placeholder.city,
-        zip: (zip != null) ? zip : props.placeholder.zip,
-        //description: "string",
-        addressSuffix: (addressSuffix != null) ? addressSuffix : props.placeholder.addressSuffix,
-        addressType: (addressType != null) ? addressType : props.placeholder.addressType
+        country: country,
+        street: street,
+        streetNumber: streetNumber,
+        city: city,
+        zip: zip,
+        addressSuffix: addressSuffix,
+        addressType: addressType
     });
 
     useEffect(() => {
@@ -59,31 +58,31 @@ export default function FormPatchAddress(props) {
             <div className='form-row'>
                 <label>
                     Straße
-                    <input placeholder={props.placeholder.street} className='light-blue' type="text" name="street" onChange={getStreet} />
+                    <input placeholder={props.placeholder.street}  type="text" name="street" onChange={getStreet} />
                 </label>
                 <label>
                     Hausnummer
-                    <input placeholder={props.placeholder.streetNumber} className='light-blue' type="number" name="streetNumber" min="1" onChange={getStreetNumber} />
+                    <input placeholder={props.placeholder.streetNumber}  type="number" name="streetNumber" min="1" onChange={getStreetNumber} />
                 </label>
             </div>
             <div className='form-row'>
                 <label>
                     Postleitzahl
-                    <input placeholder={props.placeholder.zip} className='light-blue' type="text" name="zip" minLength={5} maxLength={5} onChange={getZip} />
+                    <input placeholder={props.placeholder.zip}  type="text" name="zip" minLength={5} maxLength={5} onChange={getZip} />
                 </label>
                 <label>
                     Stadt
-                    <input placeholder={props.placeholder.city} className='light-blue' type="text" name="city" onChange={getCity} />
+                    <input placeholder={props.placeholder.city}  type="text" name="city" onChange={getCity} />
                 </label>
             </div>
             <div className='form-row'>
                 <label>
                     Land
-                    <input placeholder={props.placeholder.country} className='light-blue' type="text" name="country" onChange={getCountry} />
+                    <input placeholder={props.placeholder.country}  type="text" name="country" onChange={getCountry} />
                 </label>
                 <label>
                     Addresszusatz
-                    <input placeholder={props.placeholder.addressSuffix} className='light-blue' type="text" name="addressSuffix" onChange={getAddressSuffix} />
+                    <input placeholder={props.placeholder.addressSuffix}  type="text" name="addressSuffix" onChange={getAddressSuffix} />
                 </label>
             </div>
         </div>

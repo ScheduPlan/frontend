@@ -64,16 +64,16 @@ export default function ChangePassword() {
       <form onSubmit={submitForm}>
         <label>
           E-Mail-Adresse:
-          <input className='light-blue' type="email" name="email" value={user.user?.email} readOnly />
+          <input  type="email" name="email" value={user.user?.email} readOnly />
         </label>
         <div className='form-row'>
           <label>
             neues Passwort:
-            <input className='light-blue' type="password" name="password" onChange={getPassword} required />
+            <input  type="password" name="password" onChange={getPassword} required />
           </label>
           <label>
             neues Passwort bestätigen:
-            <input className='light-blue' type="password" name="password" onChange={getPassword2} required />
+            <input  type="password" name="password" onChange={getPassword2} required />
           </label>
         </div>
         <div className='btn-wrapper'>

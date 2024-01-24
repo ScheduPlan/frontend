@@ -19,6 +19,7 @@ export default function FormPatchCustomer() {
   const [lastname, setLastname] = useState();
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
+  const [description, setDescription] = useState();
 
   const [addressElement, setAddressElement] = useState({});
 
@@ -58,6 +59,10 @@ export default function FormPatchCustomer() {
     setAddressElement(e);
   }
 
+  function getDescription(e) {
+    setDescription(e);
+  }
+
   /**
    * creates a new customer
    * @param {*} event
@@ -69,6 +74,7 @@ export default function FormPatchCustomer() {
         {
           customerNumber: customerNumber,
           company: company,
+          description: description,
           person: {
             firstName: firstname,
             lastName: lastname
@@ -115,35 +121,39 @@ export default function FormPatchCustomer() {
         <div className='form-row'>
           <label>
             Firmenname
-            <input placeholder={customer.company} className='light-blue' type="text" name="company" onChange={getCompany} />
+            <input placeholder={customer.company}  type="text" name="company" onChange={getCompany} />
           </label>
           <label>
             Kundennummer
-            <input placeholder={customer.customerNumber} className='light-blue' type="number" name="customerNumber" min={100000} max={999999} onChange={getCustomerNumber} />
+            <input placeholder={customer.customerNumber}  type="number" name="customerNumber" min={100000} max={999999} onChange={getCustomerNumber} />
           </label>
         </div>
         <h3>Ansprechpartner</h3>
         <div className='form-row'>
           <label>
             Vorname
-            <input placeholder={customer.firstName} className='light-blue' type="text" name="firstname" onChange={getFirstname} />
+            <input placeholder={customer.firstName}  type="text" name="firstname" onChange={getFirstname} />
           </label>
           <label>
             Nachname
-            <input placeholder={customer.lastName} className='light-blue' type="text" name="lastname" onChange={getLastname} />
+            <input placeholder={customer.lastName}  type="text" name="lastname" onChange={getLastname} />
           </label>
         </div>
         <div className='form-row'>
           <label>
             E-Mail-Adresse
-            <input placeholder={customer.email} className='light-blue' type="email" name="email" onChange={getEmail} />
+            <input placeholder={customer.email}  type="email" name="email" onChange={getEmail} />
           </label>
           <label>
             Telefonnummer
-            <input placeholder={customer.phoneNumber} className='light-blue' type="text" name="phone" onChange={getPhone} />
+            <input placeholder={customer.phoneNumber}  type="text" name="phone" onChange={getPhone} />
           </label>
         </div>
         <FormPatchAddress placeholder={address} addressElement={(elem) => { getAddressElement(elem) }} />
+        <h3>Bemerkung</h3>
+        <label>
+          <input placeholder={description} type="text" name="description" onChange={getDescription} />
+        </label>
         <div className='btn-wrapper'>
           <input className="btn primary" type="submit" value="Speichern" />
           <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem(url + "/customers/" + customer.id, (res) => { console.log(res); navigate("..", { relative: "path" }) }) }} />

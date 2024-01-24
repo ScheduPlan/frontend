@@ -118,7 +118,7 @@ export default function FormPatchEvent() {
                 <div className='form-row'>
                     <label>
                         Terminart
-                        <select className='light-blue' name="datetype" onChange={getType}> {/*To Do: alle mgl typen ziehen und hier ausgeben */}
+                        <select  name="datetype" onChange={getType}> {/*To Do: alle mgl typen ziehen und hier ausgeben */}
                             <option readOnly hidden>Bitte auswählen</option>
                             <option value="ASSEMBLY">Montage</option>
                             <option>Reklamation</option>
@@ -129,7 +129,7 @@ export default function FormPatchEvent() {
                 <div className='form-row'>
                     <label>
                         Helfer
-                        <select className='light-blue' name="customer" onChange={getPickedHelpers}>
+                        <select  name="customer" onChange={getPickedHelpers}>
                             <option readOnly hidden>Bitte wählen</option>
                             {availableHelpers.map(helper => {
                                 console.log(helper);

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import url from '../BackendURL';
 import { useNavigate } from 'react-router-dom';
+import sortItems from '../utility/sortItems';
 
 export default function FormCreateOrder() {
 
@@ -15,7 +16,7 @@ export default function FormCreateOrder() {
     const [number, setNumber] = useState("");
     const [commissionNumber, setCommissionNumber] = useState("");
     const [weight, setWeight] = useState("");
-    const [date, setDate] = useState(""); //To Do
+    const [date, setDate] = useState(""); //To Do: Andi
     const [timeperiod, setTimeperiod] = useState("");
     const [teamID, setTeamID] = useState();
     const [description, setDescription] = useState();
@@ -31,7 +32,7 @@ export default function FormCreateOrder() {
     function getCustomerList() {
         axios.get(url + '/customers').then(
             res => {
-                setCustomerList(res.data);
+                setCustomerList(sortItems(res.data, "customerNumber"));
             }
         );
     }
@@ -42,7 +43,7 @@ export default function FormCreateOrder() {
     function getTeamList() {
         axios.get(url + '/teams').then(
             res => {
-                setTeamList(res.data);
+                setTeamList(sortItems(res.data, "description", "name"));
             }
         );
     }
@@ -97,7 +98,7 @@ export default function FormCreateOrder() {
             Swal.fire({
                 position: 'top',
                 icon: 'success',
-                title: 'Neuen Auftrag angelegt!',
+                title: 'Neuer Auftrag wurde angelegt!',
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--success)',
                 timer: 2000
@@ -117,63 +118,55 @@ export default function FormCreateOrder() {
             <form onSubmit={submitForm}>
                 <div className='form-row'>
                     <label>
-                        Kunde
-                        <select className='light-blue' name="customer" onChange={getCustomerID} required>
-                            <option readOnly hidden>Bitte wählen</option>
-                            {customerList.sort(function (a, b) {
-                                if (a.customerNumber < b.customerNumber) { return -1; }
-                                if (a.customerNumber > b.customerNumber) { return 1; }
-                                return 0;
-                            }).map((cust) => {
+                        Kunde <span>*</span>
+                        <select  name="customer" onChange={getCustomerID} required>
+                            <option value={''} readOnly hidden>Bitte wählen</option>
+                            {customerList.map((cust) => {
                                 return (<option key={cust.id} value={cust.id}>{cust.customerNumber} {cust.company}</option>)
                             })}
                         </select>
                     </label>
                     <label>
-                        Auftragsnummer
-                        <input className='light-blue' type="number" name="number" min="10000" onChange={getNumber} required />
+                        Auftragsnummer <span>*</span>
+                        <input  type="number" name="number" min={10000} max={999999} onChange={getNumber} required />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
-                        Kommisionsnummer
-                        <input className='light-blue' type="text" name="commissionNumber" onChange={getCommissionNumber} required />
+                        Kommisionsnummer <span>*</span>
+                        <input  type="text" name="commissionNumber" onChange={getCommissionNumber} required />
                     </label>
                     <label>
-                        Gewicht
-                        <input className='light-blue' type="number" min="1" step="0.05" name="weight" onChange={getWeight} required />
-                    </label>
-                </div>
-
-                <div className='form-row'>
-                    <label>
-                        freigegebener Termin
-                        <input className='light-blue' type="date" name="date" onChange={getDate} required />
-                    </label>
-                    <label>
-                        geplante Termindauer
-                        <input className='light-blue' type="number" min="1" step="0.5" name="timeperiod" onChange={getTimeperiod} required />
+                        Gewicht <span>*</span>
+                        <input  type="number" min="1" step="0.05" name="weight" onChange={getWeight} required />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
-                        Team
-                        <select className='light-blue' name="team" onChange={getTeamID} required>
+                        freigegebener Termin <span>*</span>
+                        <input  type="date" name="date" onChange={getDate} required />
+                    </label>
+                    <label>
+                        geplante Termindauer <span>*</span>
+                        <input  type="number" min="1" step="0.5" name="timeperiod" onChange={getTimeperiod} required />
+                    </label>
+                </div>
+
+                <div className='form-row'>
+                    <label>
+                        Team <span>*</span>
+                        <select  name="team" onChange={getTeamID} required>
                             <option readOnly hidden>Bitte wählen</option>
-                            {teamList.sort(function (a, b) {
-                                if (a.description.name < b.description.name) { return -1; }
-                                if (a.description.name > b.description.name) { return 1; }
-                                return 0;
-                            }).map((team, index) => {
+                            {teamList.map((team, index) => {
                                 return (<option key={index} value={team.id}>{team.description.name}</option>)
                             })}
                         </select>
                     </label>
                     <label>
-                        Beschreibung
-                        <input className='light-blue' type="text" name="description" onChange={getDescription} />
+                        Bemerkung
+                        <input  type="text" name="description" onChange={getDescription} />
                     </label>
                 </div>
                 <div className='btn-wrapper'>
