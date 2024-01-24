@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 
 export default function CalendarComponent(props) {
     const { user } = useContext(AuthContext);
-    const { activeOrder, getOrders } = props;
+    const { activeOrder, getOrders, allOrdersDisplayed } = props;
 
     const [events, setEvents] = useState([]);
 
@@ -40,7 +40,7 @@ export default function CalendarComponent(props) {
     localizer.formats.agendaDateFormat = 'DD.MM.';
 
     //sets default values for the calendar
-    const { components, views, allOrdersDisplayed } = useMemo(
+    const { components, views } = useMemo(
         () => ({
             views: [Views.WEEK, Views.DAY, Views.AGENDA],
         }),
@@ -145,73 +145,75 @@ export default function CalendarComponent(props) {
      * @param {*} end 
      */
     async function validateEvent(start, end) {
-        if (start.getHours() > minTime.getHours() && start > new Date()) {
-            if (end.getHours() > maxTime.getHours()) {
+        if (!allOrdersDisplayed) {
+            if (start.getHours() > minTime.getHours() && start > new Date()) {
+                if (end.getHours() > maxTime.getHours()) {
+                    Swal.fire({
+                        position: 'top',
+                        title: "Länge des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
+                        icon: "question",
+                        iconColor: "var(--question)",
+                        input: "number",
+                        inputAttributes: {
+                            step: "0.5",
+                            min: "1",
+                            max: activeOrder.plannedDuration,
+                            required: true
+                        },
+                        inputLabel: "geschätzter Aufwand",
+                        inputPlaceholder: activeOrder.plannedDuration,
+                        confirmButtonText: "Ändern",
+                        confirmButtonColor: "var(--info)",
+
+                        showDenyButton: true,
+                        denyButtonText: "Termin teilen",
+                        denyButtonColor: "var(--error)",
+
+                        showCancelButton: true,
+                        cancelButtonText: "Abbruch",
+                        cancelButtonColor: "var(--grey-light)"
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
+                                {
+                                    plannedDuration: result.value
+                                });
+                            const newEndDate = new Date(start.getTime() + result.value)
+                            validateEvent(start, newEndDate);
+                        } else if (result.isDenied) {
+                            console.log("Termin wird geteilt"); //To Do
+                        }
+                    });
+                } else {
+                    try {
+                        const response = await axios.post(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id + "/events",
+                            {
+                                date: start,
+                                endDate: end,
+                                type: "ASSEMBLY",
+                                orderId: activeOrder.id
+                            }, { headers: { 'Content-Type': 'application/json' } });
+
+                        //set order state confirmed to remove it from sidebar
+                        await axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
+                            {
+                                state: "CONFIRMED"
+                            }, { headers: { 'Content-Type': 'application/json' } }).then(() => updateEvents());
+                        getOrders();
+                    } catch (error) {
+                        alert(error);
+                    }
+                }
+            } else {
                 Swal.fire({
                     position: 'top',
-                    title: "Länge des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
-                    icon: "question",
-                    iconColor: "var(--question)",
-                    input: "number",
-                    inputAttributes: {
-                        step: "0.5",
-                        min: "1",
-                        max: activeOrder.plannedDuration,
-                        required: true
-                    },
-                    inputLabel: "geschätzter Aufwand",
-                    inputPlaceholder: activeOrder.plannedDuration,
-                    confirmButtonText: "Ändern",
-                    confirmButtonColor: "var(--info)",
-
-                    showDenyButton: true,
-                    denyButtonText: "Termin teilen",
-                    denyButtonColor: "var(--error)",
-
-                    showCancelButton: true,
-                    cancelButtonText: "Abbruch",
-                    cancelButtonColor: "var(--grey-light)"
-                }).then(result => {
-                    if (result.isConfirmed) {
-                        axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
-                            {
-                                plannedDuration: result.value
-                            });
-                        const newEndDate = new Date(start.getTime() + result.value)
-                        validateEvent(start, newEndDate);
-                    } else if (result.isDenied) {
-                        console.log("Termin wird geteilt"); //To Do
-                    }
+                    title: "Startzeit des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
+                    icon: "warning",
+                    iconColor: "var(--warning)",
+                    confirmButtonColor: "var(--warning)",
+                    confirmButtonText: "Ok",
                 });
-            } else {
-                try {
-                    const response = await axios.post(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id + "/events",
-                        {
-                            date: start,
-                            endDate: end,
-                            type: "ASSEMBLY",
-                            orderId: activeOrder.id
-                        }, { headers: { 'Content-Type': 'application/json' } });
-
-                    //set order state confirmed to remove it from sidebar
-                    await axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
-                        {
-                            state: "CONFIRMED"
-                        }, { headers: { 'Content-Type': 'application/json' } }).then(() => updateEvents());
-                    getOrders();
-                } catch (error) {
-                    alert(error);
-                }
             }
-        } else {
-            Swal.fire({
-                position: 'top',
-                title: "Startzeit des Termins befindet sich außerhalb des erlaubten Zeitrahmens",
-                icon: "warning",
-                iconColor: "var(--warning)",
-                confirmButtonColor: "var(--success)",
-                confirmButtonText: "Ok",
-            });
         }
     }
 

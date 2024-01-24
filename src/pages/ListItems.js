@@ -92,12 +92,8 @@ export default function ListItems(props) {
         });
         break;
       case "/events":
-        axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
-          {
-            state: "PLANNED"
-          }, { headers: { 'Content-Type': 'application/json' } });
-
-        deleteItem(props.pathToItem, updateItemObjects, (error) => {
+        console.log(item);
+        deleteItem(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id + "/events/" + item.id, updateItemObjects, (error) => {
           Swal.fire({
             position: 'top',
             title: error,
@@ -105,7 +101,12 @@ export default function ListItems(props) {
             confirmButtonText: "Ok",
             confirmButtonColor: "var(--error)",
             timer: 2000
-          })
+          }).then(
+            axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
+              {
+                state: "PLANNED"
+              }, { headers: { 'Content-Type': 'application/json' } })
+          )
         });
 
       default:

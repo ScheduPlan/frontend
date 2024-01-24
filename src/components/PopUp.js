@@ -76,7 +76,7 @@ export default function PopUp(props) {
                         state: "PLANNED"
                     }, { headers: { 'Content-Type': 'application/json' } });
 
-                deleteItem(pathToItem, updateItemObjects, (error) => {
+                deleteItem(pathToItem, () => props.updateEvents(), (error) => {
                     Swal.fire({
                         position: 'top',
                         title: error,
