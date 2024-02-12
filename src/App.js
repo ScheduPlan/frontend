@@ -70,16 +70,18 @@ export default function App() {
 
             <Route path='/' element={<Login />} />
 
-            <Route path='/administrator' element={<Dashboard />} />
-            <Route path='/administrator/employees' element={<ListItems items={Employee} path="/employees" h1="Alle Mitarbeiter" />} />
-            <Route path='/administrator/employees/new' element={<FormCreateEmployee />} />
-            <Route path='/administrator/employees/:id' element={<FormPatchEmployee />} />
-            <Route path='/administrator/teams' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />} />
-            <Route path='/administrator/teams/new' element={<FormCreateTeam />} />
-            <Route path='/administrator/teams/:id' element={<FormPatchTeam />} />
+            <Route path='/administrator' > 
+              <Route path='' element={<Dashboard />} />
+              <Route path='employees' element={<ListItems items={Employee} path="/employees" h1="Alle Mitarbeiter" />} />
+              <Route path='/administrator/employees/new' element={<FormCreateEmployee />} />
+              <Route path='/administrator/employees/:id' element={<FormPatchEmployee />} />
+              <Route path='/administrator/teams' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />} />
+              <Route path='/administrator/teams/new' element={<FormCreateTeam />} />
+              <Route path='/administrator/teams/:id' element={<FormPatchTeam />} />
+            </Route>
 
             <Route path='/manager' element={<Dashboard />} />
-            <Route path='/manager/schedule' element={<Schedule path="/orders"/>} />
+            <Route path='/manager/schedule' element={<Schedule path="/orders" />} />
             <Route path='/manager/customers' element={<ListItems items={Customer} path="/customers" h1="Alle Kunden" />} />
             <Route path='/manager/customers/new' element={<FormCreateCustomer />} />
             <Route path='/manager/customers/:id' element={<FormPatchCustomer />} />
@@ -88,7 +90,7 @@ export default function App() {
             <Route path='/manager/orders/:id' element={<FormPatchOrder />} />
             <Route path='/manager/events' element={<ListItems items={Event} path="/events" h1="Alle Termine" />} />
             <Route path='/manager/events/:id' element={<FormPatchEvent />} />
-            
+
 
 
             <Route path='/fitter' element={<Dashboard />} />
