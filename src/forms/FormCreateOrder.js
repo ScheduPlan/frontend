@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import url from '../BackendURL';
 import { useNavigate } from 'react-router-dom';
 import sortItems from '../utility/sortItems';
+import FormCreateAddress from './FormCreateAddress';
 
 export default function FormCreateOrder() {
 
@@ -20,6 +21,8 @@ export default function FormCreateOrder() {
     const [timeperiod, setTimeperiod] = useState("");
     const [teamID, setTeamID] = useState();
     const [description, setDescription] = useState();
+
+    const [addressElement, setAddressElement] = useState({});
 
     useEffect(() => {
         getCustomerList();
@@ -74,6 +77,10 @@ export default function FormCreateOrder() {
 
     const getTeamID = (e) => {
         setTeamID(e.target.value);
+    }
+
+    function getAddressElement(e) {
+        setAddressElement(e);
     }
 
     const getDescription = (e) => {
@@ -164,11 +171,12 @@ export default function FormCreateOrder() {
                             })}
                         </select>
                     </label>
-                    <label>
-                        Bemerkung
-                        <input  type="text" name="description" onChange={getDescription} />
-                    </label>
                 </div>
+                <FormCreateAddress addressElement={(elem) => { getAddressElement(elem) }} />
+                <h3>Bemerkung</h3>
+                <label>
+                    <input type="text" name="description" onChange={getDescription} />
+                </label>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Anlegen" />
                     <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />

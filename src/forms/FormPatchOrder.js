@@ -4,12 +4,14 @@ import Swal from 'sweetalert2'
 import url from '../BackendURL';
 import { useNavigate, useParams } from 'react-router-dom';
 import deleteItem from '../utility/deleteItem';
+import FormPatchAddress from './FormPatchAddress';
 
 export default function FormPatchOrder() {
 
     const { id } = useParams();
     const navigate = useNavigate();
     const [order, setOrder] = useState({});
+    const [address, setAddress] = useState({});
 
     const [teamList, setTeamList] = useState([]);
 
@@ -20,10 +22,13 @@ export default function FormPatchOrder() {
     const [teamID, setTeamID] = useState();
     const [description, setDescription] = useState();
 
+    const [addressElement, setAddressElement] = useState({});
+
     useEffect(() => {
         axios.get(url + '/orders')
             .then(res => {
                 setOrder(res.data.find(data => data.id == id));
+                setAddress(res.data.address);
             });
     }, [id]);
 
@@ -57,6 +62,10 @@ export default function FormPatchOrder() {
     const getTeamID = (e) => {
         setTeamID(e.target.value);
     }
+
+    function getAddressElement(e) {
+        setAddressElement(e);
+      }
 
     const getDescription = (e) => {
         setDescription(e.target.value);
@@ -132,9 +141,10 @@ export default function FormPatchOrder() {
                         </select>
                     </label>
                 </div>
+                <FormPatchAddress placeholder={address} addressElement={(elem) => { getAddressElement(elem) }} />
+                <h3>Bemerkung</h3>
                 <label>
-                    Beschreibung
-                    <input type="text" name="description" onChange={getDescription} />
+                    <input placeholder={description} type="text" name="description" onChange={getDescription} />
                 </label>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Speichern" />

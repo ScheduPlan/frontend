@@ -166,7 +166,7 @@ export default function FormCreateCustomer() {
                 <FormCreateAddress addressElement={(elem) => { getAddressElement(elem) }} />
                 <h3>Bemerkung</h3>
                 <label>
-                    <input  type="text" name="description" onChange={getDescription} />
+                    <input type="text" name="description" onChange={getDescription} />
                 </label>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Anlegen" />
