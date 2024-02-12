@@ -28,10 +28,14 @@ export default function FormCreateTeam() {
      * gets all employees from database
      */
     function getAllEmployees() {
-        axios.get(url + '/employees')
-            .then(response => {
-                setAllEmployees(response.data.filter(data => (data.firstName != "Administrator") && (data.team?.id == null)));
-            });
+        axios.get(url + '/employees', {
+            headers: {
+                'unassigned': 'true',
+                'role': 'FITTER',
+            },
+        }).then(response => {
+            setAllEmployees(response.data);
+         });
     }
 
     /**
@@ -117,19 +121,19 @@ export default function FormCreateTeam() {
                 <div className='form-row'>
                     <label>
                         Name des Teams <span>*</span>
-                        <input  type="text" name="team" onChange={getTeamName} required />
+                        <input type="text" name="team" onChange={getTeamName} required />
                     </label>
                     <label>
                         Beschreibung
-                        <input  type="text" name="description" onChange={getTeamDesc} />
+                        <input type="text" name="description" onChange={getTeamDesc} />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Mitarbeiter
-                        <select  name="customer" onChange={getPickedEmployees}>
+                        <select name="customer" onChange={getPickedEmployees}>
                             <option readOnly hidden>Bitte wählen</option>
-                            {availableEmployees.filter(emp => emp.user?.role == "FITTER").map((emp) => {
+                            {availableEmployees.map((emp) => {
                                 return (
                                     <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
                                 )

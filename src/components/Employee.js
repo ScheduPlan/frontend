@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import popupStyle from './PopUp.module.css';
 import roles from '../ROLES';
+import axios from 'axios';
+import url from '../BackendURL';
 
 
 export default function Employee(props) {
+  const [team, setTeam] = useState({});
+
+  useEffect(() => {
+    if(props.object.teamId) {
+      axios.get(url + '/teams/' + props.object.teamId).then(res => setTeam(res.data));
+    }
+  }, [props]);
+
   return (
     props.extended ?
       <>
@@ -20,12 +30,12 @@ export default function Employee(props) {
             <p>"Bitte wählen"</p>}
           {(props.object.user?.role == "FITTER") ?
             (
-              (props.object.team != null) ?
+              (team.description != null) ?
                 <p>
                   <b>Team: </b>
-                  {props.object.team.description.name}
-                  {(props.object.team.description.description != "") ?
-                    " (" + props.object.team.description.description + ")" : ""
+                  {team.description.name}
+                  {(team.description.description != "") ?
+                    " (" + team.description.description + ")" : ""
                   }
                 </p> : "--aktuell keinem Team zugewiesen--"
             ) : ""

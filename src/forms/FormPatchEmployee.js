@@ -187,8 +187,8 @@ export default function FormPatchEmployee() {
                             Team
                             <select  name="team" onChange={getTeamId} >
                                 <option readOnly hidden>
-                                    {employee.team != null ?
-                                        employee.team?.description?.name :
+                                    {(employee.teamId != null && teamList) ?
+                                        teamList.find(team => team.id == employee.teamId).description?.name :
                                         "Bitte wählen"}
                                 </option>
                                 {teamList.map((team, index) => {

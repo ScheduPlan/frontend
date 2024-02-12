@@ -34,9 +34,10 @@ export default function FormPatchTeam() {
     * gets all employees with role FITTER from API
     */
     function getAllEmployees() {
-        axios.get(url + '/employees')
+        axios.get(url + '/employees') //?role=FITTER
             .then(res => {
-                setAllEmployees(res.data.filter(data => data.user?.role == "FITTER" && !data.team?.id));
+                setAllEmployees(res.data);
+                console.log("allEmployees", allEmployees);
             });
     }
 
@@ -105,11 +106,10 @@ export default function FormPatchTeam() {
                 firstName: emp.firstName,
                 lastName: emp.lastName
             },
-            userDefinition: {
-                email: emp.user.email,
-                username: emp.user.username,
-                password: emp.user.password,
-                role: emp.user.role
+            user: {
+                email: emp.user?.email,
+                username: emp.user?.username,
+                role: emp.user?.role
             }
         });
 
