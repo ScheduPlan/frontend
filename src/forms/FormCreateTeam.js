@@ -29,9 +29,9 @@ export default function FormCreateTeam() {
      */
     function getAllEmployees() {
         axios.get(url + '/employees', {
-            headers: {
-                'unassigned': 'true',
-                'role': 'FITTER',
+            params: {
+                unassigned: 'true',
+                role: 'FITTER',
             },
         }).then(response => {
             setAllEmployees(response.data);

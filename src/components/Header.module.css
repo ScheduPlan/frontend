@@ -24,3 +24,25 @@
     cursor: pointer;
     fill: var(--grey-dark);
 }
+
+svg#close_icon,
+svg#menue_icon {
+    transition: 0.8s ease;
+}
+
+.header_wrapper svg#close_icon {
+    opacity: 0;
+    display: block;
+    position: absolute;
+    transform: translateY(-118%) rotate(45deg);
+}
+
+.menueOpen svg#menue_icon {
+    opacity: 0;
+    transform: rotate(-90deg);
+}
+
+.menueOpen svg#close_icon {
+    opacity: 1;
+    transform: translateY(-118%) rotate(0);
+}

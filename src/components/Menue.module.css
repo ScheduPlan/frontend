@@ -1,22 +1,22 @@
 .menue_wrapper {
     position: absolute;
     background: #fff;
-    top: 6rem;
-    right: -16rem;
-    opacity: 0;
+    top: 66px;
+    right: 0;
     padding: 1rem;
     z-index: 5;
     box-shadow: -3px 5px 5px 0px #00000024;
-    transition: 0.4s ease;
+    transition: 0.8s ease-in-out;
+    transition-delay: 0s;
     width: 16rem;
-    height: calc(100vh - 6rem);
-    transition-delay: 0.2s;
+    height: calc(100vh - 66px);
+    opacity: 0;
+    transform: translateX(100%);
 }
 
-.menue_wrapper[state="open"] {
-    right: 0;
+.menue_wrapper.open {
     opacity: 1;
-    transition-delay: 0;
+    transform: translateX(0);
 }
 
 .menue_wrapper>p {

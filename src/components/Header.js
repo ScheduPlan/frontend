@@ -9,17 +9,14 @@ import AuthContext from '../AuthProvider';
 export default function Header() {
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
-    const [isMenueOpen, setMenueOpen] = useState(false);
-    const [menueIcon, setMenueIcon] = useState("menue");
-    const menueButton = useRef(null);
 
-    function toggleMenue() {
+    const [isMenueOpen, setMenueOpen] = useState(false);
+
+    function toggleMenue(e) {
         if (isMenueOpen) {
             setMenueOpen(false);
-            setMenueIcon("menue");
         } else {
             setMenueOpen(true);
-            setMenueIcon("close");
         }
     }
 
@@ -28,14 +25,14 @@ export default function Header() {
      * @param {*} e 
      * close menu onClick anywhere - not menue
      */
-    const closeMenue = (e) => {
+    /*const closeMenue = (e) => {
         if (isMenueOpen && !menueButton.current.contains(e.target)) {
             setMenueOpen(false);
             setMenueIcon("menue");
         }
-    }
+    }*/
 
-    document.addEventListener('mousedown', closeMenue);
+    //document.addEventListener('mousedown', closeMenue);
 
     return (
         <div className={style.header_wrapper}>
@@ -45,12 +42,16 @@ export default function Header() {
                         <path d={Path("home")} />
                     </svg>
                 </button>
-                <button className='btn icon' onClick={toggleMenue}>
-                    <svg ref={menueButton} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
-                        <path d={Path(menueIcon)} />
+                <button className={'btn icon ' + (isMenueOpen ? " " + style.menueOpen : " ")} onClick={toggleMenue}>
+                    <svg id={style.menue_icon} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
+                        <path d={Path("menue")} />
+                    </svg>
+                    <svg id={style.close_icon} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 -960 960 960">
+                        <path d={Path("close")} />
                     </svg>
                 </button>
-                <Menue trigger={isMenueOpen} links={roles.find((r) => r.role === user.user.role.toLowerCase()).links} />
+
+                <Menue isOpen={isMenueOpen} links={roles.find((r) => r.role === user.user.role.toLowerCase()).links} />
             </div>
         </div>
     )
