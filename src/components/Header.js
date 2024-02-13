@@ -51,7 +51,7 @@ export default function Header() {
                     </svg>
                 </button>
 
-                <Menue isOpen={isMenueOpen} links={roles.find((r) => r.role === user.user.role.toLowerCase()).links} />
+                <Menue isOpen={isMenueOpen} setOpen={(e) => setMenueOpen(e)} links={roles.find((r) => r.role === user.user.role.toLowerCase()).links} />
             </div>
         </div>
     )

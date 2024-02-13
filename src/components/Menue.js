@@ -16,7 +16,7 @@ export default function Menue(props) {
             <div className={style.menue_links}>
                 <Link to={'/' + user.user.role.toLowerCase()} replace>Dashboard</Link>
                 {roles.find((r) => r.role === user.user.role.toLowerCase()).links.map((link, index) => (
-                    <Link key={index} to={'/' + user.user.role.toLowerCase() + '/' + link.path}>{link.title}</Link>
+                    <Link key={index} to={'/' + user.user.role.toLowerCase() + '/' + link.path} onClick={() => props.setOpen(false)} replace>{link.title}</Link>
                 ))}
                 <Link to='/password' replace>Passwort ändern</Link>
                 <Link onClick={() => {logout(() => navigate("/")); }} to='/' replace>Logout</Link>
