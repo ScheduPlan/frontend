@@ -135,7 +135,7 @@ export default function FormCreateOrder() {
                     </label>
                     <label>
                         Auftragsnummer <span>*</span>
-                        <input  type="number" name="number" min={10000} max={999999} onChange={getNumber} required />
+                        <input  type="number" name="number" min={100000} max={999999} onChange={getNumber} required />
                     </label>
                 </div>
 

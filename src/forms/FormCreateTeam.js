@@ -35,7 +35,7 @@ export default function FormCreateTeam() {
             },
         }).then(response => {
             setAllEmployees(response.data);
-         });
+        });
     }
 
     /**
@@ -108,7 +108,18 @@ export default function FormCreateTeam() {
                 navigate("..", { relative: "path" });
             });
         } catch (error) {
-            alert(error);
+            if (error.response.data.message.includes("ASSEMBLY_TEAM")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Teamname ist bereits vergeben!',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else {
+                alert(error);
+            }
         }
     }
 

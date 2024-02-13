@@ -28,17 +28,20 @@ export default function FormPatchTeam() {
 
     useEffect(() => {
         updateAvailableEmployees();
-    }, [pickedEmployees]);
+    }, [allEmployees, pickedEmployees]);
 
     /**
     * gets all employees with role FITTER from API
     */
     function getAllEmployees() {
-        axios.get(url + '/employees') //?role=FITTER
-            .then(res => {
-                setAllEmployees(res.data);
-                console.log("allEmployees", allEmployees);
-            });
+        axios.get(url + '/employees', {
+            params: {
+                unassigned: 'true',
+                role: 'FITTER',
+            },
+        }).then(res => {
+            setAllEmployees(res.data);
+        });
     }
 
     /**
@@ -95,25 +98,15 @@ export default function FormPatchTeam() {
 
     /**
      * removes the employee from the picked list & adds the removed employee back to the select options
-     * @param {*} e 
+     * @param {*} emp 
      */
-    function removeEmployee(e) {
-        let emp = allEmployees.find(elem => elem.id == e.target.id);
-        axios.put(url + "/employees/" + e.target.id, {
-            employeeNumber: emp.employeeNumber,
-            teamId: null,
-            person: {
-                firstName: emp.firstName,
-                lastName: emp.lastName
-            },
-            user: {
-                email: emp.user?.email,
-                username: emp.user?.username,
-                role: emp.user?.role
-            }
+    function removeEmployee(emp) {
+        axios.get(url + "/employees/" + emp.id).then(res => {
+            axios.put(url + "/employees/" + emp.id, {
+                ...res.data,
+                teamId: null
+            }).then(() => {setPickedEmployees(pickedEmployees.filter(obj => obj.id != emp.id));});
         });
-
-        setPickedEmployees(pickedEmployees.filter(obj => obj.id != e.target.id));
     }
 
     async function submitForm(event) {
@@ -154,17 +147,17 @@ export default function FormPatchTeam() {
                 <div className='form-row'>
                     <label>
                         Name des Teams
-                        <input placeholder={team.description?.name}  type="text" name="team" onChange={getTeamName} />
+                        <input placeholder={team.description?.name} type="text" name="team" onChange={getTeamName} />
                     </label>
                     <label>
                         Beschreibung
-                        <input placeholder={team.description?.description}  type="text" name="description" onChange={getTeamDesc} />
+                        <input placeholder={team.description?.description} type="text" name="description" onChange={getTeamDesc} />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Mitarbeiter
-                        <select  name="customer" onChange={getPickedEmployees}>
+                        <select name="customer" onChange={getPickedEmployees}>
                             <option readOnly hidden>Bitte wählen</option>
                             {availableEmployees.map((emp) => {
                                 return (
@@ -179,7 +172,7 @@ export default function FormPatchTeam() {
                                 return (
                                     <div key={index} className='pickedItem'>
                                         <p>{emp.firstName} {emp.lastName}</p>
-                                        <svg onClick={removeEmployee} id={emp.id} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
+                                        <svg onClick={() => removeEmployee(emp)} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
                                             <path d={Path("close")} />
                                         </svg>
                                     </div>

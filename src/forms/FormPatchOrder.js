@@ -5,6 +5,7 @@ import url from '../BackendURL';
 import { useNavigate, useParams } from 'react-router-dom';
 import deleteItem from '../utility/deleteItem';
 import FormPatchAddress from './FormPatchAddress';
+import sortItems from '../utility/sortItems';
 
 export default function FormPatchOrder() {
 
@@ -13,8 +14,10 @@ export default function FormPatchOrder() {
     const [order, setOrder] = useState({});
     const [address, setAddress] = useState({});
 
+    const [customerList, setCustomerList] = useState([]);
     const [teamList, setTeamList] = useState([]);
 
+    const [customerID, setCustomerID] = useState();
     const [number, setNumber] = useState();
     const [commissionNumber, setCommissionNumber] = useState();
     const [weight, setWeight] = useState();
@@ -33,8 +36,20 @@ export default function FormPatchOrder() {
     }, [id]);
 
     useEffect(() => {
+        getCustomerList();
         getTeamList();
     }, []);
+
+    /**
+     * gets all customers from API
+     */
+    function getCustomerList() {
+        axios.get(url + '/customers').then(
+            res => {
+                setCustomerList(sortItems(res.data, "customerNumber"));
+            }
+        );
+    }
 
     /**
      * gets all teams from database
@@ -42,9 +57,17 @@ export default function FormPatchOrder() {
     function getTeamList() {
         axios.get(url + '/teams').then(
             res => {
-                setTeamList(res.data);
+                setTeamList(sortItems(res.data, "description", "name"));
             }
         );
+    }
+
+    const getCustomerID = (e) => {
+        setCustomerID(e.target.value);
+    }
+
+    const getNumber = (e) => {
+        setNumber(e.target.value);
     }
 
     const getCommissionNumber = (e) => {
@@ -65,7 +88,7 @@ export default function FormPatchOrder() {
 
     function getAddressElement(e) {
         setAddressElement(e);
-      }
+    }
 
     const getDescription = (e) => {
         setDescription(e.target.value);
@@ -106,7 +129,26 @@ export default function FormPatchOrder() {
                 <h1>Auftrag <b>{order.number}</b> bearbeiten</h1>
             </div>
             <form onSubmit={submitForm}>
-                <h3>Kunde: {order.customer?.customerNumber} {order.customer?.company}</h3>
+                <div className='form-row'>
+                    <label>
+                        Kunde
+                        <select name="customer" onChange={getCustomerID}>
+                            <option readOnly hidden>
+                                {order.customer != null ?
+                                    order.customer?.customerNumber + " " + order.customer?.company :
+                                    "Bitte wählen"}
+                            </option>
+                            {customerList.map((cust) => {
+                                return (<option key={cust.id} value={cust.id}>{cust.customerNumber} {cust.company}</option>)
+                            })}
+                        </select>
+                    </label>
+                    <label>
+                        Auftragsnummer
+                        <input placeholder={order.number} type="number" name="number" min={100000} max={999999} onChange={getNumber} />
+                    </label>
+                </div>
+
                 <div className='form-row'>
                     <label>
                         Kommisionsnummer
@@ -131,17 +173,13 @@ export default function FormPatchOrder() {
                                     order.team?.description?.name :
                                     "Bitte wählen"}
                             </option>
-                            {teamList.sort(function (a, b) {
-                                if (a.description.name < b.description.name) { return -1; }
-                                if (a.description.name > b.description.name) { return 1; }
-                                return 0;
-                            }).map((team, index) => {
+                            {teamList.map((team, index) => {
                                 return (<option key={index} value={team.id}>{team.description.name}</option>)
                             })}
                         </select>
                     </label>
                 </div>
-                <FormPatchAddress placeholder={address} addressElement={(elem) => { getAddressElement(elem) }} />
+                {/*<FormPatchAddress placeholder={address} addressElement={(elem) => { getAddressElement(elem) }} />*/}
                 <h3>Bemerkung</h3>
                 <label>
                     <input placeholder={description} type="text" name="description" onChange={getDescription} />

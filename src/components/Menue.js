@@ -19,7 +19,7 @@ export default function Menue(props) {
                     <Link key={index} to={'/' + user.user.role.toLowerCase() + '/' + link.path} onClick={() => props.setOpen(false)} replace>{link.title}</Link>
                 ))}
                 <Link to='/password' replace>Passwort ändern</Link>
-                <Link onClick={() => {logout(() => navigate("/")); }} to='/' replace>Logout</Link>
+                <Link onClick={logout} to='/' replace>Logout</Link>
             </div>
         </div>
     )
