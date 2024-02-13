@@ -103,7 +103,7 @@ export default function Schedule(props) {
    */
   function setSidebar() {
     return (
-      <Sidebar path={props.path} orders={activeOrders} getOrders={getAllOrders} activeOrder={(e) => setActiveOrder(e)} allOrdersDisplayed={showAllOrders} setAllOrdersDisplayed={(e) => setShowAllOrders(e)} />
+      <Sidebar path={props.path} activeTeamId={activeTeamId} orders={activeOrders} getOrders={getAllOrders} activeOrder={(e) => setActiveOrder(e)} allOrdersDisplayed={showAllOrders} setAllOrdersDisplayed={(e) => setShowAllOrders(e)} />
     );
   }
 

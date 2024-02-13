@@ -6,6 +6,9 @@ import sortItems from '../utility/sortItems';
 import PopUp from './PopUp';
 import AuthContext from '../AuthProvider';
 import Swal from 'sweetalert2';
+import debounce from '../utility/debounce';
+
+
 
 export default function Sidebar(props) {
 
@@ -23,12 +26,13 @@ export default function Sidebar(props) {
     const [isPopUpOpen, setPopUpOpen] = useState(false);
 
     useEffect(() => {
-        setOrders(props.orders);
-    }, [props.orders]);
+        setOrders(props.orders); //To DO
+    }, [props.orders, props.activeTeamId]);
 
-    useEffect(() => {
+    /*useEffect(() => {
         getSearchOutput();
-    }, [searchInput]);
+        console.log(getSearchOutput);
+    }, [searchInput]);*/
 
     /**
    * toggles pop up & sets path to items and path to the edit forms
@@ -83,52 +87,26 @@ export default function Sidebar(props) {
      */
     const getFilterOption = (e) => {
         setFilterOption(e.target.value);
-        switch (e.target.value) {
-            case null:
-                setOrders(sortItems(orders, "commissionNumber"));
-                break;
-            case "none":
-                setOrders(sortItems(orders, "commissionNumber"));
-                break;
-            case "company":
-                setOrders(sortItems(orders, "customer", "company"));
-                break;
-            case "team":
-                setOrders(sortItems(orders, "team", "description", "name"));
-            default: setOrders(sortItems(orders, e.target.value));
-                break;
-        }
     }
 
     const getSearchInput = (e) => {
-        setSearchInput(e.target.value);
+        setSearchInput(e.target.value)
+        getSearchOutput();
     }
 
     /**
-     * gets order elements for search
-     */
-    function getSearchOutput() {
-
-        //var filterData = data.filter(item => item.name.includes(search));
-        //console.log(filterData);
-
-        var entries = [];
-        orders.forEach(item => {
-            Object.keys(item).map((subject, i) => {
-                entries = [...entries, item[subject]];
-                entries.map(entry => {
-                    if (!isNaN(+entry)) {
-                        var temp = entry + "";
-                        entry = temp;
-                    }
-                });
-            })
+    * gets order elements for search
+    */
+    const getSearchOutput = debounce(() => {
+        let parameters = { teamId: props.activeTeamId };
+        parameters[filterOption] = searchInput;
+        axios.get(url + "/orders", {
+            params: parameters
+        }).then(res => {
+            setOrders(res.data);
         });
-        console.log(entries);
-        /*axios.get(url + "/orders").then(res => {
-            setOrders(sortItems(res.data.filter(order => (order.team.id == props.activeTeamId) && (order.state == "PLANNED")), "commissionNumber"));
-        });*/
-    }
+    });
+
 
     /**
      * allows to drag and drop an order into a calendar if a team calendar is picked
@@ -152,7 +130,7 @@ export default function Sidebar(props) {
 
     return (
         <div className={style.sidebar + (!isOpen ? " " + style.sidebar_closed : " ")}>
-            <h2>Aufträge</h2>
+            <h2 className={style.headline}>Aufträge</h2>
             <div className={style.btn_close} onClick={toggleSidebar}>{'<'}</div>
 
             <div className={style.filter_row}>
@@ -163,24 +141,20 @@ export default function Sidebar(props) {
                     <option value="commissionNumber">Kom.-Nr.</option>
                     <option value="company">Kunde</option>
                     <option value="plannedDuration">geschätzter Aufwand</option>
-                    <option value="weight">Gewicht</option>
-                    {props.allOrdersDisplayed ?
-                        <option value="team">Team</option> : ""}
                 </select>
             </div>
             <div className={style.filter_row}>
                 <span>filtern</span>
-                <select name="filterOptions" className={style.filter}>
+                <select name="filterOptions" className={style.filter} onChange={getFilterOption}>
                     <option value="none" readOnly>Bitte wählen</option>
-                    <option value="number">Auftr.-Nr.</option>
+                    <option value="orderNumber">Auftr.-Nr.</option>
                     <option value="commissionNumber">Kom.-Nr.</option>
-                    <option value="company">Kunde</option>
-                    <option value="plannedDuration">geschätzter Aufwand</option>
+                    <option value="companyName">Firmenname</option>
                 </select>
             </div>
             <div className={style.filter_row}>
                 <span>suchen</span>
-                <input className={style.filter} placeholder='suchen...' type="text" name="searchInput" onChange={getSearchInput} />
+                <input className={style.filter} placeholder='suchen...' type="text" name="searchInput" onKeyUp={getSearchInput} />
             </div>
 
             <button className={'btn secondary ' + style.btn_showAll} onClick={() => { props.getOrders(); props.setAllOrdersDisplayed(true); }}>alle anzeigen</button>

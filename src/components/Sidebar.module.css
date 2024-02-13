@@ -12,7 +12,7 @@
     display: none;
 }
 
-.sidebar h2 {
+.sidebar h2.headline {
     text-align: left;
     font-weight: 400;
     margin: 0;
