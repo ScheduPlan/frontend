@@ -22,11 +22,7 @@ export default function ListItems(props) {
 
   useEffect(() => {
     getItemObjects();
-  }, []);
-
-  useEffect(() => {
-    //setContent();
-  }, [itemObjects]);
+  }, [props.path]);
 
   /**
    * gets all Items from database for the list
