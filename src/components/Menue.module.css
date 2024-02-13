@@ -6,12 +6,18 @@
     padding: 1rem;
     z-index: 5;
     box-shadow: -3px 5px 5px 0px #00000024;
-    transition: 0.8s ease-in-out;
+    transition: 0.5s ease-in-out;
     transition-delay: 0s;
     width: 16rem;
     height: calc(100vh - 66px);
     opacity: 0;
     transform: translateX(100%);
+}
+
+@media screen and (min-width: 1480px) {
+    .menue_wrapper {
+        width: calc(6rem + (100vw - 1200px) / 2);
+    }
 }
 
 .menue_wrapper.open {
