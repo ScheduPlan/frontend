@@ -165,7 +165,7 @@ export default function FormCreateOrder() {
                     <label>
                         Team <span>*</span>
                         <select  name="team" onChange={getTeamID} required>
-                            <option readOnly hidden>Bitte wählen</option>
+                            <option value={''} readOnly hidden>Bitte wählen</option>
                             {teamList.map((team, index) => {
                                 return (<option key={index} value={team.id}>{team.description.name}</option>)
                             })}
