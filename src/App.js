@@ -102,8 +102,9 @@ export default function App() {
               </Route>
             </Route>
 
-            <Route path='/fitter' element={<Dashboard />} />
-            <Route path='/fitter/calendar' element={<AssemblerDashboard />} />
+            <Route path='/fitter' element={<Dashboard />}>
+              <Route path='calendar' element={<AssemblerDashboard />} />
+            </Route>
 
             <Route path='/unauthorized' element={<Unauthorized />} />
             <Route path='/password' element={<ChangePassword />} />
