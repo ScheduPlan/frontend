@@ -73,36 +73,43 @@ export default function App() {
             <Route path='/administrator' >
               <Route path='' element={<Dashboard />} />
 
-              <Route path='employees' element={<ListItems items={Employee} path="/employees" h1="Alle Mitarbeiter" />}>
+              <Route path='employees'>
+                <Route path='' element={<ListItems items={Employee} path="/employees" h1="Alle Mitarbeiter" />} />
                 <Route path='new' element={<FormCreateEmployee />} />
                 <Route path=':id' element={<FormPatchEmployee />} />
               </Route>
 
-              <Route path='teams' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />}>
+              <Route path='teams'>
+                <Route path='' element={<ListItems items={Team} path="/teams" h1="Alle Teams" />} />
                 <Route path='new' element={<FormCreateTeam />} />
                 <Route path=':id' element={<FormPatchTeam />} />
               </Route>
             </Route>
 
-            <Route path='/manager' element={<Dashboard />}>
+            <Route path='/manager'>
+              <Route path='' element={<Dashboard />} />
               <Route path='schedule' element={<Schedule path="/orders" />} />
 
-              <Route path='customers' element={<ListItems items={Customer} path="/customers" h1="Alle Kunden" />}>
+              <Route path='customers'>
+                <Route path='' element={<ListItems items={Customer} path="/customers" h1="Alle Kunden" />} />
                 <Route path='new' element={<FormCreateCustomer />} />
                 <Route path=':id' element={<FormPatchCustomer />} />
               </Route>
 
-              <Route path='orders' element={<ListItems items={Order} path="/orders" h1="Alle Aufträge" />}>
+              <Route path='orders'>
+                <Route path='' element={<ListItems items={Order} path="/orders" h1="Alle Aufträge" />} />
                 <Route path='new' element={<FormCreateOrder />} />
                 <Route path=':id' element={<FormPatchOrder />} />
               </Route>
 
-              <Route path='events' element={<ListItems items={Event} path="/events" h1="Alle Termine" />}>
+              <Route path='events'>
+                <Route path='' element={<ListItems items={Event} path="/events" h1="Alle Termine" />} />
                 <Route path=':id' element={<FormPatchEvent />} />
               </Route>
             </Route>
 
-            <Route path='/fitter' element={<Dashboard />}>
+            <Route path='/fitter'>
+              <Route path='' element={<Dashboard />} />
               <Route path='calendar' element={<AssemblerDashboard />} />
             </Route>
 
