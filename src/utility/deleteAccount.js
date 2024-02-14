@@ -3,8 +3,7 @@ import url from "../BackendURL";
 import Swal from "sweetalert2";
 import logout from "./logout";
 
-export default async function deleteAccount(user) {
-
+export default async function deleteAccount(user, callback) {
     Swal.fire({
         position: 'top',
         title: 'Sind Sie sicher, dass Sie Ihren Account löschen möchten?',
@@ -27,7 +26,7 @@ export default async function deleteAccount(user) {
                         showConfirmButton: false,
                         timer: 3000
                     }).then(() => {
-                        logout();
+                        logout(callback);
                     });
                 })
             } catch (e) {

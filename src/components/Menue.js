@@ -32,7 +32,7 @@ export default function Menue(props) {
                 ))}
                 <Link to='/password' onClick={() => props.setOpen(false)} replace>Passwort ändern</Link>
                 <Link onClick={() => logout(props.setOpen(false))} to='/' replace>Logout</Link>
-                {user.user.role != "FITTER" ? <Link className="red" onClick={() => deleteAccount(user)} to='/' replace>Account löschen</Link> : ""}
+                {(user.user.role != "FITTER" && user.firstName != "Administrator") ? <Link className="red" onClick={() => deleteAccount(user)} to='/' replace>Account löschen</Link> : ""}
             </div>
         </div>
     )
