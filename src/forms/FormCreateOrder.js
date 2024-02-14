@@ -17,7 +17,7 @@ export default function FormCreateOrder() {
     const [number, setNumber] = useState("");
     const [commissionNumber, setCommissionNumber] = useState("");
     const [weight, setWeight] = useState("");
-    const [date, setDate] = useState(""); //To Do: Andi
+    const [plannedDate, setPlannedDate] = useState("");
     const [timeperiod, setTimeperiod] = useState("");
     const [teamID, setTeamID] = useState();
     const [description, setDescription] = useState();
@@ -68,7 +68,7 @@ export default function FormCreateOrder() {
     }
 
     const getDate = (e) => {
-        setDate(e.target.value);
+        setPlannedDate(new Date(e.target.value));
     }
 
     const getTimeperiod = (e) => {
@@ -89,6 +89,7 @@ export default function FormCreateOrder() {
 
     async function submitForm(event) {
         event.preventDefault();
+        console.log(plannedDate);
         try {
             const response = await axios.post(url + '/customers/' + customerID + '/orders',
                 {
@@ -97,23 +98,33 @@ export default function FormCreateOrder() {
                     commissionNumber: commissionNumber,
                     weight: weight,
                     state: "PLANNED",
+                    plannedExecutionDate: plannedDate,
                     teamId: teamID,
                     plannedDuration: timeperiod
                 },
-                { headers: { 'Content-Type': 'application/json' } });
-
+                { headers: { 'Content-Type': 'application/json' } }).then(() => {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'success',
+                        title: 'Neuer Auftrag wurde angelegt!',
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: 'var(--success)',
+                        timer: 2000
+                    }).then(() => {
+                        navigate("..", { relative: "path" });
+                    });
+                });
+        } catch (error) {
+            console.log(error);
             Swal.fire({
                 position: 'top',
-                icon: 'success',
-                title: 'Neuer Auftrag wurde angelegt!',
+                icon: 'error',
+                title: 'Fehler',
+                text: 'Auftrag konnte nicht angelegt werden!',
                 confirmButtonText: 'Ok',
-                confirmButtonColor: 'var(--success)',
-                timer: 2000
-            }).then(() => {
-                navigate("..", { relative: "path" });
+                confirmButtonColor: 'var(--error)',
+                timer: 2500
             });
-        } catch (error) {
-            alert(error);
         }
     }
 
@@ -172,7 +183,7 @@ export default function FormCreateOrder() {
                         </select>
                     </label>
                 </div>
-                <FormCreateAddress addressElement={(elem) => { getAddressElement(elem) }} />
+                {/*<FormCreateAddress addressElement={(elem) => { getAddressElement(elem) }} />*/}
                 <h3>Bemerkung</h3>
                 <label>
                     <input type="text" name="description" onChange={getDescription} />
