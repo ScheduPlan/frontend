@@ -9,11 +9,34 @@ export default function Event(props) {
     const start = moment(props.object.startDate).format("HH:mm");
     const end = moment(props.object.endDate).format("HH:mm");
 
+    const eventTypes = [
+        {
+            type: 'ASSEMBLY',
+            alias: "Montage"
+        },
+        {
+            type: 'DELIVERY',
+            alias: "Lieferung"
+        },
+        {
+            type: 'COMMUTE',
+            alias: "Reklamation"
+        }
+    ];
+
     const [isCustomerConfirmed, setCustomerConfirmed] = useState();
 
     useEffect(() => {
         setCustomerConfirmed(props.object?.order?.state == "CUSTOMER_CONFIRMED");
     }, [props.object]);
+
+    async function changeEventType(e) {
+        await axios.patch(url + "/customers/" + props.object.order.customer.id + "/orders/" + props.object.order.id + "/events/" + props.object.id,
+            {
+                type: e.target.value
+            }, { headers: { 'Content-Type': 'application/json' } }
+        );
+    }
 
     function toggleCustomerConfirmation() {
         if (isCustomerConfirmed) {
@@ -53,14 +76,33 @@ export default function Event(props) {
                             )
                         })}</p>
                         : ""}
-                    <label>
-                        <input
-                            type="checkbox"
-                            checked={isCustomerConfirmed}
-                            onChange={toggleCustomerConfirmation}
-                        />
-                        vom Kunden bestätigt
-                    </label>
+                    {!props.isFitter ?
+                        <>
+                            <form className='popup'>
+                                <div className='form-row'>
+                                    <label>
+                                        Terminart
+                                        <select name="type" onChange={changeEventType}> 
+                                            <option value={props.object.type} hidden readOnly>Montage</option>
+                                            {eventTypes.map(item => {
+                                                return (<option value={item.type}>{item.alias}</option>)
+                                            })}
+                                        </select>
+                                    </label>
+                                    <label>
+                                        <input
+                                            type="checkbox"
+                                            checked={isCustomerConfirmed}
+                                            onChange={toggleCustomerConfirmation}
+                                        />
+                                        vom Kunden bestätigt
+                                    </label>
+                                </div>
+
+                            //Helper
+                            </form>
+                        </>
+                        : ""}
                 </div>
             </> :
             <>

@@ -1,14 +1,16 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import url from '../BackendURL';
 import { useNavigate, useParams } from 'react-router-dom';
 import Path from '../icons/Paths';
+import AuthContext from '../AuthProvider';
 
 export default function FormPatchEvent() {
 
     const eventTypes = [];
 
+    const { user } = useContext(AuthContext);
     const { id } = useParams();
     const navigate = useNavigate();
     const [event, setEvent] = useState({});
@@ -37,7 +39,7 @@ export default function FormPatchEvent() {
     useEffect(() => {
         axios.get(url + '/employees').then(res => {
             console.log(res.data);
-            setFitters(res.data.filter(data => (data.user.role == "FITTER") /*&& (data.team.id != event.order.team.id)*/));
+            setFitters(res.data.filter(data => (user.role == "FITTER") /*&& (data.team.id != event.order.team.id)*/));
         });
     }, []);
 

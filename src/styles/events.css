@@ -13,10 +13,6 @@
     background-color: var(--primary-dark);
 }
 
-.rbc-day-slot .rbc-event.assembly {
-    background-color: var(--primary);
-}
-
 .rbc-day-slot .rbc-event.showCustomerIcon {
     background-color: var(--green);
 }
@@ -32,6 +28,30 @@
     height: auto;
     right: 5px;
     bottom: 0;
+}
+
+.rbc-day-slot .rbc-event.assembly {
+    background-color: var(--primary);
+}
+
+.rbc-day-slot .rbc-event.assembly:hover {
+    background-color: var(--primary-dark);
+}
+
+.rbc-day-slot .rbc-event.delivery {
+    background-color: var(--grey);
+}
+
+.rbc-day-slot .rbc-event.delivery:hover {
+    background-color: var(--grey-dark);
+}
+
+.rbc-day-slot .rbc-event.complaint {
+    background-color: var(--red);
+}
+
+.rbc-day-slot .rbc-event.complaint:hover {
+    background-color: var(--red-dark);
 }
 
 .rbc-addons-dnd-resizable {
