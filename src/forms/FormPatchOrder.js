@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import deleteItem from '../utility/deleteItem';
 import FormPatchAddress from './FormPatchAddress';
 import sortItems from '../utility/sortItems';
+import moment from 'moment';
 
 export default function FormPatchOrder() {
 
@@ -29,12 +30,10 @@ export default function FormPatchOrder() {
 
     useEffect(() => {
         axios.get(url + '/orders').then(res => {
-            setOrder(res.data.find(order => order.id == id));
-            setAddress(res.data.address);
-        }).then(() => {
-            if (order.plannedExecutionDate != null) {
-                setDate(new Date(order.plannedExecutionDate));
-            }
+            const o = res.data.find(order => order.id == id)
+            setOrder(o);
+            setAddress(o.address);
+            setDate(moment(o.plannedExecutionDate).format("YYYY-MM-DD"));
         });
     }, [id]);
 
@@ -166,7 +165,7 @@ export default function FormPatchOrder() {
                 <div className='form-row'>
                     <label>
                         freigegebener Termin
-                        <input placeholder={order.plannedExecutionDate} type="date" name="date" onChange={getDate} />
+                        <input type="date" name="date" defaultValue={date} onChange={getDate} />
                     </label>
                     <label>
                         Team
