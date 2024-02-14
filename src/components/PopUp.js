@@ -14,7 +14,7 @@ import Swal from 'sweetalert2';
 
 export default function PopUp(props) {
     const navigate = useNavigate();
-    const { events, path, pathToItem, pathToEdit, updateItemObjects, updateEvents, close, trigger } = props
+    const { events, path, pathToItem, pathToEdit, updateItemObjects, updateEvents, close, trigger, isFitter } = props
 
     const [item, setItem] = useState({});
     const [subItem, setSubItem] = useState({});
@@ -57,7 +57,7 @@ export default function PopUp(props) {
                 )
             case "/events":
                 return (
-                    <Event extended object={item} updateEvents={updateEvents} />
+                    <Event extended object={item} updateEvents={updateEvents} isFitter={isFitter} />
                 )
             default:
                 break;
@@ -71,12 +71,7 @@ export default function PopUp(props) {
     async function deleteFct() {
         switch (path) {
             case "/events":
-                axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
-                    {
-                        state: "PLANNED"
-                    }, { headers: { 'Content-Type': 'application/json' } });
-
-                deleteItem(pathToItem, () => props.updateEvents(), (error) => {
+                deleteItem(pathToItem, updateEvents, (error) => {
                     Swal.fire({
                         position: 'top',
                         title: error,
@@ -114,7 +109,7 @@ export default function PopUp(props) {
                 </div>
                 <div className='btn-wrapper'>
                     {pathToEdit != null ? <button onClick={() => { navigate(pathToEdit) }} className='btn secondary'>Bearbeiten</button> : ""}
-                    {pathToItem != null ? <button onClick={deleteFct} className='btn red'>Löschen</button> : ""}
+                    {(pathToItem != null && !isFitter) ? <button onClick={deleteFct} className='btn red'>Löschen</button> : ""}
                 </div>
             </div>
         </div> : ""
