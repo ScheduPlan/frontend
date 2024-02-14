@@ -25,10 +25,10 @@ export default function FormPatchEmployee() {
     useEffect(() => {
         getTeamList().then(() => {
             axios.get(url + '/employees/' + id)
-            .then(res => {
-                setEmployee(res.data);
-                setUserRole(res.data.user?.role);
-            });
+                .then(res => {
+                    setEmployee(res.data);
+                    setUserRole(res.data.user?.role);
+                });
         });
     }, [id]);
 
@@ -82,10 +82,8 @@ export default function FormPatchEmployee() {
                 {
                     employeeNumber: employeeNumber,
                     teamId: teamId,
-                    person: {
-                        firstName: firstName,
-                        lastName: lastName
-                    },
+                    firstName: firstName,
+                    lastName: lastName,
                     user: {
                         email: email,
                         username: username,
@@ -146,31 +144,31 @@ export default function FormPatchEmployee() {
                 <div className='form-row'>
                     <label>
                         Vorname
-                        <input placeholder={employee.firstName}  type="text" name="firstName" onChange={getFirstName} />
+                        <input placeholder={employee.firstName} type="text" name="firstName" onChange={getFirstName} />
                     </label>
                     <label>
                         Nachname
-                        <input placeholder={employee.lastName}  type="text" name="lastName" onChange={getLastName} />
+                        <input placeholder={employee.lastName} type="text" name="lastName" onChange={getLastName} />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Personalnummer
-                        <input placeholder={employee.employeeNumber}  type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} />
+                        <input placeholder={employee.employeeNumber} type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} />
                     </label>
                     <label>
                         E-Mail-Adresse
-                        <input placeholder={employee.user?.email}  type="email" name="email" onChange={getEmail} />
+                        <input placeholder={employee.user?.email} type="email" name="email" onChange={getEmail} />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Benutzername
-                        <input placeholder={employee.user?.username}  type="text" name="username" onChange={getUsername} />
+                        <input placeholder={employee.user?.username} type="text" name="username" onChange={getUsername} />
                     </label>
                     <label>
                         Benutzerrolle
-                        <select  name="userRole" onChange={getUserRole} >
+                        <select name="userRole" onChange={getUserRole} >
                             <option readOnly hidden>
                                 {employee.user != null ?
                                     roles.find(role => role.role == employee.user.role.toLowerCase()).title :
@@ -186,7 +184,7 @@ export default function FormPatchEmployee() {
                     {userRole == "FITTER" ?
                         <label>
                             Team
-                            <select  name="team" onChange={getTeamId} >
+                            <select name="team" onChange={getTeamId} >
                                 <option readOnly hidden>
                                     {(employee.teamId != null && teamList) ?
                                         teamList.find(team => team.id == employee.teamId).description?.name :
@@ -200,7 +198,7 @@ export default function FormPatchEmployee() {
                 </div>
                 <div className='btn-wrapper'>
                     <input className="btn primary" type="submit" value="Speichern" />
-                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem(url + "/employees/" + employee.id,  (res) => {console.log(res); navigate("..", { relative: "path" })}) }} />
+                    <input className="btn red" type="button" value="Löschen" onClick={() => { deleteItem(url + "/employees/" + employee.id, (res) => { console.log(res); navigate("..", { relative: "path" }) }) }} />
                     <input className="btn secondary" type="button" value="Abbrechen" onClick={() => { navigate("..", { relative: "path" }); }} />
                 </div>
             </form>

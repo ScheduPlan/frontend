@@ -21,7 +21,7 @@ export default function FormPatchCustomer() {
   const [phone, setPhone] = useState();
   const [description, setDescription] = useState();
 
-  const [addressElement, setAddressElement] = useState({});
+  const [addressElement, setAddressElement] = useState();
 
   useEffect(() => {
     axios.get(url + '/customers/' + id)
@@ -82,31 +82,33 @@ export default function FormPatchCustomer() {
           email: email,
           phoneNumber: phone
         },
-        { headers: { 'Content-Type': 'application/json' } });
+        { headers: { 'Content-Type': 'application/json' } }).then(async () => {
+          console.log("addressElement", addressElement);
+          if (addressElement != null) {
+            await axios.patch(url + '/customers/' + id + '/addresses/' + customer.addresses.at(0).id,
+              {
+                country: addressElement.country,
+                street: addressElement.street,
+                streetNumber: addressElement.streetNumber,
+                city: addressElement.city,
+                zip: addressElement.zip,
+                addressSuffix: addressElement.addressSuffix,
+                addressType: addressElement.addressType,
+              },
+              { headers: { 'Content-Type': 'application/json' } })
+          }
 
-      const response2 = await axios.patch(url + '/customers/' + id + '/addresses/' + customer.addresses.at(0).id,
-        {
-          country: addressElement.country,
-          street: addressElement.street,
-          streetNumber: addressElement.streetNumber,
-          city: addressElement.city,
-          zip: addressElement.zip,
-          addressSuffix: addressElement.addressSuffix,
-          addressType: addressElement.addressType,
-        },
-        { headers: { 'Content-Type': 'application/json' } });
-
-      Swal.fire({
-        position: 'top',
-        icon: 'success',
-        title: 'Änderungen gespeichert!',
-        confirmButtonText: 'Ok',
-        confirmButtonColor: 'var(--success)',
-        timer: 2000,
-      }).then(() => {
-        navigate("..", { relative: "path" });
-      });
-
+          Swal.fire({
+            position: 'top',
+            icon: 'success',
+            title: 'Änderungen gespeichert!',
+            confirmButtonText: 'Ok',
+            confirmButtonColor: 'var(--success)',
+            timer: 2000,
+          }).then(() => {
+            navigate("..", { relative: "path" });
+          });
+        });
     } catch (error) {
       alert(error);
     }
@@ -121,32 +123,32 @@ export default function FormPatchCustomer() {
         <div className='form-row'>
           <label>
             Firmenname
-            <input placeholder={customer.company}  type="text" name="company" onChange={getCompany} />
+            <input placeholder={customer.company} type="text" name="company" onChange={getCompany} />
           </label>
           <label>
             Kundennummer
-            <input placeholder={customer.customerNumber}  type="number" name="customerNumber" min={100000} max={999999} onChange={getCustomerNumber} />
+            <input placeholder={customer.customerNumber} type="number" name="customerNumber" min={100000} max={999999} onChange={getCustomerNumber} />
           </label>
         </div>
         <h3>Ansprechpartner</h3>
         <div className='form-row'>
           <label>
             Vorname
-            <input placeholder={customer.firstName}  type="text" name="firstname" onChange={getFirstname} />
+            <input placeholder={customer.firstName} type="text" name="firstname" onChange={getFirstname} />
           </label>
           <label>
             Nachname
-            <input placeholder={customer.lastName}  type="text" name="lastname" onChange={getLastname} />
+            <input placeholder={customer.lastName} type="text" name="lastname" onChange={getLastname} />
           </label>
         </div>
         <div className='form-row'>
           <label>
             E-Mail-Adresse
-            <input placeholder={customer.email}  type="email" name="email" onChange={getEmail} />
+            <input placeholder={customer.email} type="email" name="email" onChange={getEmail} />
           </label>
           <label>
             Telefonnummer
-            <input placeholder={customer.phoneNumber}  type="text" name="phone" onChange={getPhone} />
+            <input placeholder={customer.phoneNumber} type="text" name="phone" onChange={getPhone} />
           </label>
         </div>
         <FormPatchAddress placeholder={address} addressElement={(elem) => { getAddressElement(elem) }} />

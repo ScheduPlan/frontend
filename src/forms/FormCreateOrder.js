@@ -120,7 +120,7 @@ export default function FormCreateOrder() {
                 position: 'top',
                 icon: 'error',
                 title: 'Fehler',
-                text: 'Auftrag konnte nicht angelegt werden!',
+                text: 'Auftrag konnte nicht angelegt werden! Bitte Angabe prüfen.',
                 confirmButtonText: 'Ok',
                 confirmButtonColor: 'var(--error)',
                 timer: 2500

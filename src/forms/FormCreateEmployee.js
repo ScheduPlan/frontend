@@ -78,10 +78,8 @@ export default function FormCreateEmployee() {
                 {
                     employeeNumber: employeeNumber,
                     teamId: ((teamId != null) && (teamId != "")) ? teamId : null,
-                    person: {
-                        firstName: firstname,
-                        lastName: lastname
-                    },
+                    firstName: firstname,
+                    lastName: lastname,
                     userDefinition: {
                         email: email,
                         username: username,
@@ -143,37 +141,37 @@ export default function FormCreateEmployee() {
                 <div className='form-row'>
                     <label>
                         Vorname <span>*</span>
-                        <input  type="text" name="firstname" onChange={getFirstname} required />
+                        <input type="text" name="firstname" onChange={getFirstname} required />
                     </label>
                     <label>
                         Nachname <span>*</span>
-                        <input  type="text" name="lastname" onChange={getLastname} required />
+                        <input type="text" name="lastname" onChange={getLastname} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Personalnummer <span>*</span>
-                        <input  type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} required />
+                        <input type="number" name="employeeNumber" min={100000} max={999999} onChange={getEmployeeNumber} required />
                     </label>
                     <label>
                         E-Mail-Adresse <span>*</span>
-                        <input  type="email" name="email" onChange={getEmail} required />
+                        <input type="email" name="email" onChange={getEmail} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Benutzername <span>*</span>
-                        <input  type="text" name="username" onChange={getUsername} required />
+                        <input type="text" name="username" onChange={getUsername} required />
                     </label>
                     <label>
                         Passwort <span>*</span>
-                        <input  type="password" name="password" onChange={getPassword} required />
+                        <input type="password" name="password" onChange={getPassword} required />
                     </label>
                 </div>
                 <div className='form-row'>
                     <label>
                         Benutzerrolle <span>*</span>
-                        <select  name="userRole" onChange={getUserRole} required>
+                        <select name="userRole" onChange={getUserRole} required>
                             <option value={''} readOnly hidden>Bitte wählen</option>
                             {roles.map((role, index) => {
                                 return (<option key={index} value={role.role}>{role.title}</option>)
@@ -183,7 +181,7 @@ export default function FormCreateEmployee() {
                     {userRole == "FITTER" ?
                         <label>
                             Team
-                            <select  name="team" onChange={getTeamId}>
+                            <select name="team" onChange={getTeamId}>
                                 <option value={''}>Bitte wählen</option>
                                 {teamList.map((team, index) => {
                                     return (<option key={index} value={team.id} required>{team.description.name}</option>)

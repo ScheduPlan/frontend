@@ -22,8 +22,9 @@ export default function FormPatchEvent() {
     const [pickedHelpers, setPickedHelpers] = useState([]); //pickedEmployees
 
     useEffect(() => {
-        axios.get(url + '/events')
-            .then(res => {
+        axios.get(url + '/events', {
+            params: {eventId: id}
+        }).then(res => {
                 const e = res.data.find(data => data.id == id)
                 setEvent(e);
                 if (e.helpers != []) {
