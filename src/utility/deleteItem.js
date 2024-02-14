@@ -19,19 +19,18 @@ export default function deleteItem(path, onSuccess, onError) {
     }).then(async (result) => {
         if (result.isConfirmed) {
             try {
-                const res = await axios.delete(path);
-
-                Swal.fire({
-                    position: 'top',
-                    title: "Element gelöscht!",
-                    icon: "success",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: "var(--success)",
-                    timer: 2000
-                  }).then(() => {
-                    onSuccess(res);
-                  });
-
+                const res = await axios.delete(path).then(() => {
+                    Swal.fire({
+                        position: 'top',
+                        title: "Element gelöscht!",
+                        icon: "success",
+                        confirmButtonText: "Ok",
+                        confirmButtonColor: "var(--success)",
+                        timer: 2000
+                      }).then(() => {
+                        onSuccess(res);
+                      });
+                })
             } catch (error) {
                 if(onError) {
                     onError(error);
