@@ -77,31 +77,14 @@ export default function Event(props) {
                         })}</p>
                         : ""}
                     {!props.isFitter ?
-                        <>
-                            <form className='popup'>
-                                <div className='form-row'>
-                                    <label>
-                                        Terminart
-                                        <select name="type" onChange={changeEventType}> 
-                                            <option value={props.object.type} hidden readOnly>Montage</option>
-                                            {eventTypes.map(item => {
-                                                return (<option value={item.type}>{item.alias}</option>)
-                                            })}
-                                        </select>
-                                    </label>
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            checked={isCustomerConfirmed}
-                                            onChange={toggleCustomerConfirmation}
-                                        />
-                                        vom Kunden bestätigt
-                                    </label>
-                                </div>
-
-                            //Helper
-                            </form>
-                        </>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={isCustomerConfirmed}
+                                onChange={toggleCustomerConfirmation}
+                            />
+                            vom Kunden bestätigt
+                        </label>
                         : ""}
                 </div>
             </> :
