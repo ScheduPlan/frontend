@@ -42,7 +42,6 @@ export default function PopUp(props) {
                 return (
                     <Employee extended object={item} />
                 )
-                break;
             case "/teams":
                 return (
                     <Team extended object={item} subItem={subItem} />
@@ -80,7 +79,12 @@ export default function PopUp(props) {
                         confirmButtonColor: "var(--error)",
                         timer: 2000
                     })
-                });
+                }).then(() => {
+                    axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
+                      {
+                        state: "PLANNED"
+                      }, { headers: { 'Content-Type': 'application/json' } })
+                    });;
 
             default:
                 deleteItem(pathToItem, updateItemObjects, (error) => {
