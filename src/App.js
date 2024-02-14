@@ -1,8 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import React, { Component, useContext } from 'react';
-import AuthContext from './AuthProvider';
+import React from 'react';
 import { AuthProvider } from './AuthProvider';
-import TestUser, { roles } from './UserExample'; //später raus
 import Layout from './components/Layout';
 
 // import pages
@@ -31,8 +29,7 @@ import FormPatchEvent from './forms/FormPatchEvent';
 
 export default function App() {
 
-  function redirect() {
-    const userRole = TestUser.role.toLowerCase();
+  /*function redirect() {
     if (userRole == "admin") {
       window.location.href = 'admin';
       return (
@@ -52,7 +49,7 @@ export default function App() {
         <Navigate to="/error" replace />
       )
     }
-  }
+  }*/
 
   return (
     <BrowserRouter>

@@ -70,7 +70,7 @@ export default function Event(props) {
                         <p><b>Helfer: </b>{props.object.helpers.map((helper, index) => {
                             return (
                                 ((props.object.helpers?.length > 1) && (props.object.helpers?.length - 1 > index)) ?
-                                    "Test" + helper.firstName + " " + helper.lastName + ", "
+                                    helper.firstName + " " + helper.lastName + ", "
                                     :
                                     helper.firstName + " " + helper.lastName
                             )
