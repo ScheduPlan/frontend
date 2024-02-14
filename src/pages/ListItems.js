@@ -97,12 +97,12 @@ export default function ListItems(props) {
             confirmButtonText: "Ok",
             confirmButtonColor: "var(--error)",
             timer: 2000
-          }).then(
+          }).then(() => {
             axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
               {
                 state: "PLANNED"
               }, { headers: { 'Content-Type': 'application/json' } })
-          )
+            });
         });
 
       default:
