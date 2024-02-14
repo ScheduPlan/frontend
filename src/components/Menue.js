@@ -31,7 +31,7 @@ export default function Menue(props) {
                     <Link key={index} to={'/' + user.user.role.toLowerCase() + '/' + link.path} onClick={() => props.setOpen(false)} replace>{link.title}</Link>
                 ))}
                 <Link to='/password' onClick={() => props.setOpen(false)} replace>Passwort ändern</Link>
-                <Link onClick={logout} to='/' replace>Logout</Link>
+                <Link onClick={() => logout(props.setOpen(false))} to='/' replace>Logout</Link>
                 {user.user.role != "FITTER" ? <Link className="red" onClick={() => deleteAccount(user)} to='/' replace>Account löschen</Link> : ""}
             </div>
         </div>

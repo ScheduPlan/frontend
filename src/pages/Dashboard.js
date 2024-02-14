@@ -29,7 +29,7 @@ export default function Dashboard() {
                             ))
                             }
                             <Link to='/password' className="btn primary" replace>Passwort ändern</Link>
-                            <Link className="btn primary" onClick={logout} to='/' replace>Logout</Link>
+                            <Link className="btn primary" onClick={() => logout()} to='/' replace>Logout</Link>
                             {user.user.role != "FITTER" ? <Link className="btn red" onClick={() => deleteAccount(user)} to='/' replace>Account löschen</Link> : ""}
                         </div>
 
