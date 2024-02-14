@@ -105,7 +105,10 @@ export default function FormPatchTeam() {
             axios.put(url + "/employees/" + emp.id, {
                 ...res.data,
                 teamId: null
-            }).then(() => {setPickedEmployees(pickedEmployees.filter(obj => obj.id != emp.id));});
+            }).then(() => {
+                setPickedEmployees(pickedEmployees.filter(obj => obj.id != emp.id));
+                getAllEmployees();
+            });
         });
     }
 
@@ -161,7 +164,7 @@ export default function FormPatchTeam() {
                             <option readOnly hidden>Bitte wählen</option>
                             {availableEmployees.map((emp) => {
                                 return (
-                                    <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp}>{emp.firstName} {emp.lastName}</option>
+                                    <option onClick={updateAvailableEmployees} key={emp.id} id={emp.id} value={emp.firstName + " " + emp.lastName}>{emp.firstName} {emp.lastName}</option>
                                 )
                             })}
                         </select>
