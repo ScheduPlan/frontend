@@ -23,19 +23,20 @@ export default function FormPatchEmployee() {
     const [teamId, setTeamId] = useState();
 
     useEffect(() => {
-        axios.get(url + '/employees/' + id)
+        getTeamList().then(() => {
+            axios.get(url + '/employees/' + id)
             .then(res => {
                 setEmployee(res.data);
                 setUserRole(res.data.user?.role);
             });
-        getTeamList();
+        });
     }, [id]);
 
     /**
      * gets all teams from API & sorts them
      */
-    function getTeamList() {
-        axios.get(url + '/teams').then(
+    async function getTeamList() {
+        await axios.get(url + '/teams').then(
             res => {
                 setTeamList(sortItems(res.data, "description", "name"));
             }
