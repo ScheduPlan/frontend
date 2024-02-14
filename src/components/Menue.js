@@ -1,18 +1,29 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import style from './Menue.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import roles from '../ROLES';
 import AuthContext from '../AuthProvider';
 import logout from '../utility/logout';
+import axios from 'axios';
+import url from '../BackendURL';
 
 
 export default function Menue(props) {
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
+    const [team, setTeam] = useState();
+
+    useEffect(() => {
+        if(user.user?.role == "FITTER") {
+            axios.get(url + "/teams/" + user.teamId).then(res => setTeam(res.data));
+        }
+    }, []);
 
     return (
         <div className={style.menue_wrapper + (props.isOpen ? " " + style.open : " ")}>    
-            <p><b>{user.firstName} {user.lastName}</b></p>
+            <p><b>{user.firstName} {user.lastName}</b>
+            {team != null ? 
+                <><br />Team: {team.description?.name}</> : ""}</p>
             <div className={style.menue_links}>
                 <Link to={'/' + user.user.role.toLowerCase()} replace>Dashboard</Link>
                 {roles.find((r) => r.role === user.user.role.toLowerCase()).links.map((link, index) => (
