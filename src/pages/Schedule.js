@@ -91,7 +91,7 @@ export default function Schedule(props) {
       teams.map(team => {
         return (
           <div key={team.id} id={"team " + team.id} className={style.tab_container}>
-            <Calendar events={activeEvents} getEvents={getAllEvents} getOrders={getAllOrders} activeOrder={activeOrder} allOrdersDisplayed={showAllOrders} />
+            <Calendar events={activeEvents} getAllEvents={() => getAllEvents()} getOrders={getAllOrders} activeOrder={activeOrder} allOrdersDisplayed={showAllOrders} />
           </div>
         )
       })

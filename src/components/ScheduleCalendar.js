@@ -40,7 +40,7 @@ export default function CalendarComponent(props) {
     localizer.formats.agendaDateFormat = 'DD.MM.';
 
     //sets default values for the calendar
-    const { components, views } = useMemo(
+    const { views } = useMemo(
         () => ({
             views: [Views.WEEK, Views.DAY, Views.AGENDA],
         }),
@@ -88,7 +88,7 @@ export default function CalendarComponent(props) {
      */
     function updateEvents() {
         console.log("updated");
-        props.getEvents();
+        props.getAllEvents();
     }
 
     /**
@@ -106,37 +106,41 @@ export default function CalendarComponent(props) {
             cancelButtonColor: "var(--error)",
             cancelButtonText: "Nein",
             confirmButtonText: "Ja",
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                axios.patch(url + "/customers/" + e.event.event.order.customer.id + "/orders/" + e.event.event.order.id + "/events/" + e.event.event.id,
-                    {
-                        date: e.start,
-                        endDate: e.end,
-                    }, { headers: { 'Content-Type': 'application/json' } });
-                axios.patch(url + "/customers/" + e.event.event.order.customer.id + "/orders/" + e.event.event.order.id,
-                    {
-                        state: "CONFIRMED"
-                    }, { headers: { 'Content-Type': 'application/json' } });
-
-                Swal.fire({
-                    position: 'top',
-                    title: "Element verschoben!",
-                    icon: "success",
-                    confirmButtonText: "Ok",
-                    confirmButtonColor: "var(--success)",
-                    timer: 2000
-                }).then(() => {
-                    updateEvents();
-                });
+                try {
+                    await axios.patch(url + "/customers/" + e.event.event.order.customer.id + "/orders/" + e.event.event.order.id + "/events/" + e.event.event.id,
+                        {
+                            date: e.start,
+                            endDate: e.end,
+                        }, { headers: { 'Content-Type': 'application/json' } }).then(() => {
+                            axios.patch(url + "/customers/" + e.event.event.order.customer.id + "/orders/" + e.event.event.order.id,
+                                {
+                                    state: "CONFIRMED"
+                                }, { headers: { 'Content-Type': 'application/json' } });
+                            Swal.fire({
+                                position: 'top',
+                                title: "Element verschoben!",
+                                icon: "success",
+                                confirmButtonText: "Ok",
+                                confirmButtonColor: "var(--success)",
+                                timer: 2000
+                            }).then(() => {
+                                updateEvents();
+                            });
+                        });
+                } catch (error) {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'error',
+                        title: 'Terminüberlappung!',
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: 'var(--error)',
+                        timer: 2500
+                    });
+                }
             }
         });
-
-        /*const response = await axios.patch(url + "/customers/" + e.event?.event?.order?.customer?.id + "/orders/" + e.event?.event?.order?.id + "/events/" + e.event?.event?.id,
-            {
-                date: new Date(e.start),
-                endDate: newEnd,
-            }, { headers: { 'Content-Type': 'application/json' } });
-        console.log("response", response);*/
     }
 
     /**
@@ -165,9 +169,9 @@ export default function CalendarComponent(props) {
                         confirmButtonText: "Ändern",
                         confirmButtonColor: "var(--info)",
 
-                        showDenyButton: true,
-                        denyButtonText: "Termin teilen",
-                        denyButtonColor: "var(--error)",
+                        //showDenyButton: true,
+                        //denyButtonText: "Termin teilen",
+                        //denyButtonColor: "var(--error)",
 
                         showCancelButton: true,
                         cancelButtonText: "Abbruch",
@@ -177,7 +181,7 @@ export default function CalendarComponent(props) {
                             axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
                                 {
                                     plannedDuration: result.value
-                                });
+                                }, { headers: { 'Content-Type': 'application/json' } });
                             const newEndDate = new Date(start.getTime() + result.value)
                             validateEvent(start, newEndDate);
                         } else if (result.isDenied) {
@@ -192,16 +196,23 @@ export default function CalendarComponent(props) {
                                 endDate: end,
                                 type: "ASSEMBLY",
                                 orderId: activeOrder.id
-                            }, { headers: { 'Content-Type': 'application/json' } });
-
-                        //set order state confirmed to remove it from sidebar
-                        await axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
-                            {
-                                state: "CONFIRMED"
-                            }, { headers: { 'Content-Type': 'application/json' } }).then(() => updateEvents());
-                        getOrders();
+                            }, { headers: { 'Content-Type': 'application/json' } }).then(async () => {
+                                //set order state confirmed to remove it from sidebar
+                                await axios.patch(url + "/customers/" + activeOrder.customer.id + "/orders/" + activeOrder.id,
+                                    {
+                                        state: "CONFIRMED"
+                                    }, { headers: { 'Content-Type': 'application/json' } }).then(() => updateEvents());
+                                getOrders();
+                            });
                     } catch (error) {
-                        alert(error);
+                        Swal.fire({
+                            position: 'top',
+                            icon: 'error',
+                            title: 'Terminüberlappung!',
+                            confirmButtonText: 'Ok',
+                            confirmButtonColor: 'var(--error)',
+                            timer: 2500
+                        });
                     }
                 }
             } else {
@@ -240,6 +251,14 @@ export default function CalendarComponent(props) {
                 className += " assembly";
                 break;
 
+            case "DELIVERY":
+                className += " delivery";
+                break;
+
+            case "COMMUTE":
+                className += " complaint";
+                break;
+
             default:
                 className = "default";
                 break;
@@ -258,26 +277,27 @@ export default function CalendarComponent(props) {
         <div className={style.calendar_wrapper} >
             <DnDCalendar
                 defaultView="week"
-                components={components}
+                //components={components}
                 events={events} //fct. die events returnt?
                 onSelectEvent={togglePopUp}
                 eventPropGetter={eventPropGetter}
                 onEventDrop={changeEventDateTime}
                 onEventResize={changeEventDateTime} // TO Do: fixen
                 onDropFromOutside={onDropFromOutside}
+                resizable
                 //showAllEvents ------> To Do: Was macht das? 
                 localizer={localizer}
-                showMultiDayTimes
+                //showMultiDayTimes
                 step={30}
                 //min={minTime}
                 //max={maxTime}
                 views={views}
                 dayLayoutAlgorithm="no-overlap"
-                selectable
+                //selectable
                 culture='de'
                 style={style}
                 length={6}
-                messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag", noEventsInRange: "Es gibt keine Termine für diesen Tag." }}
+                messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag", noEventsInRange: "Es gibt keine Termine für diesen Tag.", date: "Datum", time: "Uhrzeit", event: "Auftrag" }}
             />
             <PopUp events={events} updateEvents={updateEvents} trigger={isPopUpOpen} close={togglePopUp} path={"/events"} pathToItem={pathToItem} pathToEdit={pathToEdit} /> {/*To Do: Das mit dem PopUp öffnen & schließen anders regeln -> window eventlistener */}
         </div>

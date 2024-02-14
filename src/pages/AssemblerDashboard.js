@@ -10,10 +10,14 @@ export default function AssemblerDashboard() {
 
   //get all appointments
   useEffect(() => {
-    axios.get(url + "/events").then(res => {
-      setEvents(res.data.filter(events => events.order.team.id == user.team?.id));
-    });
+    getAllEvents();
   }, []);
+
+  function getAllEvents() {
+    axios.get(url + "/events").then(res => {
+      setEvents(res.data.filter(event => event.order.team.id == user.teamId));
+    });
+  }
 
   return (
     <div className='content-container'>

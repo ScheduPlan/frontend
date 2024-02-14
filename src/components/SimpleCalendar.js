@@ -1,19 +1,28 @@
-import React, { useMemo, useState, useContext, useCallback, useEffect } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import { Calendar, Views, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/de';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import style from './ScheduleCalendar.module.css';
+import url from '../BackendURL';
+import PopUp from './PopUp';
 
 export default function CalendarComponent(props) {
 
     const [events, setEvents] = useState([]);
     const [isPopUpOpen, setPopUpOpen] = useState(false);
+    const [pathToItem, setPathToItem] = useState("");
 
-    function togglePopUp() {
+    useEffect(() => {
+        getEvents();
+        console.log(props.events);
+    }, [props.events]);
+
+    function togglePopUp(item) {
         if (isPopUpOpen) {
             setPopUpOpen(false);
         } else {
+            setPathToItem(url + "/customers/" + item.event.order.customer.id + "/orders/" + item.event.order.id + "/events/" + item.event.id);
             setPopUpOpen(true);
         }
     }
@@ -31,16 +40,12 @@ export default function CalendarComponent(props) {
 
 
     //sets default values for the calendar
-    const { components, max, views } = useMemo(
+    const { views } = useMemo(
         () => ({
             views: [Views.WEEK, Views.DAY, Views.AGENDA],
         }),
         []
     );
-
-    useEffect(() => {
-        getEvents();
-    }, [props.events]);
 
     /**
      * get all events from API & puts it in correct form for the calendar
@@ -60,59 +65,59 @@ export default function CalendarComponent(props) {
         setEvents(allEvents);
     }
 
-    //style of different appointments
-    const eventPropGetter = useCallback((event, start, end, isSelected) => (
-        {
-            ...(event && {
-                style: {
-                    backgroundColor: '#ccc',
-                    borderRadius: '0px',
-                    color: 'black',
-                    border: 'none',
-                    opacity: '1',
-                    display: 'block'
-                }
-            }),
-            ...(event.title === "Montage" && { //ToDo: title in timeslot z-index:1 setzen
-                style: {
-                    backgroundColor: 'var(--primary)',
-                    border: '0',
-                    opacity: '1',
-                    display: 'block'
-                }
-            }),
-            ...(event.title === "Reklamation" && { //ToDo: title in timeslot z-index:1 setzen
-                style: {
-                    backgroundColor: 'var(--primary-dark)',
-                    border: '0',
-                    opacity: '1',
-                    display: 'block'
-                }
-            })
+    /**
+     * styles events for different props
+     */
+    const eventPropGetter = useCallback((event, start, end, isSelected) => {
+        var className = "default";
+
+        switch (event.event.type) {
+            case "ASSEMBLY":
+                className += " assembly";
+                break;
+
+            case "DELIVERY":
+                className += " delivery";
+                break;
+
+            case "COMMUTE":
+                className += " complaint";
+                break;
+
+            default:
+                className = "default";
+                break;
         }
-    ), [events]);
+
+        if (event.event?.order?.state == "CUSTOMER_CONFIRMED") {
+            className += " showCustomerIcon";
+        }
+
+        return {
+            className
+        };
+    }, [events, props.events]);
 
     return (
         <div className={style.calendar_wrapper + " " + style.simple} >
             <Calendar
                 defaultView="week"
-                components={components}
                 events={events}
-                /*eventPropGetter={eventPropGetter}*/
+                eventPropGetter={eventPropGetter}
                 localizer={localizer}
-                max={max}
                 showMultiDayTimes
                 step={30}
                 views={views}
                 onSelectEvent={togglePopUp}
                 dayLayoutAlgorithm="no-overlap"
-                tooltipAccessor={{}}
+                //tooltipAccessor={{}}
                 culture='de'
                 style={style}
                 length={6}
                 resizable={false}
                 messages={{ next: ">", previous: "<", today: "Heute", week: "Woche", day: "Tag", noEventsInRange: "Es gibt keine Termine für diesen Tag." }}
             />
+            <PopUp isFitter={true} trigger={isPopUpOpen} close={togglePopUp} path={"/events"} pathToItem={pathToItem} />
         </div>
     )
 }
