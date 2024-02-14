@@ -94,7 +94,7 @@ export default function FormCreateTeam() {
             pickedEmployees.forEach(emp => {
                 axios.patch(url + "/employees/" + emp.id, {
                     teamId: teamId
-                });
+                }, { headers: { 'Content-Type': 'application/json' } });
             });
 
             Swal.fire({
