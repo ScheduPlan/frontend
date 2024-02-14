@@ -6,6 +6,7 @@ import AuthContext from '../AuthProvider';
 import logout from '../utility/logout';
 import axios from 'axios';
 import url from '../BackendURL';
+import deleteAccount from '../utility/deleteAccount';
 
 
 export default function Menue(props) {
@@ -25,12 +26,13 @@ export default function Menue(props) {
             {team != null ? 
                 <><br />Team: {team.description?.name}</> : ""}</p>
             <div className={style.menue_links}>
-                <Link to={'/' + user.user.role.toLowerCase()} replace>Dashboard</Link>
+                <Link to={'/' + user.user.role.toLowerCase()} onClick={() => props.setOpen(false)} replace>Dashboard</Link>
                 {roles.find((r) => r.role === user.user.role.toLowerCase()).links.map((link, index) => (
                     <Link key={index} to={'/' + user.user.role.toLowerCase() + '/' + link.path} onClick={() => props.setOpen(false)} replace>{link.title}</Link>
                 ))}
-                <Link to='/password' replace>Passwort ändern</Link>
+                <Link to='/password' onClick={() => props.setOpen(false)} replace>Passwort ändern</Link>
                 <Link onClick={logout} to='/' replace>Logout</Link>
+                {user.user.role != "FITTER" ? <Link className="red" onClick={() => deleteAccount(user)} to='/' replace>Account löschen</Link> : ""}
             </div>
         </div>
     )

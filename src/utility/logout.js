@@ -1,4 +1,3 @@
-export default function logout(callback) {
+export default function logout() {
     sessionStorage.clear();
-    callback();
 }

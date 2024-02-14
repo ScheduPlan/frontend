@@ -3,6 +3,7 @@ import roles from '../ROLES';
 import { Link, Outlet } from 'react-router-dom';
 import AuthContext from '../AuthProvider';
 import logout from '../utility/logout';
+import deleteAccount from '../utility/deleteAccount';
 
 export default function Dashboard() {
 
@@ -29,6 +30,7 @@ export default function Dashboard() {
                             }
                             <Link to='/password' className="btn primary" replace>Passwort ändern</Link>
                             <Link className="btn primary" onClick={logout} to='/' replace>Logout</Link>
+                            {user.user.role != "FITTER" ? <Link className="btn red" onClick={() => deleteAccount(user)} to='/' replace>Account löschen</Link> : ""}
                         </div>
 
                         <Outlet />
