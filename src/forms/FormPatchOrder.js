@@ -28,11 +28,14 @@ export default function FormPatchOrder() {
     const [addressElement, setAddressElement] = useState({});
 
     useEffect(() => {
-        axios.get(url + '/orders')
-            .then(res => {
-                setOrder(res.data.find(data => data.id == id));
-                setAddress(res.data.address);
-            });
+        axios.get(url + '/orders').then(res => {
+            setOrder(res.data.find(order => order.id == id));
+            setAddress(res.data.address);
+        }).then(() => {
+            if (order.plannedExecutionDate != null) {
+                setDate(new Date(order.plannedExecutionDate));
+            }
+        });
     }, [id]);
 
     useEffect(() => {
@@ -97,27 +100,27 @@ export default function FormPatchOrder() {
     async function submitForm(event) {
         event.preventDefault();
         try {
-            const response = await axios.patch(url + '/customers/' + order.customer.id + '/orders/' + order.id,
+            await axios.patch(url + '/customers/' + order.customer.id + '/orders/' + order.id,
                 {
                     number: number,
                     description: description,
                     commissionNumber: commissionNumber,
                     weight: weight,
+                    plannedExecutionDate: date,
                     teamId: teamID,
                 },
-                { headers: { 'Content-Type': 'application/json' } });
-
-            Swal.fire({
-                position: 'top',
-                icon: 'success',
-                title: 'Änderungen gespeichert!',
-                confirmButtonText: 'Ok',
-                confirmButtonColor: 'var(--success)',
-                timer: 2000
-            }).then(() => {
-                navigate("..", { relative: "path" });
-            });
-
+                { headers: { 'Content-Type': 'application/json' } }).then(() => {
+                    Swal.fire({
+                        position: 'top',
+                        icon: 'success',
+                        title: 'Änderungen gespeichert!',
+                        confirmButtonText: 'Ok',
+                        confirmButtonColor: 'var(--success)',
+                        timer: 2000
+                    }).then(() => {
+                        navigate("..", { relative: "path" });
+                    });
+                });
         } catch (error) {
             alert(error);
         }
@@ -163,7 +166,7 @@ export default function FormPatchOrder() {
                 <div className='form-row'>
                     <label>
                         freigegebener Termin
-                        <input type="date" name="date" onChange={getDate} />
+                        <input placeholder={order.plannedExecutionDate} type="date" name="date" onChange={getDate} />
                     </label>
                     <label>
                         Team

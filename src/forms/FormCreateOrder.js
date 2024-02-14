@@ -116,15 +116,26 @@ export default function FormCreateOrder() {
                 });
         } catch (error) {
             console.log(error);
-            Swal.fire({
-                position: 'top',
-                icon: 'error',
-                title: 'Fehler',
-                text: 'Auftrag konnte nicht angelegt werden! Bitte Angabe prüfen.',
-                confirmButtonText: 'Ok',
-                confirmButtonColor: 'var(--error)',
-                timer: 2500
-            });
+            if (error.response.data.message.includes("ORDERS(NUMBER")) {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Auftragsnummer bereits vergeben',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            } else {
+                Swal.fire({
+                    position: 'top',
+                    icon: 'error',
+                    title: 'Fehler',
+                    text: 'Auftrag konnte nicht angelegt werden! Bitte Angabe prüfen.',
+                    confirmButtonText: 'Ok',
+                    confirmButtonColor: 'var(--error)',
+                    timer: 2500
+                });
+            }
         }
     }
 
@@ -137,7 +148,7 @@ export default function FormCreateOrder() {
                 <div className='form-row'>
                     <label>
                         Kunde <span>*</span>
-                        <select  name="customer" onChange={getCustomerID} required>
+                        <select name="customer" onChange={getCustomerID} required>
                             <option value={''} readOnly hidden>Bitte wählen</option>
                             {customerList.map((cust) => {
                                 return (<option key={cust.id} value={cust.id}>{cust.customerNumber} {cust.company}</option>)
@@ -146,36 +157,36 @@ export default function FormCreateOrder() {
                     </label>
                     <label>
                         Auftragsnummer <span>*</span>
-                        <input  type="number" name="number" min={100000} max={999999} onChange={getNumber} required />
+                        <input type="number" name="number" min={100000} max={999999} onChange={getNumber} required />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
                         Kommisionsnummer <span>*</span>
-                        <input  type="text" name="commissionNumber" onChange={getCommissionNumber} required />
+                        <input type="text" name="commissionNumber" onChange={getCommissionNumber} required />
                     </label>
                     <label>
                         Gewicht <span>*</span>
-                        <input  type="number" min="1" step="0.05" name="weight" onChange={getWeight} required />
+                        <input type="number" min="1" step="0.05" name="weight" onChange={getWeight} required />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
                         freigegebener Termin <span>*</span>
-                        <input  type="date" name="date" onChange={getDate} required />
+                        <input type="date" name="date" onChange={getDate} required />
                     </label>
                     <label>
                         geplante Termindauer <span>*</span>
-                        <input  type="number" min="1" step="0.5" name="timeperiod" onChange={getTimeperiod} required />
+                        <input type="number" min="1" step="0.5" name="timeperiod" onChange={getTimeperiod} required />
                     </label>
                 </div>
 
                 <div className='form-row'>
                     <label>
                         Team <span>*</span>
-                        <select  name="team" onChange={getTeamID} required>
+                        <select name="team" onChange={getTeamID} required>
                             <option value={''} readOnly hidden>Bitte wählen</option>
                             {teamList.map((team, index) => {
                                 return (<option key={index} value={team.id}>{team.description.name}</option>)
