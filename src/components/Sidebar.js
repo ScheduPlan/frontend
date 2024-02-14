@@ -59,17 +59,15 @@ export default function Sidebar(props) {
     }
 
     /**
-     * sorts order list for the choosen option
+     * sorts order list for the choosen option // To DO
      * @param {*} e 
      */
     const getSortOption = (e) => {
         setSortOption(e.target.value);
         switch (e.target.value) {
             case null:
-                setOrders(sortItems(orders, "commissionNumber"));
                 break;
             case "none":
-                setOrders(sortItems(orders, "commissionNumber"));
                 break;
             case "company":
                 setOrders(sortItems(orders, "customer", "company"));
@@ -136,11 +134,12 @@ export default function Sidebar(props) {
             <div className={style.filter_row}>
                 <span>sortieren</span>
                 <select name="sortOptions" className={style.filter} onChange={getSortOption}>
-                    <option value="none" readOnly>Bitte wählen</option>
+                    <option value="none" readOnly hidden>Bitte wählen</option>
                     <option value="number">Auftr.-Nr.</option>
                     <option value="commissionNumber">Kom.-Nr.</option>
                     <option value="company">Kunde</option>
                     <option value="plannedDuration">geschätzter Aufwand</option>
+                    <option value="plannedExecutionDate">geplantes Datum</option>
                 </select>
             </div>
             <div className={style.filter_row}>
@@ -161,7 +160,7 @@ export default function Sidebar(props) {
 
             <div className={style.appointment_box_wrapper}>
                 {orders.map((order) => (
-                    <div key={order.id} className={style.appointment_box} id={order.id} onClick={() => togglePopUp(order)} draggable onDragStart={() => { validateCurrentTeam(order) }}>
+                    <div key={order.id} className={style.appointment_box} id={order.id} onClick={() => togglePopUp(order)} draggable onDragStart={() => {validateCurrentTeam(order) }}>
                         <p className={style.title}>Auftr.-Nr.: {order.number}</p>
                         <div className={style.appointment_detail}>
                             <p><b>Kom.-Nr.:</b> {order.commissionNumber}</p>
