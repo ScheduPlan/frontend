@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import popupStyle from './PopUp.module.css';
 import moment from 'moment';
 import axios from 'axios';
 import url from '../BackendURL';
+import AuthContext from '../AuthProvider';
 
 export default function Event(props) {
+    const { user } = useContext(AuthContext);
     const day = moment(props.object.startDate).format("ddd DD.MM.");
     const start = moment(props.object.startDate).format("HH:mm");
     const end = moment(props.object.endDate).format("HH:mm");
@@ -75,6 +77,9 @@ export default function Event(props) {
                                     helper.firstName + " " + helper.lastName
                             )
                         })}</p>
+                        : ""}
+                    {props.object.order?.team?.id != user.teamId ?
+                        <p><b>Team: </b>{props.object.order?.team?.description?.name}</p>
                         : ""}
                     {!props.isFitter ?
                         <label>

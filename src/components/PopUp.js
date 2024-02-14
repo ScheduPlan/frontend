@@ -68,36 +68,32 @@ export default function PopUp(props) {
    * @param {*} item 
    */
     async function deleteFct() {
-        switch (path) {
-            case "/events":
-                deleteItem(pathToItem, updateEvents, (error) => {
-                    Swal.fire({
-                        position: 'top',
-                        title: error,
-                        icon: "error",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "var(--error)",
-                        timer: 2000
-                    })
-                }).then(() => {
-                    axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
-                      {
+        if (path == "/events") {
+            deleteItem(pathToItem, updateEvents ?? updateItemObjects, (error) => {
+                Swal.fire({
+                    position: 'top',
+                    title: error,
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: "var(--error)",
+                    timer: 2000
+                })
+            });
+            axios.patch(url + "/customers/" + item.order.customer.id + "/orders/" + item.order.id,
+                    {
                         state: "PLANNED"
-                      }, { headers: { 'Content-Type': 'application/json' } })
-                    });;
-
-            default:
-                deleteItem(pathToItem, updateItemObjects, (error) => {
-                    Swal.fire({
-                        position: 'top',
-                        title: error,
-                        icon: "error",
-                        confirmButtonText: "Ok",
-                        confirmButtonColor: "var(--error)",
-                        timer: 2000
-                    })
-                });
-                break;
+                    }, { headers: { 'Content-Type': 'application/json' } })
+        } else {
+            deleteItem(pathToItem, updateItemObjects, (error) => {
+                Swal.fire({
+                    position: 'top',
+                    title: error,
+                    icon: "error",
+                    confirmButtonText: "Ok",
+                    confirmButtonColor: "var(--error)",
+                    timer: 2000
+                })
+            });
         }
         close();
     }

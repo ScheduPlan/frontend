@@ -109,7 +109,7 @@ export default function CalendarComponent(props) {
                 step={30}
                 views={views}
                 onSelectEvent={togglePopUp}
-                dayLayoutAlgorithm="no-overlap"
+                dayLayoutAlgorithm="overlap"
                 //tooltipAccessor={{}}
                 culture='de'
                 style={style}
