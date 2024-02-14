@@ -15,8 +15,11 @@ export default function AssemblerDashboard() {
 
   function getAllEvents() {
     axios.get(url + "/events").then(res => {
-      setEvents(res.data.filter(event => event.order.team.id == user.teamId));
+      setEvents([...events, ...res.data.filter(event => event.order.team.id == user.teamId)]);
     });
+    user.helpsOn.forEach(ev => axios.get(url + "/events/" + ev.id).then(res => {
+      setEvents([...events, res.data]);
+    }))
   }
 
   return (

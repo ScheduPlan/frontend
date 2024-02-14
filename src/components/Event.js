@@ -21,7 +21,7 @@ export default function Event(props) {
             alias: "Lieferung"
         },
         {
-            type: 'COMMUTE',
+            type: 'MODIFICATION',
             alias: "Reklamation"
         }
     ];

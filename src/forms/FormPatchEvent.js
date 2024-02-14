@@ -17,7 +17,7 @@ export default function FormPatchEvent() {
             alias: "Lieferung"
         },
         {
-            type: 'COMMUTE',
+            type: 'MODIFICATION',
             alias: "Reklamation"
         }
     ];
@@ -113,7 +113,7 @@ export default function FormPatchEvent() {
      * @param {*} emp 
      */
     function removeHelper(emp) {
-        axios.delete(url + '/customers/' + event.order.customer.id + '/orders/' + event.order.id + '/events/' + event.id + '/helpers' + emp.id).then(() => {
+        axios.delete(url + '/customers/' + event.order.customer.id + '/orders/' + event.order.id + '/events/' + event.id + '/helpers/' + emp.id).then(() => {
             setPickedHelpers(pickedHelpers.filter(obj => obj.id != emp.id));
             getFitters();
         });
@@ -195,7 +195,7 @@ export default function FormPatchEvent() {
                                 return (
                                     <div key={index} className='pickedItem'>
                                         <p>{emp.firstName} {emp.lastName}</p>
-                                        <svg onClick={removeHelper} id={emp.id} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
+                                        <svg onClick={() => removeHelper(emp)} id={emp.id} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 -960 960 960">
                                             <path d={Path("close")} />
                                         </svg>
                                     </div>

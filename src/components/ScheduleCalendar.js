@@ -255,7 +255,7 @@ export default function CalendarComponent(props) {
                 className += " delivery";
                 break;
 
-            case "COMMUTE":
+            case "MODIFICATION":
                 className += " complaint";
                 break;
 
